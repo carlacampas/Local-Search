@@ -1,2 +1,2 @@
 # Busqueda-Local
-Pratica 1 IA-FIB
+Prática 1 IA-FIB
