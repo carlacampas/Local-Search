@@ -4,12 +4,12 @@ package Abastecimiento;
 import java.util.*;
 
 public class AbastecimientoState {
-    // Attributes.
-    private ArrayList<ArrayList<Integer>> assignments;
-    private ArrayList<Integer> distances;
+    // ATTRIBUTES.
+    private ArrayList<ArrayList<Pair <int, int>>> assignments;
+    private ArrayList<int> distances; // distancia que le queda por recorrer al camión
     Gasolineras gasolineras;
 
-    // Constructors.
+    // CONSTRUCTORS.
     public AbastecimientoState (Gasolineras gasolineras){
         this.assignments = new ArrayList <> ();
         this.distances = new ArrayList <> ();
@@ -40,9 +40,13 @@ public class AbastecimientoState {
     }
 
     // OPERADORS.
-    public void move () {}
+    public void assignaPeticion (/*id camion, peticion*/) {}
 
-    public void delete () {}
+    public void intercambiaPeticiones (/*p, p1 peticiones, c, c1 camiones*//) {}
+
+    public void intercambioOrden (/*p, p1 peticiones, c camion*/) {}
+
+    public void cambiaPeticion (/*p peticion, c, c1 camiones*/) {}
 
     // INITIAL STATE.
     //potseer ni ha més d'una
