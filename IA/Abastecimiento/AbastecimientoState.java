@@ -18,7 +18,7 @@ public class AbastecimientoState {
     Gasolineras gasolineras;
     CentrosDistribucion centrosDistibucion;
 
-    private ArrayList<ArrayList<Integer>> asignaciones;
+    private ArrayList<ArrayList<Asignacion>> asignaciones;
     private ArrayList <Integer> distancias;
 
     // CONSTRUCTORS.
@@ -34,7 +34,7 @@ public class AbastecimientoState {
         }
     }
 
-    public AbastecimientoState (ArrayList <ArrayList<Integer>> asignaciones, ArrayList <Integer> distancias,
+    public AbastecimientoState (ArrayList <ArrayList<Asignacion>> asignaciones, ArrayList <Integer> distancias,
                                 Gasolineras gasolineras, CentrosDistribucion centrosDistribucion) {
         this.asignaciones = asignaciones;
         this.distancias = distancias;
@@ -43,7 +43,7 @@ public class AbastecimientoState {
     }
 
     // SETTERS.
-    public void setAssigments(ArrayList <ArrayList<Integer>> asignaciones) {
+    public void setAssigments(ArrayList <ArrayList<Asignacion>> asignaciones) {
         this.asignaciones = asignaciones;
     }
 
@@ -52,7 +52,7 @@ public class AbastecimientoState {
     }
 
     // GETTERS.
-    public ArrayList<ArrayList<Integer>> getAsignaciones() {
+    public ArrayList<ArrayList<Asignacion>> getAsignaciones() {
         return asignaciones;
     }
 
@@ -63,8 +63,8 @@ public class AbastecimientoState {
     // OPERADORS.
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
     // Los camiones seran identificados con su propio Id Integer
-    public void assignaPeticion (Integer camion, Pair <Integer, Integer> peticion) {
-
+    public void assignaPeticion (int camion, Pair <Integer, Integer> peticion) {
+    	
 	} 
 
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){}
