@@ -164,6 +164,7 @@ public class AbastecimientoState {
     			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
     			while (!visited[c] && !assignaPeticion(c, pet)) {
+    				visited[c] = true;
     				c = rand.nextInt(n);
     			}
     			
