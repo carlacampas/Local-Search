@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="src" path="IA"/>
+	<classpathentry kind="lib" path="lib/AIMA.jar"/>
+	<classpathentry kind="lib" path="lib/Gasolina/Gasolina.jar"/>
+	<classpathentry kind="output" path="IA"/>
+</classpath>
