@@ -6,7 +6,7 @@ class Asignacion {
 	
 	Asignacion () {}
 	
-	Asignacion (Pair <Integer, Integer>a, Pair <Integer, Integer> b) {
+	Asignacion (Pair <Integer, Integer> a, Pair <Integer, Integer> b) {
 		this.p = a;
 		this.p1 = b;
 	}

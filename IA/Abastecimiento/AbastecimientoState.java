@@ -72,12 +72,39 @@ public class AbastecimientoState {
     	
     	asignaciones.get(camion).set(n-1, last);
 	} 
+    /*
+    * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
+    * Post: La asignación de las peticiones se invierte.
+    * */
+    public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
+        Asignacion a = asignaciones.get(c).get(p);
+        Asignación b = asignaciones.get(c1).get(p1);
 
-    public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){}
+        asignaciones.get(c).set(p1, b);
+        asignaciones.get(c1).set(p, a);
+    }
+    /*
+    * Pre: Both p y p1 son peticiones asignadas al camión c
+    * Post: El orden en que estaban asignadas p y p1 se invierte
+    * */
+    public void intercambioOrden (Integer p, Integer p1, int c) {
+        Asignacion a = asignaciones.get(c).get(p);
+        Asignacion b = asignaciones.get(c).get(p1);
 
-    public void intercambioOrden (/*p, p1 peticiones, c camion*/) {}
+        asignaciones.get(c).set(p1, a);
+        asignaciones.get(c).set(p, b);
+    }
+    /*
+    * Pre: La petición p estaba asignada al camion c
+    * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
+    * */
+    public void cambiaPeticion (Integer p, int c, int c1) {
+        int n = asignaciones.get(c1).size();
+        Asignacion a = asignaciones.get(c).get(p);
 
-    public void cambiaPeticion (/*p peticion, c, c1 camiones*/) {}
+        asignaciones.get(c).remove(p);
+        asignaciones.get(c1).set(n-1, a);
+    }
 
     // INITIAL SOLUTION.
     // Genera solució inicial repartint paquets equitativament entre tots els paquets de forma aleatoria.
