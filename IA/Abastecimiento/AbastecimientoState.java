@@ -113,32 +113,46 @@ public class AbastecimientoState {
     	return false;
 	} 
     /*
-    * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
+    * Pre: la petición p está asignada al camión c y la petición p1 al camión c1
     * Post: La asignación de las peticiones se invierte.
     * */
-    public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
-        Asignacion a = asignaciones.get(c).get(p);
-        Asignacion b = asignaciones.get(c1).get(p1);
 
-        asignaciones.get(c).set(p1, b);
-        asignaciones.get(c1).set(p, a);
+
+    public void intercambiaPeticiones (Pair <Integer, Integer> p, Pair <Integer, Integer> p1, int c, int c1){
+        ArrayList <Asignacion> ac = asignaciones.get(c);
+        ArrayList <Asignacion> ac1 = asignaciones.get(c1);
+
+
+
+
+        /*int ip = asignaciones.get(c).indexOf(p);
+        int ip1 = asignaciones.get(c1).indexOf(p1);
+
+        Asignacion a = asignaciones.get(c).get(ip);
+        Asignacion b = asignaciones.get(c1).get(ip1);
+
+        asignaciones.get(c).set(ip, b);
+        asignaciones.get(c1).set(ip1, a);*/
     }
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     * */
-    public void intercambioOrden (Integer p, Integer p1, int c) {
-        Asignacion a = asignaciones.get(c).get(p);
-        Asignacion b = asignaciones.get(c).get(p1);
+    public void intercambioOrden (Pair <Integer, Integer> p, Pair <Integer, Integer> p1, int c) {
+        int ip = asignaciones.get(c).indexOf(p);
+        int ip1 = asignaciones.get(c1).indexOf(p1);
 
-        asignaciones.get(c).set(p1, a);
-        asignaciones.get(c).set(p, b);
+        Asignacion a = asignaciones.get(c).get(ip);
+        Asignacion b = asignaciones.get(c).get(ip1);
+
+        asignaciones.get(c).set(ip, b);
+        asignaciones.get(c).set(ip1, a);
     }
     /*
     * Pre: La petición p estaba asignada al camion c
     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
     * */
-    public void cambiaPeticion (Integer p, int c, int c1) {
+    public void cambiaPeticion (Pair <Integer, Integer> p, int c, int c1) {
         int n = asignaciones.get(c1).size();
         Asignacion a = asignaciones.get(c).get(p);
 
