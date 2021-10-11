@@ -161,9 +161,9 @@ public class AbastecimientoState {
     		for (Integer p : peticiones) {
     			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, p);
     			
-    			// TODO(carla): check para todo array visitado
+    			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
-    			while (!assignaPeticion(c, pet)) {
+    			while (!visited[c] && !assignaPeticion(c, pet)) {
     				c = rand.nextInt(n);
     			}
     			
