@@ -64,7 +64,13 @@ public class AbastecimientoState {
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
     // Los camiones seran identificados con su propio Id Integer
     public void assignaPeticion (int camion, Pair <Integer, Integer> peticion) {
+    	int n = asignaciones.size();
+    	Asignacion last = asignaciones.get(camion).get(n-1);
     	
+    	if (last.secondIsEmpty()) last.setSecond(peticion);
+    	else last = new Asignacion (peticion);
+    	
+    	asignaciones.get(camion).set(n-1, last);
 	} 
 
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){}
