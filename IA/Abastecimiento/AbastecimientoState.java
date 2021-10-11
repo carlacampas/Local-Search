@@ -5,11 +5,8 @@ import java.util.*;
 
 import IA.Gasolina.Gasolineras;
 import IA.Gasolina.CentrosDistribucion;
-//import aima.search.informed.HillClimbingSearch;
-//import aima.search.informed.SimulatedAnnealingSearch;
-//import aima.search.framework.Problem;
-//import aima.search.framework.Search;
-//import aima.search.framework.SearchAgent;
+import IA.Gasolina.Distribucion;
+import IA.Gasolina.Gasolinera;
 
 public class AbastecimientoState {
     // ATRIBUTOS.
@@ -31,6 +28,7 @@ public class AbastecimientoState {
 
         for (int i=0; i<centrosDistribucion.size(); i++){
             this.distancias.set(i, maxDist);
+            this.asignaciones.set (i, new ArrayList <>());
         }
     }
 
@@ -63,14 +61,56 @@ public class AbastecimientoState {
     // OPERADORS.
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
     // Los camiones seran identificados con su propio Id Integer
-    public void assignaPeticion (int camion, Pair <Integer, Integer> peticion) {
-    	int n = asignaciones.size();
-    	Asignacion last = asignaciones.get(camion).get(n-1);
+    public Integer calcularDistancias (int c, Pair <Integer, Integer> p) {
+    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
     	
-    	if (last.secondIsEmpty()) last.setSecond(peticion);
-    	else last = new Asignacion (peticion);
+    	int n = cAssig.size();
     	
-    	asignaciones.get(camion).set(n-1, last);
+    	Distribucion d = centrosDistibucion.get(c);
+    	Gasolinera g1 = gasolineras.get(p.a);
+		
+		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
+		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
+	
+		if (n > 0) {
+			Asignacion last = cAssig.get(n - 1);
+	    	if (last.secondIsEmpty()) {
+	    		Gasolinera g = gasolineras.get(last.first().a);
+	    		Pair <Integer, Integer> coord2 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
+	    		
+	    		int prevD = calcularDistancia (coord1, coord2);
+	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
+	    	
+	    		return distancias.get(c) + prevD*2 - newD;
+	    	}
+		}
+    	
+    	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
+    }
+    
+    public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
+    	int dist = calcularDistancias(c, p);
+    	if (dist > 0) {
+	    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
+	    	
+	    	int n = cAssig.size();
+	    	if (n == 0) cAssig.add(new Asignacion (p));
+	    	else {
+	    		Asignacion last = cAssig.get(n - 1);
+	    		if (last.secondIsEmpty()) {
+	    			last.setSecond(p);
+	    			cAssig.set(n-1, last);
+	    		}
+	        	else {
+	        		last = new Asignacion (p);
+	        		cAssig.add(last);
+	        	}
+	    	}
+	    	
+	    	asignaciones.set(c, cAssig);
+	    	return true;
+    	}
+    	return false;
 	} 
     /*
     * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
@@ -78,7 +118,7 @@ public class AbastecimientoState {
     * */
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
         Asignacion a = asignaciones.get(c).get(p);
-        Asignación b = asignaciones.get(c1).get(p1);
+        Asignacion b = asignaciones.get(c1).get(p1);
 
         asignaciones.get(c).set(p1, b);
         asignaciones.get(c1).set(p, a);
@@ -107,8 +147,30 @@ public class AbastecimientoState {
     }
 
     // INITIAL SOLUTION.
+    public int calcularDistancia (Pair <Integer, Integer> coord1, Pair <Integer, Integer> coord2) {
+    	return Math.abs (coord1.a - coord2.a) + Math.abs (coord1.b - coord2.b);
+    }
+    
     // Genera solució inicial repartint paquets equitativament entre tots els paquets de forma aleatoria.
-    public void generateInitialSolution1 () {}
+    public void generateInitialSolution1 () {
+    	Random rand = new Random();
+    	int n = centrosDistibucion.size();
+    	
+    	for (int i=0; i<gasolineras.size(); i++) {
+    		ArrayList <Integer> peticiones = gasolineras.get(i).getPeticiones();
+    		for (Integer p : peticiones) {
+    			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, p);
+    			
+    			// TODO(carla): check para todo array visitado
+    			int c = rand.nextInt(n);
+    			while (!assignaPeticion(c, pet)) {
+    				c = rand.nextInt(n);
+    			}
+    			
+    			assignaPeticion (c, new Pair <Integer, Integer> (i, p));
+    		}
+    	}
+    }
 
     // Genera solució inicial repartint paquets equitativament entre tots els paquets amb ponderacions dels costos i
     // beneficis.
