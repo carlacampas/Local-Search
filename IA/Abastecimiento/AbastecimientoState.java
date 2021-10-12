@@ -15,7 +15,7 @@ public class AbastecimientoState {
     Gasolineras gasolineras;
     CentrosDistribucion centrosDistibucion;
 
-    private ArrayList<ArrayList<Asignacion>> asignaciones;
+    private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
 
     // CONSTRUCTORS.
@@ -27,12 +27,12 @@ public class AbastecimientoState {
         this.distancias = new ArrayList <> (centrosDistribucion.size());
 
         for (int i=0; i<centrosDistribucion.size(); i++){
-            this.distancias.set(i, maxDist);
-            this.asignaciones.set (i, new ArrayList <>());
+            this.distancias.add(maxDist);
+            this.asignaciones.add(new ArrayList <>());
         }
     }
 
-    public AbastecimientoState (ArrayList <ArrayList<Asignacion>> asignaciones, ArrayList <Integer> distancias,
+    public AbastecimientoState (ArrayList<ArrayList<Peticion>> asignaciones, ArrayList <Integer> distancias,
                                 Gasolineras gasolineras, CentrosDistribucion centrosDistribucion) {
         this.asignaciones = asignaciones;
         this.distancias = distancias;
@@ -41,7 +41,7 @@ public class AbastecimientoState {
     }
 
     // SETTERS.
-    public void setAssigments(ArrayList <ArrayList<Asignacion>> asignaciones) {
+    public void setAssigments(ArrayList<ArrayList<Peticion>> asignaciones) {
         this.asignaciones = asignaciones;
     }
 
@@ -50,7 +50,7 @@ public class AbastecimientoState {
     }
 
     // GETTERS.
-    public ArrayList<ArrayList<Asignacion>> getAsignaciones() {
+    public ArrayList<ArrayList<Peticion>> getAsignaciones() {
         return asignaciones;
     }
 
@@ -62,7 +62,7 @@ public class AbastecimientoState {
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
     // Los camiones seran identificados con su propio Id Integer
     public Integer calcularDistancias (int c, Pair <Integer, Integer> p) {
-    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
+    	ArrayList <Peticion> cAssig = asignaciones.get(c);
     	
     	int n = cAssig.size();
     	
@@ -73,9 +73,9 @@ public class AbastecimientoState {
 		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
 	
 		if (n > 0) {
-			Asignacion last = cAssig.get(n - 1);
-	    	if (last.secondIsEmpty()) {
-	    		Gasolinera g = gasolineras.get(last.first().a);
+			Peticion last = cAssig.get(n - 1);
+	    	if (n%2 == 1) {
+	    		Gasolinera g = gasolineras.get(last.get().a);
 	    		Pair <Integer, Integer> coord2 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
 	    		
 	    		int prevD = calcularDistancia (coord1, coord2);
@@ -91,70 +91,46 @@ public class AbastecimientoState {
     public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
     	int dist = calcularDistancias(c, p);
     	if (dist > 0) {
-	    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
-	    	
-	    	int n = cAssig.size();
-	    	if (n == 0) cAssig.add(new Asignacion (p));
-	    	else {
-	    		Asignacion last = cAssig.get(n - 1);
-	    		if (last.secondIsEmpty()) {
-	    			last.setSecond(p);
-	    			cAssig.set(n-1, last);
-	    		}
-	        	else {
-	        		last = new Asignacion (p);
-	        		cAssig.add(last);
-	        	}
-	    	}
-	    	
+	    	ArrayList <Peticion> cAssig = asignaciones.get(c);
+	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
+	    	
+	    	distancias.set(c, dist);
 	    	return true;
     	}
     	return false;
 	} 
+    
     /*
-    * Pre: la petición p está asignada al camión c y la petición p1 al camión c1
+    * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
     * Post: La asignación de las peticiones se invierte.
     * */
+    public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c1).get(p1);
 
-
-    public void intercambiaPeticiones (Pair <Integer, Integer> p, Pair <Integer, Integer> p1, int c, int c1){
-        ArrayList <Asignacion> ac = asignaciones.get(c);
-        ArrayList <Asignacion> ac1 = asignaciones.get(c1);
-
-
-
-
-        /*int ip = asignaciones.get(c).indexOf(p);
-        int ip1 = asignaciones.get(c1).indexOf(p1);
-
-        Asignacion a = asignaciones.get(c).get(ip);
-        Asignacion b = asignaciones.get(c1).get(ip1);
-
-        asignaciones.get(c).set(ip, b);
-        asignaciones.get(c1).set(ip1, a);*/
+        asignaciones.get(c).set(p1, b);
+        asignaciones.get(c1).set(p, a);
     }
+    
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     * */
-    public void intercambioOrden (Pair <Integer, Integer> p, Pair <Integer, Integer> p1, int c) {
-        int ip = asignaciones.get(c).indexOf(p);
-        int ip1 = asignaciones.get(c1).indexOf(p1);
+    public void intercambioOrden (Integer p, Integer p1, int c) {
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c).get(p1);
 
-        Asignacion a = asignaciones.get(c).get(ip);
-        Asignacion b = asignaciones.get(c).get(ip1);
-
-        asignaciones.get(c).set(ip, b);
-        asignaciones.get(c).set(ip1, a);
+        asignaciones.get(c).set(p1, a);
+        asignaciones.get(c).set(p, b);
     }
     /*
     * Pre: La petición p estaba asignada al camion c
     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
     * */
-    public void cambiaPeticion (Pair <Integer, Integer> p, int c, int c1) {
+    public void cambiaPeticion (Integer p, int c, int c1) {
         int n = asignaciones.get(c1).size();
-        Asignacion a = asignaciones.get(c).get(p);
+        Peticion a = asignaciones.get(c).get(p);
 
         asignaciones.get(c).remove(p);
         asignaciones.get(c1).set(n-1, a);
@@ -172,8 +148,8 @@ public class AbastecimientoState {
     	
     	for (int i=0; i<gasolineras.size(); i++) {
     		ArrayList <Integer> peticiones = gasolineras.get(i).getPeticiones();
-    		for (Integer p : peticiones) {
-    			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, p);
+    		for (int j = 0; j < peticiones.size(); j++) {
+    			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, j);
     			
     			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
@@ -182,7 +158,7 @@ public class AbastecimientoState {
     				c = rand.nextInt(n);
     			}
     			
-    			assignaPeticion (c, new Pair <Integer, Integer> (i, p));
+    			assignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
