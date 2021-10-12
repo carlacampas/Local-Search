@@ -163,29 +163,49 @@ public class AbastecimientoState {
     	}
     }
     
-    SortedMap <Integer, Pair<Integer, Integer>[]> organizarPeticiones (Map <Integer, Integer> used) {
+    SortedMap <Integer, Pair<Integer, Integer>[]> organizarPeticiones () {
+    	for (Gasolinera g : gasolineras) {
+    		
+    	}
     	return null;
     }
 
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
     public void generateInitialSolution2 () {
-    	/*Map <Integer, Integer> used = null;
+    	Map <Integer, Integer> used = null;
     	Set <Pair <Integer, Integer>> coordVisited = null;
-    	for (Distribucion cd : centrosDistribucion) {
+    	
+    	int n = centrosDistribucion.size();
+    	for (int i=0; i<n; i++) {
+    		Distribucion cd = centrosDistribucion.get(i);
     		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
-    		if (coordVisited.contains(coords)) break;
+    		if (coordVisited.contains(coords)) continue;
     		coordVisited.add(coords);
     		
-    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones (used);
+    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones ();
+    		boolean done = false;
     		
-    		for (SortedMap.Entry<Integer, Pair<Integer, Integer>[]> entry : map.entrySet()) {
-    		    System.out.println(entry.getKey() + " => " + entry.getValue());
+    		
+    		for (int j=i; j<n; j++) {
+    			Distribucion cd1 = centrosDistribucion.get(i);
+    			if (new Pair <Integer, Integer> (cd1.getCoordX(), cd1.getCoordY()) != coords) continue;
+    			
+	    		for (Pair <Integer, Integer>[] v : pOrg.values()) {
+	    			for (Pair <Integer, Integer> p : v) {
+	    				int x = used.get(p.a);
+	    				if (x > p.b) continue;
+	    				
+	    				if (!assignaPeticion(j, p)) { done = true; break; }
+	    				else used.put(p.a, x+1);
+	    			}
+	    			if (done) break;
+	    		}
     		}
-    	}*/
+    	}
     }
 
- // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
-    // beneficis. Posar x paquets en els 
+    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Posar maxim x paquets en els diferents camions equitativament.
     public void generateInitialSolution3 () {}
 }
