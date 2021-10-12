@@ -13,35 +13,35 @@ public class AbastecimientoState {
     final static int maxDist = 640;
 
     Gasolineras gasolineras;
-    CentrosDistribucion centrosDistibucion;
+    CentrosDistribucion centrosDistribucion;
 
-    private ArrayList<ArrayList<Asignacion>> asignaciones;
+    private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
 
     // CONSTRUCTORS.
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
         this.gasolineras = gasolineras;
-        this.centrosDistibucion = centrosDistribucion;
+        this.centrosDistribucion = centrosDistribucion;
 
         this.asignaciones = new ArrayList <> (centrosDistribucion.size());
         this.distancias = new ArrayList <> (centrosDistribucion.size());
 
         for (int i=0; i<centrosDistribucion.size(); i++){
-            this.distancias.set(i, maxDist);
-            this.asignaciones.set (i, new ArrayList <>());
+            this.distancias.add(maxDist);
+            this.asignaciones.add(new ArrayList <>());
         }
     }
 
-    public AbastecimientoState (ArrayList <ArrayList<Asignacion>> asignaciones, ArrayList <Integer> distancias,
+    public AbastecimientoState (ArrayList<ArrayList<Peticion>> asignaciones, ArrayList <Integer> distancias,
                                 Gasolineras gasolineras, CentrosDistribucion centrosDistribucion) {
         this.asignaciones = asignaciones;
         this.distancias = distancias;
         this.gasolineras = gasolineras;
-        this.centrosDistibucion = centrosDistribucion;
+        this.centrosDistribucion = centrosDistribucion;
     }
 
     // SETTERS.
-    public void setAssigments(ArrayList <ArrayList<Asignacion>> asignaciones) {
+    public void setAssigments(ArrayList<ArrayList<Peticion>> asignaciones) {
         this.asignaciones = asignaciones;
     }
 
@@ -50,7 +50,7 @@ public class AbastecimientoState {
     }
 
     // GETTERS.
-    public ArrayList<ArrayList<Asignacion>> getAsignaciones() {
+    public ArrayList<ArrayList<Peticion>> getAsignaciones() {
         return asignaciones;
     }
 
@@ -62,20 +62,20 @@ public class AbastecimientoState {
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
     // Los camiones seran identificados con su propio Id Integer
     public Integer calcularDistancias (int c, Pair <Integer, Integer> p) {
-    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
+    	ArrayList <Peticion> cAssig = asignaciones.get(c);
     	
     	int n = cAssig.size();
     	
-    	Distribucion d = centrosDistibucion.get(c);
+    	Distribucion d = centrosDistribucion.get(c);
     	Gasolinera g1 = gasolineras.get(p.a);
 		
 		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
 		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
 	
 		if (n > 0) {
-			Asignacion last = cAssig.get(n - 1);
-	    	if (last.secondIsEmpty()) {
-	    		Gasolinera g = gasolineras.get(last.first().a);
+			Peticion last = cAssig.get(n - 1);
+	    	if (n%2 == 1) {
+	    		Gasolinera g = gasolineras.get(last.get().a);
 	    		Pair <Integer, Integer> coord2 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
 	    		
 	    		int prevD = calcularDistancia (coord1, coord2);
@@ -91,45 +91,35 @@ public class AbastecimientoState {
     public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
     	int dist = calcularDistancias(c, p);
     	if (dist > 0) {
-	    	ArrayList <Asignacion> cAssig = asignaciones.get(c);
-	    	
-	    	int n = cAssig.size();
-	    	if (n == 0) cAssig.add(new Asignacion (p));
-	    	else {
-	    		Asignacion last = cAssig.get(n - 1);
-	    		if (last.secondIsEmpty()) {
-	    			last.setSecond(p);
-	    			cAssig.set(n-1, last);
-	    		}
-	        	else {
-	        		last = new Asignacion (p);
-	        		cAssig.add(last);
-	        	}
-	    	}
-	    	
+	    	ArrayList <Peticion> cAssig = asignaciones.get(c);
+	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
+	    	
+	    	distancias.set(c, dist);
 	    	return true;
     	}
     	return false;
 	} 
+    
     /*
     * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
     * Post: La asignación de las peticiones se invierte.
     * */
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
-        Asignacion a = asignaciones.get(c).get(p);
-        Asignacion b = asignaciones.get(c1).get(p1);
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c1).get(p1);
 
         asignaciones.get(c).set(p1, b);
         asignaciones.get(c1).set(p, a);
     }
+    
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     * */
     public void intercambioOrden (Integer p, Integer p1, int c) {
-        Asignacion a = asignaciones.get(c).get(p);
-        Asignacion b = asignaciones.get(c).get(p1);
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c).get(p1);
 
         asignaciones.get(c).set(p1, a);
         asignaciones.get(c).set(p, b);
@@ -140,7 +130,7 @@ public class AbastecimientoState {
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
         int n = asignaciones.get(c1).size();
-        Asignacion a = asignaciones.get(c).get(p);
+        Peticion a = asignaciones.get(c).get(p);
 
         asignaciones.get(c).remove(p);
         asignaciones.get(c1).set(n-1, a);
@@ -154,12 +144,12 @@ public class AbastecimientoState {
     // Genera solució inicial repartint paquets equitativament entre tots els paquets de forma aleatoria.
     public void generateInitialSolution1 () {
     	Random rand = new Random();
-    	int n = centrosDistibucion.size();
+    	int n = centrosDistribucion.size();
     	
     	for (int i=0; i<gasolineras.size(); i++) {
     		ArrayList <Integer> peticiones = gasolineras.get(i).getPeticiones();
-    		for (Integer p : peticiones) {
-    			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, p);
+    		for (int j = 0; j < peticiones.size(); j++) {
+    			Pair <Integer, Integer> pet = new Pair <Integer, Integer> (i, j);
     			
     			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
@@ -168,15 +158,34 @@ public class AbastecimientoState {
     				c = rand.nextInt(n);
     			}
     			
-    			assignaPeticion (c, new Pair <Integer, Integer> (i, p));
+    			assignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
+    
+    SortedMap <Integer, Pair<Integer, Integer>[]> organizarPeticiones (Map <Integer, Integer> used) {
+    	return null;
+    }
 
-    // Genera solució inicial repartint paquets equitativament entre tots els paquets amb ponderacions dels costos i
-    // beneficis.
-    public void generateInitialSolution2 () {}
+    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Maximizar distancies en tots els camions.
+    public void generateInitialSolution2 () {
+    	/*Map <Integer, Integer> used = null;
+    	Set <Pair <Integer, Integer>> coordVisited = null;
+    	for (Distribucion cd : centrosDistribucion) {
+    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
+    		if (coordVisited.contains(coords)) break;
+    		coordVisited.add(coords);
+    		
+    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones (used);
+    		
+    		for (SortedMap.Entry<Integer, Pair<Integer, Integer>[]> entry : map.entrySet()) {
+    		    System.out.println(entry.getKey() + " => " + entry.getValue());
+    		}
+    	}*/
+    }
 
-    // Genera solució inicial repartint paquets...
+ // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Posar x paquets en els 
     public void generateInitialSolution3 () {}
 }
