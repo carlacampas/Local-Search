@@ -28,5 +28,6 @@ public class Main {
     	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
         // genera solucio
         // imprimir estat
+    	sc.close();
     }
 }

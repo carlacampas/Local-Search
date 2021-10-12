@@ -163,11 +163,23 @@ public class AbastecimientoState {
     	}
     }
     
-    SortedMap <Integer, Pair<Integer, Integer>[]> organizarPeticiones () {
+    SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> organizarPeticiones (Pair <Integer, Integer> cCoord) {
+    	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = null;
+    	int i = 0;
     	for (Gasolinera g : gasolineras) {
+    		Pair <Integer, Integer> gCoord = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
+    		int d = calcularDistancia (cCoord, gCoord);
     		
+    		ArrayList <Pair<Integer, Integer>> arr = pOrg.get(d);
+    		int n = g.getPeticiones().size();
+    		for (int j = 0; j<n; j++) {
+    			Pair <Integer, Integer> p = new Pair <Integer, Integer> (i, j);
+    			arr.add(p);
+    		}
+    		pOrg.put(d, arr);
+    		i++;
     	}
-    	return null;
+    	return pOrg;
     }
 
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
@@ -183,7 +195,7 @@ public class AbastecimientoState {
     		if (coordVisited.contains(coords)) continue;
     		coordVisited.add(coords);
     		
-    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones ();
+    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones (coords);
     		boolean done = false;
     		
     		
