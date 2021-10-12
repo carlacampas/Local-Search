@@ -25,6 +25,7 @@ public class AbastecimientoHeuristicFunction1 implements HeuristicFunction {
         // de las peticiones atendidas y la distancia total recorrida
         for (ArrayList<Peticion> listaPeticiones : estado.getAsignaciones()) {
             double distanciaCamion = 0.0;
+            Gasolinera gasolineraAnterior = null;
             for (int i = 0; i < listaPeticiones.size(); i++) {
 
                 Peticion peticion = listaPeticiones.get(i);
@@ -32,7 +33,6 @@ public class AbastecimientoHeuristicFunction1 implements HeuristicFunction {
                 Distribucion distribucion = estado.centrosDistribucion.get(i);
 
                 // Añadir distancia recorrida por una petición a la distancia recorrida por UN camión:
-                Gasolinera gasolineraAnterior = null;
                 if (i == 0) { // Primer pedido: Distancia entre el centro de distribución y la gasolinera que ha hecho el pedido
                     distanciaCamion += calcularDistancias(distribucion.getCoordX(), distribucion.getCoordY(), gasolinera.getCoordX(), gasolinera.getCoordY());
                 }
@@ -46,14 +46,21 @@ public class AbastecimientoHeuristicFunction1 implements HeuristicFunction {
 
                 // Añadir precio de una peticion al precio total:
                 int diasPendientes = gasolinera.getPeticiones().get(peticion.get().b);
-                precioTotal += VALOR_DEPOSITO * ((100 - 2 ^ diasPendientes) / 100);
+                if (diasPendientes == 0) precioTotal += VALOR_DEPOSITO * 1.02;
+                else precioTotal += VALOR_DEPOSITO * ((100 - 2 ^ diasPendientes) / 100);
             }
             distanciaTotal += distanciaCamion;
         }
+        
+        // TODO: Erase prints
+        System.out.println("Real");
+        System.out.println(precioTotal);
+        System.out.println(distanciaTotal);
+        
         return precioTotal - COSTE_KILOMETRO * distanciaTotal;
     }
 
-    private int calcularDistancias(int fromX, int fromY, int toX, int toY) {
+    static int calcularDistancias(int fromX, int fromY, int toX, int toY) {
         return Math.abs (fromX - toX) + Math.abs (fromY - toY);
     }
 }
