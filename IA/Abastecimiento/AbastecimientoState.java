@@ -13,7 +13,7 @@ public class AbastecimientoState {
     final static int maxDist = 640;
 
     Gasolineras gasolineras;
-    CentrosDistribucion centrosDistibucion;
+    CentrosDistribucion centrosDistribucion;
 
     private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
@@ -21,7 +21,7 @@ public class AbastecimientoState {
     // CONSTRUCTORS.
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
         this.gasolineras = gasolineras;
-        this.centrosDistibucion = centrosDistribucion;
+        this.centrosDistribucion = centrosDistribucion;
 
         this.asignaciones = new ArrayList <> (centrosDistribucion.size());
         this.distancias = new ArrayList <> (centrosDistribucion.size());
@@ -37,7 +37,7 @@ public class AbastecimientoState {
         this.asignaciones = asignaciones;
         this.distancias = distancias;
         this.gasolineras = gasolineras;
-        this.centrosDistibucion = centrosDistribucion;
+        this.centrosDistribucion = centrosDistribucion;
     }
 
     // SETTERS.
@@ -66,7 +66,7 @@ public class AbastecimientoState {
     	
     	int n = cAssig.size();
     	
-    	Distribucion d = centrosDistibucion.get(c);
+    	Distribucion d = centrosDistribucion.get(c);
     	Gasolinera g1 = gasolineras.get(p.a);
 		
 		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
@@ -144,7 +144,7 @@ public class AbastecimientoState {
     // Genera solució inicial repartint paquets equitativament entre tots els paquets de forma aleatoria.
     public void generateInitialSolution1 () {
     	Random rand = new Random();
-    	int n = centrosDistibucion.size();
+    	int n = centrosDistribucion.size();
     	
     	for (int i=0; i<gasolineras.size(); i++) {
     		ArrayList <Integer> peticiones = gasolineras.get(i).getPeticiones();
@@ -162,11 +162,30 @@ public class AbastecimientoState {
     		}
     	}
     }
+    
+    SortedMap <Integer, Pair<Integer, Integer>[]> organizarPeticiones (Map <Integer, Integer> used) {
+    	return null;
+    }
 
-    // Genera solució inicial repartint paquets equitativament entre tots els paquets amb ponderacions dels costos i
-    // beneficis.
-    public void generateInitialSolution2 () {}
+    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Maximizar distancies en tots els camions.
+    public void generateInitialSolution2 () {
+    	/*Map <Integer, Integer> used = null;
+    	Set <Pair <Integer, Integer>> coordVisited = null;
+    	for (Distribucion cd : centrosDistribucion) {
+    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
+    		if (coordVisited.contains(coords)) break;
+    		coordVisited.add(coords);
+    		
+    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones (used);
+    		
+    		for (SortedMap.Entry<Integer, Pair<Integer, Integer>[]> entry : map.entrySet()) {
+    		    System.out.println(entry.getKey() + " => " + entry.getValue());
+    		}
+    	}*/
+    }
 
-    // Genera solució inicial repartint paquets...
+ // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Posar x paquets en els 
     public void generateInitialSolution3 () {}
 }

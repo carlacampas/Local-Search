@@ -10,7 +10,7 @@ class Peticion {
 	}
 	
 	Pair <Integer, Integer> get () {
-		return this;
+		return this.p;
 	}
 	
 	void set (Pair <Integer, Integer> a) {
