@@ -195,7 +195,7 @@ public class AbastecimientoState {
     		if (coordVisited.contains(coords)) continue;
     		coordVisited.add(coords);
     		
-    		SortedMap <Integer, Pair<Integer, Integer>[]> pOrg = organizarPeticiones (coords);
+    		SortedMap<Integer, ArrayList<Pair<Integer, Integer>>> pOrg = organizarPeticiones (coords);
     		boolean done = false;
     		
     		
@@ -203,7 +203,7 @@ public class AbastecimientoState {
     			Distribucion cd1 = centrosDistribucion.get(i);
     			if (new Pair <Integer, Integer> (cd1.getCoordX(), cd1.getCoordY()) != coords) continue;
     			
-	    		for (Pair <Integer, Integer>[] v : pOrg.values()) {
+	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
 	    			for (Pair <Integer, Integer> p : v) {
 	    				int x = used.get(p.a);
 	    				if (x > p.b) continue;
