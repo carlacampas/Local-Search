@@ -87,11 +87,82 @@ public class AbastecimientoState {
     	
     	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
     }
-    
+
+    public void actualizaDistancia(Pair <Integer, Integer> oldP, Pair <Integer, Integer> newP, int c){
+        Distribucion d = centrosDistibucion.get(c);
+        Gasolinera gOld = gasolineras.get(oldP.a);
+        Gasolinera gNew = gasolineras.get(newP.a);
+
+        //Calcular la distancia de d a oldP
+        //Calcular la distancia de d a newP
+        Pair <Integer, Integer> dCoord = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
+        Pair <Integer, Integer> oldCoord = new Pair <Integer, Integer> (gOld.getCoordX(), gOld.getCoordY());
+        Pair <Integer, Integer> newCoord = new Pair <Integer, Integer> (gNew.getCoordX(), gNew.getCoordY());
+
+        int dcToOldC = calcularDistancia(dCoord, oldCoord);
+        int dcToNewC = calcularDistancia(dCoord, newCoord);
+
+        int n = asignaciones.get(c).size();
+        if (n-1 == oldP.b){
+
+            if (oldP.b%2 == 0) {
+                int dAct = distancias.get(c) + dcToOldC - dcToNewC;
+                distancias.set(c, dAct);
+            }
+            else {
+                int idOld = asignaciones.get(c).indexOf(oldP);
+
+                Peticion pMid = asignaciones.get(c).get(idOld-1);
+                Gasolinera gMid = gasolineras.get(pMid.a);
+
+                Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
+
+                int dcToMidC = calcularDistancia(dCoord, midCoord);
+
+                int dOld = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
+                int dNew = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToNewC;
+
+                int dAct = distancias.get(c) + dOld - dNew;
+                distancias.set(c, dAct);
+            }
+        }
+        else {
+            if (oldP.b%2 == 0){
+                int idOld = asignaciones.get(c).indexOf(oldP);
+
+                Peticion pMid = asignaciones.get(c).get(idOld+1);
+                Gasolinera gMid = gasolineras.get(pMid.a);
+
+                Pair <Integer, Integer> midCoord = new <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
+
+                int dcToMidC = calcularDistancia(dCoord, midCoord);
+
+                int dOld = //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
+                int dNew = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToNewC;
+
+                int dAct = distancias.get(c) + dOld - dNew;
+                distancias.set(c, dAct);
+                //encontrar la petición siguiente midP
+                //calcular las distancias de d a oldP, oldP a midP y midP a d y la sumamos a distancias(c)
+                //calcular las distancias de de a newP, newP a midP y midP a d y la restamos a distancias(c)
+            }
+            else {
+                //encontrar la petición anterior midP
+                //calcular las distancias de d a midP, de midP a oldP y de oldP a d y las sumamos a distancias(c)
+                //calcular las distancias de d a midP, de midP a newP y de newP a d y la restamos a distancias(c)
+            }
+        }
+        if (n-1 != oldP.b && oldP.b%2 == 0) asignaciones.get(c).get(oldP.b)
+    }
+
+
     public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
-    	int dist = calcularDistancias(c, p);
-    	if (dist > 0) {
-	    	ArrayList <Peticion> cAssig = asignaciones.get(c);
+        ArrayList <Peticion> cAssig = asignaciones.get(c);
+        int dist = calcularDistancias(c, p);
+        int n = cAssig.size();
+
+        // control de restricciones de distancia y número de peticiones asignadas
+    	if (dist > 0 && n < 5) {
 	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
 	    	
@@ -109,8 +180,41 @@ public class AbastecimientoState {
         Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c1).get(p1);
 
-        asignaciones.get(c).set(p1, b);
-        asignaciones.get(c1).set(p, a);
+        if (p == 0 && p1 == 0){
+            asignaciones.get(c).set(p1, b);
+            asignaciones.get(c1).set(p, a);
+
+            int d = distancias.get(c);
+            int d1 = distancias.get(c1);
+
+            distancias.set(c, d1);
+            distancias.set(c1, d);
+        }
+        else {
+            int distP1 =
+        }
+
+
+        /*
+        * Varios casos:
+        * ambos camiones c y c1 tienen una sola petición
+        *   simplemente swappeamos el valor de distancias(c) por el de distancias(c1)
+        *
+        * ambos camiones tienen más de una petición
+        *   Calcular la distancia del viaje al cual pertenece la peticion p y sumarsela al total de km del camión c
+        *   Calcular la distancia del viaje al cual pertenece la peticion p1 y sumarsela al total de km del camión c1
+        *
+        *   Calcular la distancia que nos quedaria en el viaje de c con p1 y la otra petición y restarsela al total de km de c
+        *   Calcular la distancia que nos quedaria en el viaje de c1 con p y la otra petición y restarsela al total de km de c1
+        *
+        * assignaciones(c).size() == 1 y asignaciones(c1).size() > 1 o viceversa
+        *   distancias(c) += 2*d(c,p)
+        *   distancias(c) -= 2*d(c,p1)
+        *
+        *   actualizamos la distancia de c1 con el nuevo viaje
+        *
+        *   hacemos una método actualizarDistanciaViaje(peticion que hay que eliminar, peticion que hay que añadir y el camión en cuestion)
+        * */
     }
     
     /*
@@ -133,7 +237,7 @@ public class AbastecimientoState {
         Peticion a = asignaciones.get(c).get(p);
 
         asignaciones.get(c).remove(p);
-        asignaciones.get(c1).set(n-1, a);
+        asignaciones.get(c1).add(p);
     }
 
     // INITIAL SOLUTION.
