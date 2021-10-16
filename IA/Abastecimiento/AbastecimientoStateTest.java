@@ -14,12 +14,17 @@ import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AbastecimientoStateTest {
+	
+	private Gasolineras gasolineras;
+	private CentrosDistribucion centrosDistibucion;
+	@BeforeEach
+	public void setUp () {
+		gasolineras = new Gasolineras(0, 0);
+         centrosDistibucion = new CentrosDistribucion(0, 0, 0);
+	}
     @Test
     @DisplayName("Simple distance test")
-    void testCalcularDistancia () {
-    	Gasolineras gasolineras = null;
-        CentrosDistribucion centrosDistibucion = null;
-        
+    public void testCalcularDistancia () {
     	ArrayList<Integer> peticions = new ArrayList <Integer> (2);
     	gasolineras.add(new Gasolinera(0, 0, peticions));
     	gasolineras.add(new Gasolinera (5, 0, peticions));
@@ -41,4 +46,36 @@ public class AbastecimientoStateTest {
     		}
     	}
     }
+    @Test
+    @DisplayName("Simple distance test")
+    public void testCalcularDistnacias() {
+        CentrosDistribucion centrosDistibucion = new CentrosDistribucion(0, 0, 0);
+        
+        centrosDistibucion.add(new Distribucion(0, 0));
+        
+        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+        
+        // int c, pair
+        int[] solu = {440, 6, 5}; 
+        int[] codeSol = new int[3];
+        // first test: one way trip, empty array
+        Pair <Integer, Integer> p = new Pair <Integer, Integer> (100, 100);
+        codeSol[0] = as.calcularDistancias(0, p);
+        as.assignaPeticion(0, p);
+        
+        // second test: two way trip, one petition inside array
+        p = new Pair <Integer, Integer> (50, 50);
+        
+        // third test: one way trip where 2+ are already in the array
+        // km negatius
+        for (int i=0; i<3; i++) {
+        	assertEquals (solu[i], codeSol[i], "Processed distances should be equal");
+        }
+    }
+    
+    //actualizaDistancia
+    //assignaPeticion
+    //intercambiaPeticiones
+    //intercambioOrden
+    //cambiaPeticion
 }
