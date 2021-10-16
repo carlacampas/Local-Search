@@ -186,13 +186,13 @@ public class AbastecimientoState {
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
     public void intercambioOrden (Integer p, Integer p1, int c) {
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c).get(p1);
+
         int x = actualizaDistancia(a.get(), b.get(), c);
         int ogDistance = distancias.get(c);
 
         if (x > 0){
-            Peticion a = asignaciones.get(c).get(p);
-            Peticion b = asignaciones.get(c).get(p1);
-            
             distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
             int y = actualizaDistancia(b.get(), a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
@@ -213,7 +213,7 @@ public class AbastecimientoState {
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
         Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c1).get(pos)
+        Peticion b = asignaciones.get(c1).get(p)
 
         int newDist = actualizaDistancia(b, a, c1);
 
