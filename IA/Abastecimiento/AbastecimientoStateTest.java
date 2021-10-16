@@ -109,19 +109,23 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Operators test - testIntercambiaPeticiones")
     public void testIntercambiaPeticiones () {
-    	
+    	// test funciona camiones distintos
+    	// test misma peticion funciona
+    	// test mismo camion funciona
+    	// test distancia demasiado grande
     }
     
     @Test
     @DisplayName("Operators test - testIntercambioOrden")
     public void testIntercambioOrden () {
-    	
+    	// do we really need this? si yes mismos tests que arriba
     }
     
     @Test
     @DisplayName("Operators test - testCambiaPeticion")
     public void testCambiaPeticion () {
-    	
+    	// test funciona
+    	// test demasiado grande
     }
     
     @Test
@@ -171,12 +175,14 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Organizar Peticiones Test - testOrganizarPeticiones")
     public void testOrganizarPeticiones () {
-    	
+    	// test 0
+    	// test normal	
     }
     
     @Test
     @DisplayName("Initial State Test - testGenerateInitialSolution1")
     public void testGenerateInitialSolution2 () {
-    	
+    	// test totes les gasolineres en diferentes posicions
+    	// test dos camions i differentes gasolineres
     }
 }

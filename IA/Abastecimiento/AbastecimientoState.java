@@ -238,8 +238,9 @@ public class AbastecimientoState {
     	}
     }
     
+    // cambiar per crear ponderacio basada en costos
     SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> organizarPeticiones (Pair <Integer, Integer> cCoord) {
-    	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = null;
+    	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = new TreeMap <Integer, ArrayList <Pair<Integer, Integer>>> ();
     	int i = 0;
     	for (Gasolinera g : gasolineras) {
     		Pair <Integer, Integer> gCoord = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
@@ -256,12 +257,12 @@ public class AbastecimientoState {
     	}
     	return pOrg;
     }
-
+    
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
     public void generateInitialSolution2 () {
-    	Map <Integer, Integer> used = null;
-    	Set <Pair <Integer, Integer>> coordVisited = null;
+    	Map <Integer, Integer> used = new HashMap <Integer, Integer> ();
+    	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
     	
     	int n = centrosDistribucion.size();
     	for (int i=0; i<n; i++) {
