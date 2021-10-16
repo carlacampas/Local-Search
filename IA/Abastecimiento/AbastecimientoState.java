@@ -209,6 +209,10 @@ public class AbastecimientoState {
         }
     }
 
+    public void cambioPeticionNoAsig (Integer p, int c, Pair <Integer, Integer> newP){
+
+    }
+
     // INITIAL SOLUTION.
     public int calcularDistancia (Pair <Integer, Integer> coord1, Pair <Integer, Integer> coord2) {
     	return Math.abs (coord1.a - coord2.a) + Math.abs (coord1.b - coord2.b);
