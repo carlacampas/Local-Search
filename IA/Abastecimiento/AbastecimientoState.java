@@ -106,7 +106,7 @@ public class AbastecimientoState {
         if (oldP.b%2 == 0) {
             if (n-1 == oldP.b){
                 dAct = distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
-                distancias.set(c, dAct);
+                //distancias.set(c, dAct);
             }
             else {
                 int idOld = asignaciones.get(c).indexOf(oldP);
@@ -122,7 +122,7 @@ public class AbastecimientoState {
                 int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
 
                 dAct = distancias.get(c) + dOld - dNew;
-                distancias.set(c, dAct);
+                //distancias.set(c, dAct);
             }
         }
         else {
@@ -139,7 +139,7 @@ public class AbastecimientoState {
             int dNew = dcToMidC + calcularDistancia(midCoord, newCoord) + dcToNewC;
 
             dAct = distancias.get(c) + dOld - dNew;
-            distancias.set(c, dAct);
+            //distancias.set(c, dAct);
         }
         return dAct;
     }
@@ -167,46 +167,77 @@ public class AbastecimientoState {
     * Post: La asignación de las peticiones se invierte.
     * */
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
-        Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c1).get(p1);
+        int x = actualizaDistancia(a.get(), b.get(), c);
+        int y = actualizaDistancia(b.get(), a.get(), c1);
 
-        asignaciones.get(c).set(p1, b);
-        asignaciones.get(c1).set(p, a);
+        if (x > 0 && y > 0){
+            Peticion a = asignaciones.get(c).get(p);
+            Peticion b = asignaciones.get(c1).get(p1);
 
-        actualizaDistancia(a.get(), b.get(), c);
-        actualizaDistancia(b.get(), a.get(), c1);
+            asignaciones.get(c).set(p1, b);
+            asignaciones.get(c1).set(p, a);
+
+            distancias.set(c, x);
+            distancias.set(c1, y);
+        }
     }
-    
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
-    * */
+    */
     public void intercambioOrden (Integer p, Integer p1, int c) {
-        Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c).get(p1);
+        int x = actualizaDistancia(a.get(), b.get(), c);
+        int ogDistance = distancias.get(c);
 
-        asignaciones.get(c).set(p1, a);
-        asignaciones.get(c).set(p, b);
+        if (x > 0){
+            distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
+            int y = actualizaDistancia(b.get(), a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
-        actualizaDistancia(a.get(), b.get(), c);
-        actualizaDistancia(b.get(), a.get(), c);
+            if (y > 0){
+                Peticion a = asignaciones.get(c).get(p);
+                Peticion b = asignaciones.get(c).get(p1);
+
+                asignaciones.get(c).set(p1, a);
+                asignaciones.get(c).set(p, b);
+
+                distancias.set(c, y);
+            }
+            else distancias.set(c, ogDistance);                 //si pasa cambiamos al valor original y aquí no ha pasado nada :)
+        }
     }
+
+
     /*
     * Pre: La petición p estaba asignada al camion c
     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
+        int pos = asignaciones.get(c).indexOf(p);
+
         Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c1).get(pos)
 
-        asignaciones.get(c).remove(p);
-        asignaciones.get(c1).add(a);
+        int newDist = actualizaDistancia(b, a, c1);
 
-        int n = asignaciones.get(c).size();
-        distancias.set(c, maxDist);
-        if (n != 0) {
-            for (int i = 0; i < n-1; i++){
+        if (newDist > 0){
+            asignaciones.get(c).remove(p);
+            asignaciones.get(c1).add(pos, a);
+
+            int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
+            int m = asignaciones.get(c1).size(), j = 0, distC1 = maxDist;
+
+            distancias.set(c, maxDist);
+            distancias.set(c1, maxDist);
+
+            while (i < n){
                 Peticion x = asignaciones.get(c).get(i);
-                calcularDistancias(c, x.get());
+                distC -= distcalcularDistancias(c, x.get());
+                i++;
+            }
+            while (i < m){
+                Peticion x = asignaciones.get(c1).get(j);
+                distC1 -= calcularDistancias(c1, x.get());
+                j++;
             }
         }
     }
@@ -301,3 +332,4 @@ public class AbastecimientoState {
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
     public void generateInitialSolution3 () {}
 }
+
