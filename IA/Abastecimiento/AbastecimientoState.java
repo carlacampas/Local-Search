@@ -145,14 +145,14 @@ public class AbastecimientoState {
     }
 
 
-    public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
+    public boolean asignaPeticion (int c, Pair <Integer, Integer> p) {
         ArrayList <Peticion> cAssig = asignaciones.get(c);
         
         int dist = calcularDistancias(c, p);
         int n = cAssig.size();
 
         // control de restricciones de distancia y número de peticiones asignadas
-    	if (dist > 0 && n < 5) {
+    	if (dist > 0 && (n/2) < 5) {
 	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
 	    	
@@ -228,12 +228,12 @@ public class AbastecimientoState {
     			
     			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
-    			while (!visited[c] && !assignaPeticion(c, pet)) {
+    			while (!visited[c] && !asignaPeticion(c, pet)) {
     				visited[c] = true;
     				c = rand.nextInt(n);
     			}
     			
-    			assignaPeticion (c, new Pair <Integer, Integer> (i, j));
+    			asignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
@@ -283,7 +283,7 @@ public class AbastecimientoState {
 	    				int x = used.get(p.a);
 	    				if (x > p.b) continue;
 	    				
-	    				if (!assignaPeticion(j, p)) { done = true; break; }
+	    				if (!asignaPeticion(j, p)) { done = true; break; }
 	    				else used.put(p.a, x+1);
 	    			}
 	    			if (done) break;

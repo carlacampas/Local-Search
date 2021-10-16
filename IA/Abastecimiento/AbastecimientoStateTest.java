@@ -17,13 +17,15 @@ public class AbastecimientoStateTest {
 	
 	private Gasolineras gasolineras;
 	private CentrosDistribucion centrosDistibucion;
+	
 	@BeforeEach
 	public void setUp () {
 		gasolineras = new Gasolineras(0, 0);
          centrosDistibucion = new CentrosDistribucion(0, 0, 0);
 	}
+	
     @Test
-    @DisplayName("Simple distance test")
+    @DisplayName("Simple distance test - testCalcularDistancia")
     public void testCalcularDistancia () {
     	ArrayList<Integer> peticions = new ArrayList <Integer> (2);
     	gasolineras.add(new Gasolinera(0, 0, peticions));
@@ -48,8 +50,8 @@ public class AbastecimientoStateTest {
     }
     
     @Test
-    @DisplayName("Processed distance test")
-    public void testCalcularDistnacias() {        
+    @DisplayName("Processed distance test - testCalcularDistancias")
+    public void testCalcularDistancias() {        
         centrosDistibucion.add(new Distribucion(0, 0));
         ArrayList<Integer> peticiones = new ArrayList <Integer> (1);
         
@@ -59,7 +61,7 @@ public class AbastecimientoStateTest {
         gasolineras.add(new Gasolinera(74, 88, peticiones));
         // third test: one way trip where 2+ are already in the array
         gasolineras.add(new Gasolinera(50, 50, peticiones));
-        // fourth test: km negatius
+        // fourth test: negative km
         gasolineras.add(new Gasolinera(100, 100, peticiones));
         
         AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
@@ -68,13 +70,72 @@ public class AbastecimientoStateTest {
         
         for (int i=0; i<solu.length; i++) {
 	        assertEquals (solu[i], as.calcularDistancias(0, new Pair <Integer, Integer> (i, 0)), "Processed distances should be equal");
-	        as.assignaPeticion(0, new Pair <Integer, Integer> (i, 0));
+	        as.asignaPeticion(0, new Pair <Integer, Integer> (i, 0));
         }
     }
     
-    //actualizaDistancia
-    //assignaPeticion
+    @Test
+    @DisplayName("Processed distance test - testActualizaDistancia")
+    public void testActualizaDistancia () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Operators test - testAsignaPeticion")
+    public void asignaPeticion () {
+    	centrosDistibucion.add(new Distribucion(0, 0));
+    	centrosDistibucion.add(new Distribucion(5, 0));
+    	
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+    	
+    	// Test correct return value.
+    	ArrayList<Integer> peticiones = new ArrayList <Integer> (1);
+    	gasolineras.add(new Gasolinera(60, 60, peticiones));
+    	gasolineras.add(new Gasolinera(74, 88, peticiones));
+    	gasolineras.add(new Gasolinera(50, 50, peticiones));
+    	gasolineras.add(new Gasolinera(100, 100, peticiones));
+    	
+    	// first test: true, empty petition set
+    	assertEquals (true, as.asignaPeticion (0, new Pair <Integer, Integer> (0, 0)), "Empty assignation list should be true");
+    	
+    	// second test: true, not empty petition set
+    	assertEquals (true, as.asignaPeticion (0, new Pair <Integer, Integer> (1, 0)), "No criteria broken list should be true");
+    	assertEquals (true, as.asignaPeticion (0, new Pair <Integer, Integer> (2, 0)), "No criteria broken list should be true");
+    	
+    	// third test: false, not enough km
+    	assertEquals (false, as.asignaPeticion (0, new Pair <Integer, Integer> (3, 0)), "Too many KM");
+    	
+    	// fourth test: false, max trips taken
+    	int newGasoStart = 4;
+    	for (int i=1; i<=10; i++) {
+    		gasolineras.add(new Gasolinera (i, i, peticiones));
+    		as.asignaPeticion (1, new Pair <Integer, Integer> (newGasoStart++, 0));
+    	}
+    	
+    	gasolineras.add(new Gasolinera (11, 11, peticiones));
+    	assertEquals (false, as.asignaPeticion (1, new Pair <Integer, Integer> (11, 0)), "Too many trips");
+    	
+    	// Test petitions solutions are as should be
+    	ArrayList <Peticion> pet = as.getAsignaciones().get(0);
+    	assertEquals (3, pet.size(), "Should have 3 assigs");
+    	for (int i=0; i<3; i++) {
+    		Peticion p = pet.get(i);
+    		assertEquals (i, p.get().a, "Petition keys should be the same");
+    	}
+    	
+    	pet = as.getAsignaciones().get(1);
+    	assertEquals (10, pet.size(), "Should have 10 assigs");
+    	for (int i=0; i<10; i++) {
+    		Peticion p = pet.get(i);
+    		assertEquals (i+4, p.get().a, "Petition keys should be the same");
+    	}
+    }
+    
     //intercambiaPeticiones
     //intercambioOrden
     //cambiaPeticion
+    //calcularDistancia
+    //generateInitialSolution1
+    //organizarPeticiones
+    //generateInitialSolution2
 }
