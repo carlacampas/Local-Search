@@ -238,30 +238,40 @@ public class AbastecimientoState {
     	}
     }
     
+    private int ponderarCoste (int dist, int dias) {
+    	return (int) (10*((100 - Math.pow(2, dias))) - 2*dist);
+    }
+    
     // cambiar per crear ponderacio basada en costos
     SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> organizarPeticiones (Pair <Integer, Integer> cCoord) {
     	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = new TreeMap <Integer, ArrayList <Pair<Integer, Integer>>> ();
+    	
     	int i = 0;
     	for (Gasolinera g : gasolineras) {
     		Pair <Integer, Integer> gCoord = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
     		int d = calcularDistancia (cCoord, gCoord);
-    		
-    		ArrayList <Pair<Integer, Integer>> arr = pOrg.get(d);
+
     		int n = g.getPeticiones().size();
     		for (int j = 0; j<n; j++) {
+    			int c = ponderarCoste (d, g.getPeticiones().get(j));
+    			ArrayList <Pair<Integer, Integer>> arr;
+    			
+    			if (pOrg.containsKey(c)) arr = pOrg.get(c);
+    			else arr = new ArrayList <Pair <Integer, Integer>> ();
+    			
     			Pair <Integer, Integer> p = new Pair <Integer, Integer> (i, j);
     			arr.add(p);
+    			pOrg.put (c, arr);
     		}
-    		pOrg.put(d, arr);
     		i++;
     	}
     	return pOrg;
     }
-    
+
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
     public void generateInitialSolution2 () {
-    	Map <Integer, Integer> used = new HashMap <Integer, Integer> ();
+    	Set <Pair <Integer, Integer>> used = new HashSet <Pair <Integer, Integer>> ();
     	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
     	
     	int n = centrosDistribucion.size();
@@ -281,11 +291,10 @@ public class AbastecimientoState {
     			
 	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
 	    			for (Pair <Integer, Integer> p : v) {
-	    				int x = used.get(p.a);
-	    				if (x > p.b) continue;
+	    				if (used.contains(p)) continue;
 	    				
 	    				if (!asignaPeticion(j, p)) { done = true; break; }
-	    				else used.put(p.a, x+1);
+	    				else used.add(p);
 	    			}
 	    			if (done) break;
 	    		}
@@ -295,5 +304,38 @@ public class AbastecimientoState {
 
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
-    public void generateInitialSolution3 () {}
+    /*public void generateInitialSolution3 () {
+    	Set <Pair <Integer, Integer>> used = new HashMap <Integer, Integer> ();
+    	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
+    	
+    	int n = centrosDistribucion.size();
+    	for (int i=0; i<n; i++) {
+    		Distribucion cd = centrosDistribucion.get(i);
+    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
+    		if (coordVisited.contains(coords)) continue;
+    		coordVisited.add(coords);
+    		
+    		SortedMap<Integer, ArrayList<Pair<Integer, Integer>>> pOrg = organizarPeticiones (coords);
+    		boolean done = false;
+    		
+    		
+    		ArrayList <Integer> centros = new ArrayList <> ();
+    		for (int j=i; j<n; j++) {
+    			Distribucion cd1 = centrosDistribucion.get(i);
+    			if (new Pair <Integer, Integer> (cd1.getCoordX(), cd1.getCoordY()) == coords) centros.add(j);
+    		}
+    			
+	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
+	    			for (Pair <Integer, Integer> p : v) {
+	    				int x = used.get(p.a);
+	    				if (x > p.b) continue;
+	    				
+	    				//if (!asignaPeticion(j, p)) { done = true; break; }
+	    				else used.put(p.a, x+1);
+	    			}
+	    			if (done) break;
+	    		}
+    		
+    	}
+    }*/
 }

@@ -152,16 +152,8 @@ public class AbastecimientoStateTest {
     	}
     }
     
-    @Test
-    @DisplayName("Initial State Test - testGenerateInitialSolution1")
-    public void testGenerateInitialSolution1 () {
-    	gasolineras = new Gasolineras(100, 5);
-        centrosDistibucion = new CentrosDistribucion(10, 2, 5);
-        
-        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
-        as.generateInitialSolution1 ();
-        
-        for (int i=0; i<as.getAsignaciones().size(); i++) {
+    private void noErrors (AbastecimientoState as) {
+    	for (int i=0; i<as.getAsignaciones().size(); i++) {
         	ArrayList <Peticion> assigs = as.getAsignaciones().get(i);
         	assertEquals (true, assigs.size() <= 10, "No es poden fer mes de 5 viatges");
         	assertEquals (true, as.getDistancias().get(i) > 0, "Distancia ha de ser positiva");
@@ -173,6 +165,18 @@ public class AbastecimientoStateTest {
     }
     
     @Test
+    @DisplayName("Initial State Test - testGenerateInitialSolution1")
+    public void testGenerateInitialSolution1 () {
+    	gasolineras = new Gasolineras(100, 5);
+        centrosDistibucion = new CentrosDistribucion(10, 2, 5);
+        
+        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+        as.generateInitialSolution1 ();
+        
+        noErrors(as);
+    }
+    
+    @Test
     @DisplayName("Organizar Peticiones Test - testOrganizarPeticiones")
     public void testOrganizarPeticiones () {
     	// test 0
@@ -180,9 +184,27 @@ public class AbastecimientoStateTest {
     }
     
     @Test
-    @DisplayName("Initial State Test - testGenerateInitialSolution1")
+    @DisplayName("Initial State Test - testGenerateInitialSolution2")
     public void testGenerateInitialSolution2 () {
+    	gasolineras = new Gasolineras(100, 5);
+        centrosDistibucion = new CentrosDistribucion(10, 2, 5);
+        
+        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+        as.generateInitialSolution2 ();
+        
+        noErrors(as);
+    	// test totes les gasolineres en diferentes posicions
+    	// test dos camions i differentes gasolineres
+    	
+    	// comprobar que no hay errores
+    }
+    
+    @Test
+    @DisplayName("Initial State Test - testGenerateInitialSolution3")
+    public void testGenerateInitialSolution3 () {
     	// test totes les gasolineres en diferentes posicions
     	// test dos camions i differentes gasolineres
     }
+    
+    // comprobar que no hay errores
 }
