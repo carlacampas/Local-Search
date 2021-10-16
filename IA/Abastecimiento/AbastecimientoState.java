@@ -212,8 +212,6 @@ public class AbastecimientoState {
     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
-        int pos = asignaciones.get(c).indexOf(p);
-
         Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c1).get(pos)
 
@@ -221,7 +219,7 @@ public class AbastecimientoState {
 
         if (newDist > 0){
             asignaciones.get(c).remove(p);
-            asignaciones.get(c1).add(pos, a);
+            asignaciones.get(c1).add(p, a);
 
             int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
             int m = asignaciones.get(c1).size(), j = 0, distC1 = maxDist;
@@ -243,7 +241,22 @@ public class AbastecimientoState {
     }
 
     public void cambioPeticionNoAsig (Integer p, int c, Pair <Integer, Integer> newP){
+        int newDist = actualizaDistancia(p, newP.get().b, c);
 
+        if (newDist > 0){
+            Peticion a = new Peticion(newP);
+            asignaciones.get(c).add(p, a);
+
+            int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
+
+            distancias.set(c, maxDist);
+
+            while (i < n) {
+                Peticion x = asignaciones.get(c).get(i);
+                distC -= distcalcularDistancias(c, x.get());
+                i++;
+            }
+        }
     }
 
     // INITIAL SOLUTION.
