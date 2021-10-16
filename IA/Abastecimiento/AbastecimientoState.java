@@ -213,9 +213,9 @@ public class AbastecimientoState {
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
         Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c1).get(p)
+        Peticion b = asignaciones.get(c1).get(p);
 
-        int newDist = actualizaDistancia(b, a, c1);
+        int newDist = actualizaDistancia(b.get(), a.get(), c1);
 
         if (newDist > 0){
             asignaciones.get(c).remove(p);
@@ -229,7 +229,7 @@ public class AbastecimientoState {
 
             while (i < n){
                 Peticion x = asignaciones.get(c).get(i);
-                distC -= distcalcularDistancias(c, x.get());
+                distC -= calcularDistancias(c, x.get());
                 i++;
             }
             while (i < m){
@@ -241,11 +241,13 @@ public class AbastecimientoState {
     }
 
     public void cambioPeticionNoAsig (Integer p, int c, Pair <Integer, Integer> newP){
-        int newDist = actualizaDistancia(p, newP.get().b, c);
+    	Peticion a = asignaciones.get(c).get(p);
+    	Peticion b = new Peticion(newP);
+    	
+        int newDist = actualizaDistancia(a.get(), b.get(), c);
 
         if (newDist > 0){
-            Peticion a = new Peticion(newP);
-            asignaciones.get(c).add(p, a);
+            asignaciones.get(c).add(p, b);
 
             int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
 
@@ -253,7 +255,7 @@ public class AbastecimientoState {
 
             while (i < n) {
                 Peticion x = asignaciones.get(c).get(i);
-                distC -= distcalcularDistancias(c, x.get());
+                distC -= calcularDistancias(c, x.get());
                 i++;
             }
         }
