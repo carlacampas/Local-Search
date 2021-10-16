@@ -70,14 +70,15 @@ public class AbastecimientoState {
     	Gasolinera g1 = gasolineras.get(p.a);
 		
 		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
-		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
+		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY()); 
 	
 		if (n > 0) {
-			Peticion last = cAssig.get(n - 1);
 	    	if (n%2 == 1) {
+	    		Peticion last = cAssig.get(n - 1);
+	    		
 	    		Gasolinera g = gasolineras.get(last.get().a);
 	    		Pair <Integer, Integer> coord2 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
-	    		
+
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
 	    	
@@ -144,13 +145,14 @@ public class AbastecimientoState {
     }
 
 
-    public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
+    public boolean asignaPeticion (int c, Pair <Integer, Integer> p) {
         ArrayList <Peticion> cAssig = asignaciones.get(c);
+        
         int dist = calcularDistancias(c, p);
         int n = cAssig.size();
 
         // control de restricciones de distancia y número de peticiones asignadas
-    	if (dist > 0 && n < 5) {
+    	if (dist > 0 && (n/2) < 5) {
 	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
 	    	
@@ -230,18 +232,19 @@ public class AbastecimientoState {
     			
     			boolean[] visited = new boolean[n];
     			int c = rand.nextInt(n);
-    			while (!visited[c] && !assignaPeticion(c, pet)) {
+    			while (!visited[c] && !asignaPeticion(c, pet)) {
     				visited[c] = true;
     				c = rand.nextInt(n);
     			}
     			
-    			assignaPeticion (c, new Pair <Integer, Integer> (i, j));
+    			asignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
     
+    // cambiar per crear ponderacio basada en costos
     SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> organizarPeticiones (Pair <Integer, Integer> cCoord) {
-    	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = null;
+    	SortedMap <Integer, ArrayList <Pair<Integer, Integer>>> pOrg = new TreeMap <Integer, ArrayList <Pair<Integer, Integer>>> ();
     	int i = 0;
     	for (Gasolinera g : gasolineras) {
     		Pair <Integer, Integer> gCoord = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
@@ -258,12 +261,12 @@ public class AbastecimientoState {
     	}
     	return pOrg;
     }
-
+    
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
     public void generateInitialSolution2 () {
-    	Map <Integer, Integer> used = null;
-    	Set <Pair <Integer, Integer>> coordVisited = null;
+    	Map <Integer, Integer> used = new HashMap <Integer, Integer> ();
+    	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
     	
     	int n = centrosDistribucion.size();
     	for (int i=0; i<n; i++) {
@@ -285,7 +288,7 @@ public class AbastecimientoState {
 	    				int x = used.get(p.a);
 	    				if (x > p.b) continue;
 	    				
-	    				if (!assignaPeticion(j, p)) { done = true; break; }
+	    				if (!asignaPeticion(j, p)) { done = true; break; }
 	    				else used.put(p.a, x+1);
 	    			}
 	    			if (done) break;

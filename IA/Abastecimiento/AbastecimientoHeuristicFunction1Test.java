@@ -49,23 +49,37 @@ public class AbastecimientoHeuristicFunction1Test {
     	Gasolinera g0 = gasolineras.get(0);
         Gasolinera g1 = gasolineras.get(1);
         Gasolinera g2 = gasolineras.get(2);
+        
+        // Distancia recorrida por el camion 0
+        Integer distancia0 =
+        		AbastecimientoHeuristicFunction1.calcularDistancias(d0.getCoordX(), d0.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
+        		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), g1.getCoordX(), g1.getCoordY()) +
+        		AbastecimientoHeuristicFunction1.calcularDistancias(g1.getCoordX(), g1.getCoordY(), d0.getCoordX(), d0.getCoordY());
+        
+        // Distancia recorrida por el camion 1
+        Integer distancia1 =
+        		AbastecimientoHeuristicFunction1.calcularDistancias(d1.getCoordX(), d1.getCoordY(), g2.getCoordX(), g2.getCoordY()) +
+        		AbastecimientoHeuristicFunction1.calcularDistancias(g2.getCoordX(), g2.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
+        		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), d1.getCoordX(), d1.getCoordY());
+        
+    	// Calcular array de distancias (distancias[i] = MAX_DIST - distancia total recorrida por el camion i)
+    	ArrayList<Integer> distancias = new ArrayList<Integer>(Arrays.asList(
+    		distancia0, distancia1
+    	));
+    	estado.setDistances(distancias);
+    	
+    	double kilometros = 0;
+    	for(Integer distancia : distancias) {
+    		kilometros += AbastecimientoState.maxDist - distancia;
+    	}
     	
     	double ingresos = AbastecimientoHeuristicFunction1.VALOR_DEPOSITO * (1.02 + 0.98 + 0.96 + 0.92);
-    	double costes = AbastecimientoHeuristicFunction1.COSTE_KILOMETRO * (
-    		// Distancias distribuidora 0
-    		AbastecimientoHeuristicFunction1.calcularDistancias(d0.getCoordX(), d0.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
-    		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), g1.getCoordX(), g1.getCoordY()) +
-    		AbastecimientoHeuristicFunction1.calcularDistancias(g1.getCoordX(), g1.getCoordY(), d0.getCoordX(), d0.getCoordY()) +
-    		// Distancias distribuidora 1
-    		AbastecimientoHeuristicFunction1.calcularDistancias(d1.getCoordX(), d1.getCoordY(), g2.getCoordX(), g2.getCoordY()) +
-    		AbastecimientoHeuristicFunction1.calcularDistancias(g2.getCoordX(), g2.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
-    		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), d1.getCoordX(), d1.getCoordY())
-    	);
+    	double costes = AbastecimientoHeuristicFunction1.COSTE_KILOMETRO * kilometros;
     	
     	// TODO: Erase
     	System.out.println("test");
-    	System.out.println(ingresos);
-    	System.out.println(costes);
+    	System.out.println(1.02 + 0.98 + 0.96 + 0.92);
+    	System.out.println(kilometros);
     	
     	double result = ingresos - costes;
     	
