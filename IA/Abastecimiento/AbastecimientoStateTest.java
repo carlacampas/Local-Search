@@ -46,30 +46,29 @@ public class AbastecimientoStateTest {
     		}
     	}
     }
+    
     @Test
-    @DisplayName("Simple distance test")
-    public void testCalcularDistnacias() {
-        CentrosDistribucion centrosDistibucion = new CentrosDistribucion(0, 0, 0);
-        
+    @DisplayName("Processed distance test")
+    public void testCalcularDistnacias() {        
         centrosDistibucion.add(new Distribucion(0, 0));
+        ArrayList<Integer> peticiones = new ArrayList <Integer> (1);
+        
+        // first test: one way trip, empty array
+        gasolineras.add(new Gasolinera(60, 60, peticiones));
+        // second test: two way trip, one petition inside array
+        gasolineras.add(new Gasolinera(74, 88, peticiones));
+        // third test: one way trip where 2+ are already in the array
+        gasolineras.add(new Gasolinera(50, 50, peticiones));
+        // fourth test: km negatius
+        gasolineras.add(new Gasolinera(100, 100, peticiones));
         
         AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
         
-        // int c, pair
-        int[] solu = {440, 6, 5}; 
-        int[] codeSol = new int[3];
-        // first test: one way trip, empty array
-        Pair <Integer, Integer> p = new Pair <Integer, Integer> (100, 100);
-        codeSol[0] = as.calcularDistancias(0, p);
-        as.assignaPeticion(0, p);
+        int[] solu = {400, 316, 116, -84}; 
         
-        // second test: two way trip, one petition inside array
-        p = new Pair <Integer, Integer> (50, 50);
-        
-        // third test: one way trip where 2+ are already in the array
-        // km negatius
-        for (int i=0; i<3; i++) {
-        	assertEquals (solu[i], codeSol[i], "Processed distances should be equal");
+        for (int i=0; i<solu.length; i++) {
+	        assertEquals (solu[i], as.calcularDistancias(0, new Pair <Integer, Integer> (i, 0)), "Processed distances should be equal");
+	        as.assignaPeticion(0, new Pair <Integer, Integer> (i, 0));
         }
     }
     

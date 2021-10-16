@@ -70,14 +70,15 @@ public class AbastecimientoState {
     	Gasolinera g1 = gasolineras.get(p.a);
 		
 		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
-		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
+		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY()); 
 	
 		if (n > 0) {
-			Peticion last = cAssig.get(n - 1);
 	    	if (n%2 == 1) {
+	    		Peticion last = cAssig.get(n - 1);
+	    		
 	    		Gasolinera g = gasolineras.get(last.get().a);
 	    		Pair <Integer, Integer> coord2 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
-	    		
+
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
 	    	
@@ -146,6 +147,7 @@ public class AbastecimientoState {
 
     public boolean assignaPeticion (int c, Pair <Integer, Integer> p) {
         ArrayList <Peticion> cAssig = asignaciones.get(c);
+        
         int dist = calcularDistancias(c, p);
         int n = cAssig.size();
 
