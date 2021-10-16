@@ -21,7 +21,7 @@ public class AbastecimientoStateTest {
 	@BeforeEach
 	public void setUp () {
 		gasolineras = new Gasolineras(0, 0);
-         centrosDistibucion = new CentrosDistribucion(0, 0, 0);
+        centrosDistibucion = new CentrosDistribucion(0, 0, 0);
 	}
     
     @Test
@@ -136,7 +136,6 @@ public class AbastecimientoStateTest {
     	
     	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
     	
-    	
     	int[] solu = {2, 6, 5, 1}; 
     	int i = 0;
     	for (Gasolinera g: gasolineras) {
@@ -152,7 +151,21 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Initial State Test - testGenerateInitialSolution1")
     public void testGenerateInitialSolution1 () {
-    	
+    	gasolineras = new Gasolineras(100, 5);
+        centrosDistibucion = new CentrosDistribucion(10, 2, 5);
+        
+        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+        as.generateInitialSolution1 ();
+        
+        for (int i=0; i<as.getAsignaciones().size(); i++) {
+        	ArrayList <Peticion> assigs = as.getAsignaciones().get(i);
+        	assertEquals (true, assigs.size() <= 10, "No es poden fer mes de 5 viatges");
+        	assertEquals (true, as.getDistancias().get(i) > 0, "Distancia ha de ser positiva");
+	        for (Peticion p : assigs) {
+	        	assertEquals (true, gasolineras.size() > p.get().a, "Gasolinera ha d'existir");
+	        	assertEquals (true, gasolineras.get(p.get().a).getPeticiones().size() > p.get().b, "Gasolinera ha de tindre peticio");
+	        }
+    	}
     }
     
     @Test
