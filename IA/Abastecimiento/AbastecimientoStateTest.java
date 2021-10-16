@@ -23,31 +23,6 @@ public class AbastecimientoStateTest {
 		gasolineras = new Gasolineras(0, 0);
          centrosDistibucion = new CentrosDistribucion(0, 0, 0);
 	}
-	
-    @Test
-    @DisplayName("Simple distance test - testCalcularDistancia")
-    public void testCalcularDistancia () {
-    	ArrayList<Integer> peticions = new ArrayList <Integer> (2);
-    	gasolineras.add(new Gasolinera(0, 0, peticions));
-    	gasolineras.add(new Gasolinera (5, 0, peticions));
-    	
-    	centrosDistibucion.add(new Distribucion (1, 1));
-    	centrosDistibucion.add(new Distribucion (5, 1));
-    	
-    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
-    	
-    	
-    	int[] solu = {2, 6, 5, 1}; 
-    	int i = 0;
-    	for (Gasolinera g: gasolineras) {
-    		Pair <Integer, Integer> c1 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
-    		for (Distribucion cd : centrosDistibucion) {
-    			Pair <Integer, Integer> c2 = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
-    			assertEquals (solu[i], as.calcularDistancia(c1, c2), "Distances should be equal");
-    			i++;
-    		}
-    	}
-    }
     
     @Test
     @DisplayName("Processed distance test - testCalcularDistancias")
@@ -131,11 +106,64 @@ public class AbastecimientoStateTest {
     	}
     }
     
-    //intercambiaPeticiones
-    //intercambioOrden
-    //cambiaPeticion
-    //calcularDistancia
-    //generateInitialSolution1
-    //organizarPeticiones
-    //generateInitialSolution2
+    @Test
+    @DisplayName("Operators test - testIntercambiaPeticiones")
+    public void testIntercambiaPeticiones () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Operators test - testIntercambioOrden")
+    public void testIntercambioOrden () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Operators test - testCambiaPeticion")
+    public void testCambiaPeticion () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Simple distance test - testCalcularDistancia")
+    public void testCalcularDistancia () {
+    	ArrayList<Integer> peticions = new ArrayList <Integer> (2);
+    	gasolineras.add(new Gasolinera(0, 0, peticions));
+    	gasolineras.add(new Gasolinera (5, 0, peticions));
+    	
+    	centrosDistibucion.add(new Distribucion (1, 1));
+    	centrosDistibucion.add(new Distribucion (5, 1));
+    	
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+    	
+    	
+    	int[] solu = {2, 6, 5, 1}; 
+    	int i = 0;
+    	for (Gasolinera g: gasolineras) {
+    		Pair <Integer, Integer> c1 = new Pair <Integer, Integer> (g.getCoordX(), g.getCoordY());
+    		for (Distribucion cd : centrosDistibucion) {
+    			Pair <Integer, Integer> c2 = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
+    			assertEquals (solu[i], as.calcularDistancia(c1, c2), "Distances should be equal");
+    			i++;
+    		}
+    	}
+    }
+    
+    @Test
+    @DisplayName("Initial State Test - testGenerateInitialSolution1")
+    public void testGenerateInitialSolution1 () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Organizar Peticiones Test - testOrganizarPeticiones")
+    public void testOrganizarPeticiones () {
+    	
+    }
+    
+    @Test
+    @DisplayName("Initial State Test - testGenerateInitialSolution1")
+    public void testGenerateInitialSolution2 () {
+    	
+    }
 }
