@@ -1,12 +1,10 @@
 package Abastecimiento;
 
-// IMPORTS.
-import aima.search.framework.HeuristicFunction;
-
 // Aquest valora els costos.
-public class AbastecimientoHeuristicFunction2 implements HeuristicFunction {
-    public double getHeuristicValue (Object state){
-        //code fucntion
-        return 0.0;
-    }
+public class AbastecimientoHeuristicFunction2 extends AbstractHeuristic {
+
+	public double getHeuristicValue (Object state) {
+    	AbastecimientoState estado = (AbastecimientoState) state;
+    	return computeProfits(estado);
+	}
 }

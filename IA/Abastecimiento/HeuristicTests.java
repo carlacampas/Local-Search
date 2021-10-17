@@ -12,10 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class AbastecimientoHeuristicFunction1Test {
+public class HeuristicTests {
     @Test
-    @DisplayName("Test heuristic")
-    void getHeuristicValueTest() {
+    @DisplayName("Test computeProfits")
+    void computeProfitsTest() {
 
     	// Crear centros de distribucion y gasolineras en coordenadas aleatorias
         CentrosDistribucion centrosDistribucion = new CentrosDistribucion(2, 1, 1);
@@ -52,15 +52,15 @@ public class AbastecimientoHeuristicFunction1Test {
         
         // Distancia recorrida por el camion 0
         Integer distancia0 =
-        		AbastecimientoHeuristicFunction1.calcularDistancias(d0.getCoordX(), d0.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
-        		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), g1.getCoordX(), g1.getCoordY()) +
-        		AbastecimientoHeuristicFunction1.calcularDistancias(g1.getCoordX(), g1.getCoordY(), d0.getCoordX(), d0.getCoordY());
+        		calcularDistancias(d0.getCoordX(), d0.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
+        		calcularDistancias(g0.getCoordX(), g0.getCoordY(), g1.getCoordX(), g1.getCoordY()) +
+        		calcularDistancias(g1.getCoordX(), g1.getCoordY(), d0.getCoordX(), d0.getCoordY());
         
         // Distancia recorrida por el camion 1
         Integer distancia1 =
-        		AbastecimientoHeuristicFunction1.calcularDistancias(d1.getCoordX(), d1.getCoordY(), g2.getCoordX(), g2.getCoordY()) +
-        		AbastecimientoHeuristicFunction1.calcularDistancias(g2.getCoordX(), g2.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
-        		AbastecimientoHeuristicFunction1.calcularDistancias(g0.getCoordX(), g0.getCoordY(), d1.getCoordX(), d1.getCoordY());
+        		calcularDistancias(d1.getCoordX(), d1.getCoordY(), g2.getCoordX(), g2.getCoordY()) +
+        		calcularDistancias(g2.getCoordX(), g2.getCoordY(), g0.getCoordX(), g0.getCoordY()) +
+        		calcularDistancias(g0.getCoordX(), g0.getCoordY(), d1.getCoordX(), d1.getCoordY());
         
     	// Calcular array de distancias (distancias[i] = MAX_DIST - distancia total recorrida por el camion i)
     	ArrayList<Integer> distancias = new ArrayList<Integer>(Arrays.asList(
@@ -81,5 +81,9 @@ public class AbastecimientoHeuristicFunction1Test {
     	AbastecimientoHeuristicFunction1 heuristic = new AbastecimientoHeuristicFunction1();
     	
     	assertEquals (result, heuristic.getHeuristicValue(estado), "Heuristic value should be equal");
+    }
+    
+    int calcularDistancias(int fromX, int fromY, int toX, int toY) {
+        return Math.abs (fromX - toX) + Math.abs (fromY - toY);
     }
 }

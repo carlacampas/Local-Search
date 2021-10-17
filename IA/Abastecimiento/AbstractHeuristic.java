@@ -38,8 +38,4 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
         
         return VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros;
     }
-
-    static int calcularDistancias(int fromX, int fromY, int toX, int toY) {
-        return Math.abs (fromX - toX) + Math.abs (fromY - toY);
-    }
 }
