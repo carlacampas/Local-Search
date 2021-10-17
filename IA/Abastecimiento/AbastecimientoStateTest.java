@@ -364,8 +364,4 @@ public class AbastecimientoStateTest {
     	noErrors(as);
     }
     
-<<<<<<< Updated upstream
-    // comprobar que no hay errores
-=======
->>>>>>> Stashed changes
 }
