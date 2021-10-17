@@ -199,8 +199,23 @@ public class AbastecimientoStateTest {
     	
     	// comprobar que no hay errores
         
+        noErrors(as);
+    }
+    
+    @Test
+    @DisplayName("Initial State Test - testGenerateInitialSolution3")
+    public void testGenerateInitialSolution3 () {
+    	gasolineras = new Gasolineras(100, 5);
+        centrosDistibucion = new CentrosDistribucion(10, 2, 5);
         
-        for (int i=0; i<as.getAsignaciones().size(); i++) {
+        AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+        as.generateInitialSolution3 ();
+        
+        noErrors(as);
+    	// test totes les gasolineres en diferentes posicions
+    	// test dos camions i differentes gasolineres
+    	
+    	for (int i=0; i<as.getAsignaciones().size(); i++) {
         	ArrayList <Peticion> assigs = as.getAsignaciones().get(i);
         	System.out.println ("(" + i + ") --> " + as.getDistancias().get(i) + ": ");
 	        for (Peticion p : assigs) {
@@ -208,15 +223,8 @@ public class AbastecimientoStateTest {
 	        }
 	        System.out.println();
     	}
-        
-        noErrors(as);
-    }
-    
-    @Test
-    @DisplayName("Initial State Test - testGenerateInitialSolution3")
-    public void testGenerateInitialSolution3 () {
-    	// test totes les gasolineres en diferentes posicions
-    	// test dos camions i differentes gasolineres
+    	
+    	noErrors(as);
     }
     
     // comprobar que no hay errores
