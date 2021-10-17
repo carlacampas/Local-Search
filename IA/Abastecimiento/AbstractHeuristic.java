@@ -38,7 +38,7 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
                 Gasolinera gasolinera = estado.gasolineras.get(gasolineraId);
                 
                 // Marcar peticion peticionId de la gasolinera gasolineraId como atendida
-                borrarPeticionDeGasolinera(peticionesDesatendidas, gasolineraId, peticionId);
+                borrarPeticionDeGasolinera(gasolineraId, peticionId);
 
                 // Añadir precio de una peticion al precio total:
                 int diasPendientes = gasolinera.getPeticiones().get(peticionId);
@@ -61,10 +61,9 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
     }
     
     // Función que dada unas Gasolineras, marca la petición con índice peticionId de la gasolinera con índice gasolineraId con un -1
-    private ArrayList<ArrayList<Integer>> borrarPeticionDeGasolinera(ArrayList<ArrayList<Integer>> gasolineras, int gasolineraId, int peticionId) {
-		ArrayList<Integer> peticiones = gasolineras.get(gasolineraId);
+    private void borrarPeticionDeGasolinera(int gasolineraId, int peticionId) {
+		ArrayList<Integer> peticiones = peticionesDesatendidas.get(gasolineraId);
 		peticiones.set(peticionId, -1);
-		gasolineras.set(gasolineraId, peticiones);
-		return gasolineras;
+		peticionesDesatendidas.set(gasolineraId, peticiones);
     }
 }

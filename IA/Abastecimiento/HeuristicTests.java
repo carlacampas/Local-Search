@@ -23,8 +23,8 @@ public class HeuristicTests {
         
         // Crear peticiones de las gasolineras
         gasolineras.get(0).setPeticiones(new ArrayList<Integer>(Arrays.asList(2, 0)));	
-        gasolineras.get(1).setPeticiones(new ArrayList<Integer>(Arrays.asList(1)));
-        gasolineras.get(2).setPeticiones(new ArrayList<Integer>(Arrays.asList(3)));
+        gasolineras.get(1).setPeticiones(new ArrayList<Integer>(Arrays.asList(1, 2))); // la de 2 -> desatendida
+        gasolineras.get(2).setPeticiones(new ArrayList<Integer>(Arrays.asList(3, 4))); // la de 4 -> desatendida
     	
         // Crear asignaciones para los camiones
     	ArrayList<Peticion> peticions0 = new ArrayList<Peticion>();
