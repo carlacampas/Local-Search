@@ -221,7 +221,6 @@ public class AbastecimientoState {
         return false;
     }
 
-
     /*
     * Pre: La petición p estaba asignada al camion c
     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
@@ -416,5 +415,9 @@ public class AbastecimientoState {
 	    		}
 	    	}
     	}
+    }
+    
+    public int getBenefit () {
+    	return 0;
     }
 }
