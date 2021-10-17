@@ -222,10 +222,26 @@ public class AbastecimientoState {
     }
 
 
+   //Aux function for cambiaPeticion
+    private void renewDistances(int peticionesC) {
+    	ArrayList<Peticion> auxP = asignaciones.get(peticionesC);
+
+    	asignaciones.set(peticionesC, new ArrayList<Peticion>());
+    	
+    	for (int i = 0; i < auxP.size(); i++) {
+    		Peticion x = auxP.get(i);
+    		int dist = calcularDistancias(peticionesC, x.get());
+    		
+    		distancias.set(peticionesC, dist);
+    		asignaciones.get(peticionesC).add(i, x);
+    	}
+    }
+    
     /*
-    * Pre: La petición p estaba asignada al camion c
-    * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
-    * */
+     * Pre: La petición p estaba asignada al camion c
+     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
+     * */
+    
     public boolean cambiaPeticion (Integer p, int c, int c1) {
     	if (c == c1) return true;		//No cambia nada
     	
@@ -242,31 +258,21 @@ public class AbastecimientoState {
         	newDist = actualizaDistancia(b.get(), a.get(), c1);
         	bounded = true;
         }
-        else newDist = calcularDistancias(c1, a.get());  
+        else newDist = calcularDistancias(c1, a.get());
         
 
         if (newDist > 0){
-            asignaciones.get(c).remove(p);
+            asignaciones.get(c).remove(p.intValue());
             
             if (bounded) asignaciones.get(c1).add(p, a);
             else asignaciones.get(c1).add(a);
 
-            int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
-            int m = asignaciones.get(c1).size(), j = 0, distC1 = maxDist;
-
             distancias.set(c, maxDist);
             distancias.set(c1, maxDist);
-
-            while (i < n){
-                Peticion x = asignaciones.get(c).get(i);
-                distC -= calcularDistancias(c, x.get());
-                i++;
-            }
-            while (i < m){
-                Peticion x = asignaciones.get(c1).get(j);
-                distC1 -= calcularDistancias(c1, x.get());
-                j++;
-            }
+            
+            renewDistances(c);
+            renewDistances(c1);
+            
             return true;
         }
         return false;
