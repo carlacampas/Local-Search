@@ -167,13 +167,13 @@ public class AbastecimientoState {
     * Post: La asignación de las peticiones se invierte.
     * */
     public void intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c1).get(p1);
+
         int x = actualizaDistancia(a.get(), b.get(), c);
         int y = actualizaDistancia(b.get(), a.get(), c1);
 
         if (x > 0 && y > 0){
-            Peticion a = asignaciones.get(c).get(p);
-            Peticion b = asignaciones.get(c1).get(p1);
-
             asignaciones.get(c).set(p1, b);
             asignaciones.get(c1).set(p, a);
 
@@ -186,6 +186,9 @@ public class AbastecimientoState {
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
     public void intercambioOrden (Integer p, Integer p1, int c) {
+        Peticion a = asignaciones.get(c).get(p);
+        Peticion b = asignaciones.get(c).get(p1);
+
         int x = actualizaDistancia(a.get(), b.get(), c);
         int ogDistance = distancias.get(c);
 
@@ -194,9 +197,6 @@ public class AbastecimientoState {
             int y = actualizaDistancia(b.get(), a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
             if (y > 0){
-                Peticion a = asignaciones.get(c).get(p);
-                Peticion b = asignaciones.get(c).get(p1);
-
                 asignaciones.get(c).set(p1, a);
                 asignaciones.get(c).set(p, b);
 
@@ -213,9 +213,9 @@ public class AbastecimientoState {
     * */
     public void cambiaPeticion (Integer p, int c, int c1) {
         Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c1).get(pos)
+        Peticion b = asignaciones.get(c1).get(p);
 
-        int newDist = actualizaDistancia(b, a, c1);
+        int newDist = actualizaDistancia(b.get(), a.get(), c1);
 
         if (newDist > 0){
             asignaciones.get(c).remove(p);
@@ -229,7 +229,7 @@ public class AbastecimientoState {
 
             while (i < n){
                 Peticion x = asignaciones.get(c).get(i);
-                distC -= distcalcularDistancias(c, x.get());
+                distC -= calcularDistancias(c, x.get());
                 i++;
             }
             while (i < m){
@@ -241,11 +241,13 @@ public class AbastecimientoState {
     }
 
     public void cambioPeticionNoAsig (Integer p, int c, Pair <Integer, Integer> newP){
-        int newDist = actualizaDistancia(p, newP.get().b, c);
+    	Peticion a = asignaciones.get(c).get(p);
+    	Peticion b = new Peticion(newP);
+    	
+        int newDist = actualizaDistancia(a.get(), b.get(), c);
 
         if (newDist > 0){
-            Peticion a = new Peticion(newP);
-            asignaciones.get(c).add(p, a);
+            asignaciones.get(c).add(p, b);
 
             int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
 
@@ -253,7 +255,7 @@ public class AbastecimientoState {
 
             while (i < n) {
                 Peticion x = asignaciones.get(c).get(i);
-                distC -= distcalcularDistancias(c, x.get());
+                distC -= calcularDistancias(c, x.get());
                 i++;
             }
         }
