@@ -52,7 +52,45 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Processed distance test - testActualizaDistancia")
     public void testActualizaDistancia () {
+    	centrosDistibucion.add(new Distribucion(6, 100));
     	
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+    	
+    	gasolineras.add(new Gasolinera(80, 60, new ArrayList<Integer>(1)));	//oldPCase1
+    	gasolineras.add(new Gasolinera(40, 80, new ArrayList<Integer>(1)));	//newP
+    	gasolineras.add(new Gasolinera(100, 40, new ArrayList<Integer>(1)));//oldPCase2
+    	gasolineras.add(new Gasolinera(40, 50, new ArrayList<Integer>(1)));	//oldPCase3
+    	gasolineras.add(new Gasolinera(10, 20, new ArrayList<Integer>(1)));	//extra
+    		
+    	Pair<Integer, Integer> oldPCase1 = new Pair <Integer, Integer> (0,0);
+    	Pair<Integer, Integer> oldPCase2 = new Pair <Integer, Integer> (2,0);
+    	Pair<Integer, Integer> oldPCase3 = new Pair <Integer, Integer> (3,0);
+    	Pair<Integer, Integer> extra = new Pair <Integer, Integer> (4,0);
+    	Pair<Integer, Integer> newP = new Pair <Integer, Integer> (1,0);
+
+    	//caso 1: una sola petición asignada (cae por tanto en posición par, index 0)
+    	as.asignaPeticion(0, oldPCase1);
+    	    	
+    	//640 - 2*(74+40) + 2*(74+40) - 2*54 
+    	//640 --> 532
+    	assertEquals (532, as.actualizaDistancia(oldPCase1, newP, 0), "Incorrect distance update (case 1)");
+    	
+    	
+    	//caso 2: más de una petición y posición de oldP es par
+    	as.asignaPeticion(0, oldPCase3);		  //acts like an extra here
+    	as.asignaPeticion(0, oldPCase2);		  //index 2 ^^^
+    	as.asignaPeticion(0, extra);
+    	
+    	//640 - (114+50+84 + 154+110+84)+(154+110+84)-(54+90+84) 
+    	//44 --> 164
+    	assertEquals (164, as.actualizaDistancia(oldPCase2, newP, 0), "Incorrect distance update (case 2)");
+    	
+    	//caso 3: indice de la petición impar 
+    	//no nos importa si está por el medio o es la ultima, la posición impar siempre completa un viaje
+    	
+    	//640 - (114+50+84 + 154+110+84)+(114+50+84)-(114+60+54)
+    	//44 --> 64
+    	assertEquals (64, as.actualizaDistancia(oldPCase3, newP, 0), "Incorrect distance update (case 3)");
     }
     
     @Test
@@ -109,24 +147,123 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Operators test - testIntercambiaPeticiones")
     public void testIntercambiaPeticiones () {
+    	centrosDistibucion.add(new Distribucion(0, 0));
+    	centrosDistibucion.add(new Distribucion(5, 0));
+
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+    	
+    	gasolineras.add(new Gasolinera(60, 60, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(74, 88, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(50, 50, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(100, 100, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(75, 75, new ArrayList <Integer> (1)));
+    	
     	// test funciona camiones distintos
-    	// test misma peticion funciona
+    	//Test 1: intercambio en arraylists de size 1
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (0, 0));
+    	as.asignaPeticion(1, new Pair <Integer, Integer> (3, 0));	
+
+    	//*******uncomment this test and comment following one******
+    	//assertEquals (true, as.intercambiaPeticiones(0, 0, 0, 1), "Test 1: Intercambio de peticiones debería efectuarse");
+    	
+    	//Test 2: intercambio no se efectua por exceso de km
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (1, 0));
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (2, 0));
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (4, 0));
+	
+    	//640 - ((120+42+162) + (100+50+150)) = 16
+    	//640 - ((120+42+166) + (100+100+200)) = -88
+    	
+    	//******uncomment this test and comment previous one******
+    	assertEquals(false, as.intercambiaPeticiones(3, 0, 0, 1), "Test 2: Swap should not complete due to too many km");
+    	
+    	// test misma peticion funciona	???
+    	
     	// test mismo camion funciona
-    	// test distancia demasiado grande
+    	//Test 3: intercambio peticiones mismo camión
+    	assertEquals(false, as.intercambiaPeticiones(0, 1, 0, 0), "Test 3: Operator should not handle swaps of same truck's assignments");
+    	
     }
     
     @Test
     @DisplayName("Operators test - testIntercambioOrden")
     public void testIntercambioOrden () {
-    	// do we really need this? si yes mismos tests que arriba
+    	centrosDistibucion.add(new Distribucion(1, 1));
+    	centrosDistibucion.add(new Distribucion(200, 0));
+
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+    	
+    	gasolineras.add(new Gasolinera(60, 60, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(74, 88, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(50, 50, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(0, 20, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(0, 0, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(250, 0, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(250, 20, new ArrayList <Integer> (1)));
+    	
+    	
+    	//Test 1: same petition
+    	as.asignaPeticion(0, new Pair<Integer, Integer> (0,0));
+    	as.asignaPeticion(0, new Pair<Integer, Integer> (1,0));
+    	
+    	assertEquals(true, as.intercambioOrden(0,0,0), "Issue swapping same petition. Nothing should change and returns true.");
+    	assertEquals(true, as.intercambioOrden(1,1,0), "Issue swapping same petition. Nothing should change and returns true.");
+    	
+    	//Test 2: different petition
+    	as.asignaPeticion(0, new Pair<Integer, Integer> (2,0));
+    	
+    	assertEquals(true, as.intercambioOrden(0,2,0), "Swap should complete.");
+    	
+    	//Test 3: too many km
+    	//640-(200+20+220)-(50+20+70)
+    	//640-(220+250+70)-(200+250+50)
+    	for (int i = 3; i < 7; i++) {
+    		assertEquals(true,as.asignaPeticion(1, new Pair<Integer, Integer> (i,0)), "no entra");
+    	}
+    	assertEquals(false, as.intercambioOrden(0,2,1), "Swap should not complete. Excessive km");
+
     }
     
     @Test
     @DisplayName("Operators test - testCambiaPeticion")
     public void testCambiaPeticion () {
+    	centrosDistibucion.add(new Distribucion(0, 0));
+    	centrosDistibucion.add(new Distribucion(5, 0));
+
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+
+    	gasolineras.add(new Gasolinera(60, 60, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(74, 88, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(50, 50, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(100, 100, new ArrayList <Integer> (1)));
+
+    	
+    	//Test 1: same truck
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (0,0));
+    	//assertEquals(true, as.cambiaPeticion(0, 0, 0), "Should be true, since nothing changes");
+    	
+    	// Tes2: different trucks
+    	as.asignaPeticion(0, new Pair <Integer, Integer> (1,0));
+    	as.asignaPeticion(1, new Pair <Integer, Integer> (2,0));
+    	as.asignaPeticion(1, new Pair <Integer, Integer> (3,0));
+    	//assertEquals(2, as.getAsignaciones().get(0).size(), "Should be true, since nothing changes");
+
+    	//assertEquals(false, as.cambiaPeticion(0, 1, 0), "Should be true, since nothing changes");
+
+    	
+
+
+    	// test demasiado grande
+    }
+    
+    @Test
+    @DisplayName("Operators test - testCambiaPeticionNoAsig")
+    public void testCambiaPeticionNoAsig () {
+    	
     	// test funciona
     	// test demasiado grande
     }
+    
     
     @Test
     @DisplayName("Simple distance test - testCalcularDistancia")
@@ -227,5 +364,8 @@ public class AbastecimientoStateTest {
     	noErrors(as);
     }
     
+<<<<<<< Updated upstream
     // comprobar que no hay errores
+=======
+>>>>>>> Stashed changes
 }
