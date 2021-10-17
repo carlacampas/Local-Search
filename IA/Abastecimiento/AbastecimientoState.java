@@ -39,6 +39,13 @@ public class AbastecimientoState {
         this.gasolineras = gasolineras;
         this.centrosDistribucion = centrosDistribucion;
     }
+    
+    public AbastecimientoState (AbastecimientoState as) {
+    	this.gasolineras = as.gasolineras;
+    	this.centrosDistribucion = as.centrosDistribucion;
+    	this.asignaciones = as.asignaciones;
+    	this.distancias = as.distancias;
+    }
 
     // SETTERS.
     public void setAssigments(ArrayList<ArrayList<Peticion>> asignaciones) {
