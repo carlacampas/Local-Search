@@ -246,14 +246,18 @@ public class AbastecimientoStateTest {
     	as.asignaPeticion(0, new Pair <Integer, Integer> (1,0));
     	as.asignaPeticion(1, new Pair <Integer, Integer> (2,0));
     	as.asignaPeticion(1, new Pair <Integer, Integer> (3,0));
-    	//assertEquals(2, as.getAsignaciones().get(0).size(), "Should be true, since nothing changes");
-
-    	//assertEquals(false, as.cambiaPeticion(0, 1, 0), "Should be true, since nothing changes");
-
     	
+    	    	
+    	assertEquals(true, as.cambiaPeticion(0, 1, 0), "Should be true, no restrictions are met");
+    	
+    	assertEquals(76, as.getDistancias().get(0));
+    	assertEquals(250, as.getDistancias().get(1));
 
+    	//Test 3: Too many km
+    	
+    	assertEquals(false, as.cambiaPeticion(0, 1, 0), "Cannot make change since c(0) exceeds maxDist");
+    	//assertEquals(1, as.getDistancias().get(0));
 
-    	// test demasiado grande
     }
     
     @Test
