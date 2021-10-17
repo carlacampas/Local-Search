@@ -10,7 +10,7 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
 	final static int COSTE_KILOMETRO = 2;
     final static int VALOR_DEPOSITO = 1000;
     
-    private ArrayList<ArrayList<Integer>> peticionesDesatendidas = new ArrayList<ArrayList<Integer>>();
+    public ArrayList<ArrayList<Integer>> peticionesDesatendidas = new ArrayList<ArrayList<Integer>>();
     
     public abstract double getHeuristicValue (Object state);
     
@@ -52,12 +52,19 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
         for (Integer distancia : distancias) {
         	kilometros += AbastecimientoState.maxDist - distancia;
         }
-        
+    	
         return VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros;
     }
     
-    protected double computePenalisations(AbastecimientoState estado) {
-		return 0;
+    protected double computePenalisations(Integer exp) {
+    	double penalisation = 0;
+    	// Iteración sobre las peticiones desatendidas para calcular la penalización por retraso
+		for (ArrayList<Integer> g : peticionesDesatendidas) {
+			for (Integer dias : g) {
+				if (dias > 0) penalisation += Math.pow(exp, dias) / 100;
+			}
+		}
+		return VALOR_DEPOSITO * penalisation;
     }
     
     // Función que dada unas Gasolineras, marca la petición con índice peticionId de la gasolinera con índice gasolineraId con un -1

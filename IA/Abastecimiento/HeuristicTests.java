@@ -80,7 +80,23 @@ public class HeuristicTests {
     	
     	AbastecimientoHeuristicFunction1 heuristic = new AbastecimientoHeuristicFunction1();
     	
-    	assertEquals (result, heuristic.getHeuristicValue(estado), "Heuristic value should be equal");
+    	assertEquals (result, heuristic.computeProfits(estado), "Heuristic value should be equal");
+    }
+    
+    @Test
+    @DisplayName("Test computePenalisations")
+    void computePenalisationsTest() {
+    	ArrayList<ArrayList<Integer>> gs = new ArrayList<ArrayList<Integer>>(Arrays.asList(
+    		new ArrayList<Integer>(Arrays.asList(1, 3, -1, 0)),
+    		new ArrayList<Integer>(Arrays.asList(-1, 4, 0, 2))
+    	));
+    	
+    	double result = 300;
+    	
+    	AbastecimientoHeuristicFunction1 heuristic = new AbastecimientoHeuristicFunction1();
+    	heuristic.peticionesDesatendidas = gs;
+    	
+    	assertEquals (result, heuristic.computePenalisations(2), "Penalisation value should be equal");
     }
     
     int calcularDistancias(int fromX, int fromY, int toX, int toY) {
