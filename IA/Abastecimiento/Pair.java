@@ -37,4 +37,16 @@ class Pair<L, R>
     R getb () {
     	return this.b;
     }
+    
+    boolean equals (Pair <L, R> p) {
+    	return equals (p.a, p.b);
+    }
+    
+    boolean equals (L a, R b) {
+    	return a == this.a && b == this.b;
+    }
+    
+    String makeString() {
+    	return "(" + a + "," + b + ")";
+    }
 }

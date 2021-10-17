@@ -321,6 +321,34 @@ public class AbastecimientoState {
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
     public void generateInitialSolution2 () {
+    	Set <String> used = new HashSet <String> ();
+    	Set <String> coordVisited = new HashSet <String> ();
+
+    	int n = centrosDistribucion.size();
+    	for (int i=0; i<n; i++) {
+    		Distribucion cd = centrosDistribucion.get(i);
+    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
+    		
+    		if (!coordVisited.isEmpty() && coordVisited.contains(coords.makeString())) continue;
+    		coordVisited.add(coords.makeString());
+
+    		SortedMap<Integer, ArrayList<Pair<Integer, Integer>>> pOrg = organizarPeticiones (coords);
+
+    		for (int j=i; j<n; j++) {
+    			Distribucion cd1 = centrosDistribucion.get(j);
+    			if (!coords.equals(cd1.getCoordX(), cd1.getCoordY())) continue;
+    			
+	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
+	    			for (Pair <Integer, Integer> p : v) 
+	    				if (!used.contains(p.makeString()) && asignaPeticion(j, p)) used.add(p.makeString());
+	    		}
+    		}
+    	}
+    }
+
+    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
+    // beneficis. Posar maxim x paquets en els diferents camions equitativament.
+    /*public void generateInitialSolution3 () {
     	Set <Pair <Integer, Integer>> used = new HashSet <Pair <Integer, Integer>> ();
     	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
 
@@ -349,43 +377,6 @@ public class AbastecimientoState {
 	    			if (done) break;
 	    		}
     		}
-    	}
-    }
-
-    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
-    // beneficis. Posar maxim x paquets en els diferents camions equitativament.
-    /*public void generateInitialSolution3 () {
-    	Set <Pair <Integer, Integer>> used = new HashMap <Integer, Integer> ();
-    	Set <Pair <Integer, Integer>> coordVisited = new HashSet <Pair <Integer, Integer>> ();
-
-    	int n = centrosDistribucion.size();
-    	for (int i=0; i<n; i++) {
-    		Distribucion cd = centrosDistribucion.get(i);
-    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
-    		if (coordVisited.contains(coords)) continue;
-    		coordVisited.add(coords);
-
-    		SortedMap<Integer, ArrayList<Pair<Integer, Integer>>> pOrg = organizarPeticiones (coords);
-    		boolean done = false;
-
-
-    		ArrayList <Integer> centros = new ArrayList <> ();
-    		for (int j=i; j<n; j++) {
-    			Distribucion cd1 = centrosDistribucion.get(i);
-    			if (new Pair <Integer, Integer> (cd1.getCoordX(), cd1.getCoordY()) == coords) centros.add(j);
-    		}
-
-	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
-	    			for (Pair <Integer, Integer> p : v) {
-	    				int x = used.get(p.a);
-	    				if (x > p.b) continue;
-
-	    				//if (!asignaPeticion(j, p)) { done = true; break; }
-	    				else used.put(p.a, x+1);
-	    			}
-	    			if (done) break;
-	    		}
-
     	}
     }*/
 }
