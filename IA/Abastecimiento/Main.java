@@ -9,6 +9,7 @@ import aima.search.framework.Problem;
 import aima.search.framework.Search;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
+import aima.search.framework.SearchAgent;
 
 public class Main {
 	public static void AbastecimientoHillClimbingHeuristic1 (AbastecimientoState state) {
@@ -74,7 +75,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new HillClimbingSearch();
+			Search search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -103,7 +104,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
-			Search search = new HillClimbingSearch();
+			Search search = new SimulatedAnnealingSearch();
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
