@@ -263,9 +263,35 @@ public class AbastecimientoStateTest {
     @Test
     @DisplayName("Operators test - testCambiaPeticionNoAsig")
     public void testCambiaPeticionNoAsig () {
+    	centrosDistibucion.add(new Distribucion(0, 0));
+    	centrosDistibucion.add(new Distribucion(10, 20));
     	
-    	// test funciona
-    	// test demasiado grande
+    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistibucion);
+
+    	gasolineras.add(new Gasolinera(60, 60, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(74, 88, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(50, 50, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(70, 70, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(100, 100, new ArrayList <Integer> (1)));
+    	
+    	gasolineras.add(new Gasolinera(34, 24, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(70, 15, new ArrayList <Integer> (1)));
+    	gasolineras.add(new Gasolinera(63, 50, new ArrayList <Integer> (1)));
+
+    	
+    	//Test 1: Swap successful
+    	assertEquals(true, as.asignaPeticion(1, new Pair <Integer, Integer> (5,0)));
+    	assertEquals(true, as.asignaPeticion(1, new Pair <Integer, Integer> (6,0)));
+    	
+    	assertEquals(true, as.cambioPeticionNoAsig(1, 1, new Pair <Integer, Integer>(7,0)), "Swap should execute successfully");
+    	
+    	// Test 2: exceeds km
+    	assertEquals(true, as.asignaPeticion(0, new Pair <Integer, Integer> (0,0)));
+    	assertEquals(true, as.asignaPeticion(0, new Pair <Integer, Integer> (1,0)));
+    	assertEquals(true, as.asignaPeticion(0, new Pair <Integer, Integer> (2,0)));
+    	assertEquals(true, as.asignaPeticion(0, new Pair <Integer, Integer> (3,0)));
+    	
+    	assertEquals(false, as.cambioPeticionNoAsig(3, 0, new Pair <Integer, Integer>(4,0)), "New peticion exceeds km limit");
     }
     
     

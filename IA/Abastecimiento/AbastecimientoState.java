@@ -292,17 +292,12 @@ public class AbastecimientoState {
         int newDist = actualizaDistancia(a.get(), b.get(), c);
 
         if (newDist > 0){
+            asignaciones.get(c).remove(p.intValue());
             asignaciones.get(c).add(p, b);
 
-            int n = asignaciones.get(c).size(), i = 0, distC = maxDist;
-
             distancias.set(c, maxDist);
-
-            while (i < n) {
-                Peticion x = asignaciones.get(c).get(i);
-                distC -= calcularDistancias(c, x.get());
-                i++;
-            }
+            renewDistances(c);
+          
             return true;
         }
         return false;
