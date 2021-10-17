@@ -76,11 +76,6 @@ public class AbastecimientoHeuristicFunction1Test {
     	double ingresos = AbastecimientoHeuristicFunction1.VALOR_DEPOSITO * (1.02 + 0.98 + 0.96 + 0.92);
     	double costes = AbastecimientoHeuristicFunction1.COSTE_KILOMETRO * kilometros;
     	
-    	// TODO: Erase
-    	System.out.println("test");
-    	System.out.println(1.02 + 0.98 + 0.96 + 0.92);
-    	System.out.println(kilometros);
-    	
     	double result = ingresos - costes;
     	
     	AbastecimientoHeuristicFunction1 heuristic = new AbastecimientoHeuristicFunction1();
