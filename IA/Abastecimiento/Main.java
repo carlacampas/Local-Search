@@ -3,6 +3,7 @@ package Abastecimiento;
 import java.util.Scanner;
 
 import IA.Gasolina.CentrosDistribucion;
+import IA.Gasolina.Distribucion;
 import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
@@ -23,14 +24,14 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			
 			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
-			
+
 			System.out.println ("time to generate solution " + time + " ms");
 			
+			System.out.println (agent.getActions());
+			System.out.println (agent.getInstrumentation());
+			
+			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
@@ -143,7 +144,7 @@ public class Main {
 		System.out.println("costekm -- cambiar coste de recorrer un kilometro");
 		System.out.println("horas -- cambiar horas que puede trabajar un camion (0 <= h <= 24");
 		System.out.println("algo -- cambiar algoritmo de busqueda (hc == hill climbing, sa == simulated annealing)");
-		System.out.println("inicial -- cambiar solucion inicial (0 - randomizada, 1 - ponderada, 2 - ponderada igual por camiones)");
+		System.out.println("inicial -- cambiar solucion inicial (0 - randomizada, 1 - ponderada");
 		System.out.println("heuristica -- cambiar heuristica (0 - , 1 -)");
 		System.out.println("print -- ver opciones escogidas");
 		line();
@@ -203,9 +204,9 @@ public class Main {
     		    		case 1:
     		    			as.generateInitialSolution2();
     		    			break;
-    		    		case 2:
-    		    			as.generateInitialSolution3();
-    		    			break;
+    		    		//case 2:
+    		    			//as.generateInitialSolution3();
+    		    			//break;
     		    	}
     		    	
     		    	if (hillClibming && firstHeuristic) AbastecimientoHillClimbingHeuristic1(as);
@@ -244,7 +245,6 @@ public class Main {
     				if (alg.equals("hc")) hillClibming = true;
     				else if (alg.equals("sa")) hillClibming = false;
     				else {
-    					System.out.println (alg);
     					hillClibming = true;
     					System.out.println ("please enter valid option");
         				opts();

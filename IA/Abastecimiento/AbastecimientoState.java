@@ -252,35 +252,11 @@ public class AbastecimientoState {
     public boolean cambiaPeticion (Integer p, int c, int c1) {
     	if (c == c1) return true;		//No cambia nada
 
-        int sizeC1 = asignaciones.get(c1).size();
-    	int newDist;
-
-    	boolean bounded = false;
-
-    	Peticion a = asignaciones.get(c).get(p);
-    	Peticion b;
-
-        if (sizeC1 > p) {
-        	b = asignaciones.get(c1).get(p);
-        	newDist = actualizaDistancia(b.get(), a.get(), c1);
-        	bounded = true;
-        }
-        else newDist = calcularDistancias(c1, a.get());
-
-
-        if (newDist > 0 && (sizeC1/2) < 5) {
-            asignaciones.get(c).remove(p.intValue());
-
-            if (bounded) asignaciones.get(c1).add(p, a);
-            else asignaciones.get(c1).add(a);
-
-            distancias.set(c, maxDist);
-            distancias.set(c1, maxDist);
-
-            renewDistances(c);
-            renewDistances(c1);
-
-            return true;
+    	Peticion a = asignaciones.get(c).get(p); //
+    	if (asignaPeticion(c1, a.get())) {
+    		asignaciones.get(c).remove(p.intValue());
+    		renewDistances(c);
+    		return true;
         }
         return false;
     }
@@ -324,8 +300,6 @@ public class AbastecimientoState {
     				visited[c] = true;
     				c = rand.nextInt(n);
     			}
-
-    			asignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
@@ -362,7 +336,7 @@ public class AbastecimientoState {
 
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Maximizar distancies en tots els camions.
-    public void generateInitialSolution2 () {
+    /*public void generateInitialSolution2 () {
     	Set <String> used = new HashSet <String> ();
     	Set <String> coordVisited = new HashSet <String> ();
 
@@ -386,11 +360,11 @@ public class AbastecimientoState {
 	    		}
     		}
     	}
-    }
+    }*/
 
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
-    public void generateInitialSolution3 () {
+    public void generateInitialSolution2 () {
     	Set <String> used = new HashSet <String> ();
     	Set <String> coordVisited = new HashSet <String> ();
 
@@ -416,9 +390,8 @@ public class AbastecimientoState {
 	    		for (Pair <Integer, Integer> p : v) {
 	    			if (!used.contains(p.makeString()) && asignaPeticion(pos.get(j), p)) used.add(p.makeString());
 
-	    			if (add) j++;
-	    			else j--;
-
+	    			j = add ? j + 1 : j - 1;
+	    			
 	    			if (add && j == pos.size()) {add = false; j--; }
 	    			else if (!add && j == -1) {add = true; j++; }
 	    		}
