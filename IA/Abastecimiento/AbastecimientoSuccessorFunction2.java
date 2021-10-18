@@ -13,49 +13,58 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
    // private AbastecimientoState lastNode;
     private int steps;
     private boolean trace = false;
-    //private Scheduler scheduler;
     
     private int k;
     private int limit;
     private double lambda;
+    private StringBuffer s;
 	    
 	    
     public List getSuccessors (Object state) {
     	
-    	List saSucesores = new ArrayList();
+    	ArrayList <Successor> saSucesores = new ArrayList<>();
         
     	AbastecimientoState currentState = (AbastecimientoState) state;
     	AbastecimientoState nextState = null;
     	AbastecimientoState bestState = currentState;
     	
-    	Random rand = new Random();
-    	int randomNum = rand.nextInt(5) + 1;
-    	
     	for (int step = 0; step < this.steps; step++) {
     		double temperature = computeTemperature(step);
     		if (temperature == 0.0) break;
     		
-    		nextState = (AbastecimientoState) nextState(currentState, randomNum);
-    		double valNxt = nextState.getBenefit(), valCurr = currentState.getBenefit();
-    		double dE = valNxt - valCurr;
-    		
-    		Random v = new Random();
-    		double al = v.nextDouble();
-    		double prob = 1.0 / (1.0 + Math.exp(dE / temperature));
-    		
-    		/*if (trace && (dE < 0.0) && (al > prob)) {
-    			//??
-    		}*/
-    		
-    		if ((dE > 0.0) || (al > prob)) {
-    			if (valCurr > valNxt) bestState = nextState;
-    			currentState = nextState;			
+    		while (nextState == null) {
+    			Random rand = new Random();
+    	    	int randomNum = rand.nextInt(5) + 1;
+    	    	
+    			nextState = (AbastecimientoState) getNextState(currentState, randomNum);
+    			if (nextState != null) {
+    				
+    				double valNxt = nextState.getBenefit(), valCurr = currentState.getBenefit();
+		    		double dE = valNxt - valCurr;
+		    		
+		    		Random v = new Random();
+		    		double al = v.nextDouble();
+		    		double prob = 1.0 / (1.0 + Math.exp(dE / temperature));
+		    		
+		    		/*if (trace && (dE < 0.0) && (al > prob)) {
+		    			//??
+		    		}*/
+		    		
+		    		if ((dE > 0.0) || (al > prob)) {
+		    			if (valCurr > valNxt) bestState = nextState;
+		    			currentState = nextState;			
+		    		}	
+    			}
+	    		
     		}
     		
     		
     	}
-    	goalState = bestState;
+    	StringBuffer s;
+    	goalState = new Successor(bestState); 
     	saSucesores.add(goalState);
+		//ret.add(new Successor (s.toString(), newState));
+
     
     	
     	return saSucesores;
@@ -85,7 +94,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	return false;
     }
     
-    private AbastecimientoState nextState(AbastecimientoState as, int rnd) {
+    private AbastecimientoState getNextState(AbastecimientoState as, int rnd) {
     	int nCamiones = as.centrosDistribucion.size(), nGasos = as.gasolineras.size();
     	boolean b = false;
 		ArrayList<Integer> visitedGas = new ArrayList<Integer>();
@@ -121,6 +130,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 		    	    	if (!b) visitedGas.add(alGas);
 		    		}
     			}
+    			
     			break;    			
     			
     		case 2:														//Modificamos el estado mediante intercambiaPeticiones			
