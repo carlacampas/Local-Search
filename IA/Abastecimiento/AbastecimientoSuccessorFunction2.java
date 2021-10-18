@@ -61,8 +61,8 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     		
     	}
     	StringBuffer s;
-    	goalState = new Successor(bestState); 
-    	saSucesores.add(goalState);
+    	//goalState = new Successor(bestState); 
+    	//saSucesores.add(goalState);
 		//ret.add(new Successor (s.toString(), newState));
 
     

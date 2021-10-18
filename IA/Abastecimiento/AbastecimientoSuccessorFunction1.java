@@ -25,17 +25,31 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	
     	for (int i = 0; i < ncen; i++) {
     		
-    		// asigna 
+    		// asigna peticiones no asignadas
+    		for (int j = 0; j < ngas; j++) {
+    			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
+    				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
+    				if (!assignacionsContains (as.getAsignaciones(), p)) {
+	    				AbastecimientoState newState = new AbastecimientoState (as);
+	    				if (newState.asignaPeticion(i, new Pair <Integer, Integer>(j, k))) {
+	    					StringBuffer s = new StringBuffer ();
+		        			s.append("add petition gas station: " + j + " petition " + k + " to truck " + i);
+		        			ret.add(new Successor (s.toString(), newState));
+	    				}
+    				}
+    			}
+    		}
     		
     		// mover paquetes dentro del camion
     		int m = as.getAsignaciones().get(i).size();
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
-    				newState.intercambioOrden (j, k, i);
-    				StringBuffer s = new StringBuffer ();
-    				s.append("swap petition order, truck " + i + " petition " + j + " changed with petition " + k);
-    				ret.add(new Successor (s.toString(), newState));
+    				if (newState.intercambioOrden (j, k, i)) {
+	    				StringBuffer s = new StringBuffer ();
+	    				s.append("swap petition order, truck " + i + " petition " + j + " changed with petition " + k);
+	    				ret.add(new Successor (s.toString(), newState));
+    				}
     			}
     		}
     		
@@ -46,11 +60,12 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				if (!assignacionsContains (as.getAsignaciones(), p)) {
     					for (int l = 0; l < m; l++) {
 	    					AbastecimientoState newState = new AbastecimientoState (as);
-	    					newState.cambioPeticionNoAsig (l, i, p);
-	        				StringBuffer s = new StringBuffer ();
-	        				s.append("swap petition order, truck " + i + " petition (" + j + "," + k + ")" + 
-	        							" changed with petition pos " + l);
-	        				ret.add(new Successor (s.toString(), newState));
+	    					if (newState.cambioPeticionNoAsig (l, i, p)) {
+		        				StringBuffer s = new StringBuffer ();
+		        				s.append("swap petition order, truck " + i + " petition (" + j + "," + k + ")" + 
+		        							" changed with petition pos " + l);
+		        				ret.add(new Successor (s.toString(), newState));
+	    					}
     					}
     				}
     			}
@@ -61,23 +76,26 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
     					AbastecimientoState newState = new AbastecimientoState (as);
-    					newState.intercambiaPeticiones (k, l, i, j);
-        				StringBuffer s = new StringBuffer ();
-        				s.append("swap petition, truck " + i + " petition " + k + " with petition in truck " + j + " petition " + l);
+    					if (newState.intercambiaPeticiones (k, l, i, j)) {
+	        				StringBuffer s = new StringBuffer ();
+	        				s.append("swap petition, truck " + i + " petition " + k + " with petition in truck " + j + " petition " + l);
+	        				ret.add(new Successor (s.toString(), newState));
+    					}
+	    			}
+    			}
+    		}
+    		
+    		// cambia peticiones
+    		for (int j = i + 1; j < ncen; j++) {
+    			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
+    				AbastecimientoState newState = new AbastecimientoState (as);
+    				if (newState.cambiaPeticion(k, j, i)) {
+    					StringBuffer s = new StringBuffer ();
+        				s.append("swap petition " + k + " from truck " + j + " to truck " + i);
         				ret.add(new Successor (s.toString(), newState));
     				}
     			}
     		}
-    		
-    		// camia peticiones
-    		/*for (int j=0; j < m; j++) {
-    			for (int k = i+1; j < ncen; k++) {
-    				int nm = as.getAsignaciones().get(k).size();
-    				for (int l = 0; l < nm; l++) {
-    					
-    				}
-    			}
-    		}*/
     	}
     	
         return ret;

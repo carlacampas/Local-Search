@@ -144,7 +144,7 @@ public class Main {
 		System.out.println("costekm -- cambiar coste de recorrer un kilometro");
 		System.out.println("horas -- cambiar horas que puede trabajar un camion (0 <= h <= 24");
 		System.out.println("algo -- cambiar algoritmo de busqueda (hc == hill climbing, sa == simulated annealing)");
-		System.out.println("inicial -- cambiar solucion inicial (0 - randomizada, 1 - ponderada, 2 - ponderada igual por camiones)");
+		System.out.println("inicial -- cambiar solucion inicial (0 - randomizada, 1 - ponderada");
 		System.out.println("heuristica -- cambiar heuristica (0 - , 1 -)");
 		System.out.println("print -- ver opciones escogidas");
 		line();
@@ -204,9 +204,9 @@ public class Main {
     		    		case 1:
     		    			as.generateInitialSolution2();
     		    			break;
-    		    		case 2:
-    		    			as.generateInitialSolution3();
-    		    			break;
+    		    		//case 2:
+    		    			//as.generateInitialSolution3();
+    		    			//break;
     		    	}
     		    	
     		    	if (hillClibming && firstHeuristic) AbastecimientoHillClimbingHeuristic1(as);

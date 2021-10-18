@@ -378,7 +378,7 @@ public class AbastecimientoStateTest {
         noErrors(as);
     }
     
-    @Test
+    /*@Test
     @DisplayName("Initial State Test - testGenerateInitialSolution3")
     public void testGenerateInitialSolution3 () {
     	gasolineras = new Gasolineras(100, 5);
@@ -391,5 +391,5 @@ public class AbastecimientoStateTest {
     	// test totes les gasolineres en diferentes posicions
     	// test dos camions i differentes gasolineres
     
-    }
+    }*/
 }
