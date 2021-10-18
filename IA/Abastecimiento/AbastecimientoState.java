@@ -425,8 +425,4 @@ public class AbastecimientoState {
 	    	}
     	}
     }
-
-    public int getBenefit () {
-    	return 0;
-    }
 }

@@ -30,7 +30,9 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			
+			AbstractHeuristic ah = new AbstractHeuristic ();
+			System.out.println ("solution benefit " + ah.computeProfits(newState));
 			
 			System.out.println();
 			
@@ -42,7 +44,7 @@ public class Main {
 	}
 	
 	public static void AbastecimientoHillClimbingHeuristic2 (AbastecimientoState state) {
-		System.out.println ("Abastecimiento Hill Climbing Heuristic 1");
+		System.out.println ("Abastecimiento Hill Climbing Heuristic 2");
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction1(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
@@ -59,7 +61,9 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			
+			AbstractHeuristic ah = new AbstractHeuristic();
+			System.out.println ("solution benefit " + ah.computeProfits(newState));
 			
 			System.out.println();
 			
@@ -71,7 +75,7 @@ public class Main {
 	}
 	
 	public static void AbastecimientoSimulatedAnnealingHeuristic1 (AbastecimientoState state) {
-		System.out.println ("Abastecimiento Hill Climbing Heuristic 1");
+		System.out.println ("Abastecimiento Simulated Annealing Heuristic 1");
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
@@ -88,7 +92,7 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			//System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
@@ -100,7 +104,7 @@ public class Main {
 	}
 	
 	public static void AbastecimientoSimulatedAnnealingHeuristic2 (AbastecimientoState state) {
-		System.out.println ("Abastecimiento Hill Climbing Heuristic 1");
+		System.out.println ("Abastecimiento Simulated Annealing Heuristic 2");
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
@@ -117,7 +121,7 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			//System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
