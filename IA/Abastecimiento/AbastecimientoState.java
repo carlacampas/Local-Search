@@ -425,4 +425,9 @@ public class AbastecimientoState {
 	    	}
     	}
     }
+    
+    public double getBenefit (){
+    	AbastecimientoHeuristicFunction1 ah = new AbastecimientoHeuristicFunction1 ();
+    	return ah.computeProfits(this);
+    }
 }

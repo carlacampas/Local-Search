@@ -31,8 +31,7 @@ public class Main {
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			
-			AbstractHeuristic ah = new AbstractHeuristic ();
-			System.out.println ("solution benefit " + ah.computeProfits(newState));
+			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
@@ -62,8 +61,7 @@ public class Main {
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			
-			AbstractHeuristic ah = new AbstractHeuristic();
-			System.out.println ("solution benefit " + ah.computeProfits(newState));
+			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
@@ -92,7 +90,7 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			//System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
@@ -121,7 +119,7 @@ public class Main {
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			//System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
 			
@@ -243,9 +241,10 @@ public class Main {
     				String alg = sc.next(); 
     				alg.trim(); alg.toLowerCase();
     				
-    				if (alg == "hc") hillClibming = true;
-    				else if (alg == "sa") hillClibming = false;
+    				if (alg.equals("hc")) hillClibming = true;
+    				else if (alg.equals("sa")) hillClibming = false;
     				else {
+    					System.out.println (alg);
     					hillClibming = true;
     					System.out.println ("please enter valid option");
         				opts();
@@ -273,6 +272,8 @@ public class Main {
         				opts();
     				}
     				
+    				break;
+    			case "print":
     				break;
     			default:
     				System.out.println ("please enter valid option");
