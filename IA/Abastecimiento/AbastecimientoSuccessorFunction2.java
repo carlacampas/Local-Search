@@ -25,8 +25,10 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	ArrayList <Successor> saSucesores = new ArrayList<>();
         
     	AbastecimientoState currentState = (AbastecimientoState) state;
-    	AbastecimientoState nextState = null;
+    	AbastecimientoState nextState = new AbastecimientoState ();
     	AbastecimientoState bestState = currentState;
+    	
+    	s = new StringBuffer ();
     	
     	for (int step = 0; step < this.steps; step++) {
     		double temperature = computeTemperature(step);
@@ -60,9 +62,9 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     		
     		
     	}
-    	StringBuffer s;
-    	goalState = bestState; 
-    	saSucesores.add(new Successor(s.toString(), goalState));
+    	
+    	//goalState = bestState; 
+    	saSucesores.add(new Successor(s.toString(), bestState));
 
     	return saSucesores;
     }
@@ -115,7 +117,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	    		Random cn = new Random();			    	    			
     				int alCamion = cn.nextInt(nCamiones-1);
     				
-	    			Pair<Integer, Integer> x; 
+	    			Pair<Integer, Integer> x = new Pair <Integer, Integer> (); 
     				
     	    		int nPeticiones = as.gasolineras.get(alGas).getPeticiones().size();
 		    	    	

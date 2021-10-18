@@ -19,6 +19,8 @@ public class AbastecimientoState {
     private ArrayList <Integer> distancias;
 
     // CONSTRUCTORS.
+    public AbastecimientoState () {}
+    
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
         this.gasolineras = gasolineras;
         this.centrosDistribucion = centrosDistribucion;
