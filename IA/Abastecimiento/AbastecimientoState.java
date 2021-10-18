@@ -275,8 +275,6 @@ public class AbastecimientoState {
     	ArrayList <Peticion> assigs = asignaciones.get(c);
     	Peticion store = assigs.get(p);
     	
-    	System.out.println (asignaciones.get(c).size());
-    	
     	asignaciones.set(c, assigs);
     	
     	if (!renewDistances(c)) {
