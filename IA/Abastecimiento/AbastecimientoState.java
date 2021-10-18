@@ -41,11 +41,22 @@ public class AbastecimientoState {
     }
     
     public AbastecimientoState (AbastecimientoState as) {
-    	/*this.gasolineras = as.gasolineras;
-    	this.centrosDistribucion = as.centrosDistribucion;
-    	this.asignaciones = as.asignaciones;
-    	this.distancias = as.distancias;*/
-    	AbastecimientoState (as.asignaciones, as.distancias, as.gasolineras, as.centrosDistribucion);
+    	this (as.gasolineras, as.centrosDistribucion);
+    	for (int i=0; i<as.asignaciones.size(); i++) {
+    		int size = as.asignaciones.get(i).size();
+    		ArrayList <Peticion> aux = new ArrayList <> ();
+    		for (int j=0; j<size; j++) {
+    			Pair <Integer, Integer> p = as.asignaciones.get(i).get(j).get();
+    			aux.add(new Peticion (new Pair <Integer, Integer> (p.a, p.b)));
+    		}
+    		this.asignaciones.set(i, aux);
+    	}
+    	
+    	for (int i=0; i<as.distancias.size(); i++) {
+    		int x = distancias.get(i);
+    		this.distancias.set(i, x);
+    	}
+    	
     }
 
     // SETTERS.
@@ -260,22 +271,11 @@ public class AbastecimientoState {
         return false;
     }
 
-    public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){
-    	for (int i=0; i<asignaciones.get(c).size(); i++) {
-    		Pair <Integer, Integer> a = asignaciones.get(c).get(i).get();
-    		System.out.print("(" + a.geta() + "," + a.getb() + ")  : ");
-    	}
-    	System.out.println();
-    	
+    public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){    	
     	ArrayList <Peticion> assigs = asignaciones.get(c);
     	Peticion store = assigs.get(p);
     	
-    	assigs.set(p, new Peticion (newP));
-    	for (int i=0; i<assigs.size(); i++) {
-    		Pair <Integer, Integer> a = assigs.get(i).get();
-    		System.out.print("(" + a.geta() + "," + a.getb() + ")  : ");
-    	}
-    	System.out.println();
+    	System.out.println (asignaciones.get(c).size());
     	
     	asignaciones.set(c, assigs);
     	
