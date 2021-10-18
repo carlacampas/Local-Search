@@ -34,7 +34,6 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	}
 		
     	saSucesores.add(new Successor(s.toString(), nextState));
-
     	return saSucesores;
     }
     
