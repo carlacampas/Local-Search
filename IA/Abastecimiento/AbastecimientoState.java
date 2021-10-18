@@ -268,7 +268,7 @@ public class AbastecimientoState {
         else newDist = calcularDistancias(c1, a.get());
 
 
-        if (newDist > 0){
+        if (newDist > 0 && (sizeC1/2) < 5) {
             asignaciones.get(c).remove(p.intValue());
 
             if (bounded) asignaciones.get(c1).add(p, a);
