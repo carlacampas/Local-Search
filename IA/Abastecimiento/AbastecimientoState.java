@@ -324,8 +324,6 @@ public class AbastecimientoState {
     				visited[c] = true;
     				c = rand.nextInt(n);
     			}
-
-    			asignaPeticion (c, new Pair <Integer, Integer> (i, j));
     		}
     	}
     }
@@ -416,9 +414,8 @@ public class AbastecimientoState {
 	    		for (Pair <Integer, Integer> p : v) {
 	    			if (!used.contains(p.makeString()) && asignaPeticion(pos.get(j), p)) used.add(p.makeString());
 
-	    			if (add) j++;
-	    			else j--;
-
+	    			j = add ? j + 1 : j - 1;
+	    			
 	    			if (add && j == pos.size()) {add = false; j--; }
 	    			else if (!add && j == -1) {add = true; j++; }
 	    		}

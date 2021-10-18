@@ -25,6 +25,8 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	
     	for (int i = 0; i < ncen; i++) {
     		
+    		// asigna 
+    		
     		// mover paquetes dentro del camion
     		int m = as.getAsignaciones().get(i).size();
     		for (int j = 0; j < m; j++) {
@@ -61,11 +63,21 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					AbastecimientoState newState = new AbastecimientoState (as);
     					newState.intercambiaPeticiones (k, l, i, j);
         				StringBuffer s = new StringBuffer ();
-        				s.append("swap petition order, truck " + i + " petition " + k + " with petition in truck " + j + " petition " + l);
+        				s.append("swap petition, truck " + i + " petition " + k + " with petition in truck " + j + " petition " + l);
         				ret.add(new Successor (s.toString(), newState));
     				}
     			}
     		}
+    		
+    		// camia peticiones
+    		/*for (int j=0; j < m; j++) {
+    			for (int k = i+1; j < ncen; k++) {
+    				int nm = as.getAsignaciones().get(k).size();
+    				for (int l = 0; l < nm; l++) {
+    					
+    				}
+    			}
+    		}*/
     	}
     	
         return ret;

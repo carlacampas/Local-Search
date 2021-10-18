@@ -3,6 +3,7 @@ package Abastecimiento;
 import java.util.Scanner;
 
 import IA.Gasolina.CentrosDistribucion;
+import IA.Gasolina.Distribucion;
 import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
@@ -23,14 +24,14 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			
 			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
-			
+
 			System.out.println ("time to generate solution " + time + " ms");
 			
+			System.out.println (agent.getActions());
+			System.out.println (agent.getInstrumentation());
+			
+			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
 			
 			System.out.println();
@@ -244,7 +245,6 @@ public class Main {
     				if (alg.equals("hc")) hillClibming = true;
     				else if (alg.equals("sa")) hillClibming = false;
     				else {
-    					System.out.println (alg);
     					hillClibming = true;
     					System.out.println ("please enter valid option");
         				opts();
