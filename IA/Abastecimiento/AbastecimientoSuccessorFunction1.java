@@ -31,7 +31,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
     				if (!assignacionsContains (as.getAsignaciones(), p)) {
 	    				AbastecimientoState newState = new AbastecimientoState (as);
-	    				if (newState.asignaPeticion(i, new Pair <Integer, Integer>(j, k))) {
+	    				if (newState.asignaPeticion(i, p)) {
 	    					StringBuffer s = new StringBuffer ();
 		        			s.append("add petition gas station: " + j + " petition " + k + " to truck " + i);
 		        			ret.add(new Successor (s.toString(), newState));
@@ -52,7 +52,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				}
     			}
     		}
-    		
+    		    		
     		//mover paquetes con los que no estan assignados
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
@@ -69,7 +69,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
     				}
     			}
-    		}
+    		} 
     		
     		//mover paquetes con los que ya estan assignados
     		for (int j = i + 1; j < ncen; j++) {
@@ -84,20 +84,23 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    			}
     			}
     		}
+    }
     		
-    		// cambia peticiones
+    		/* cambia peticiones
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
     					StringBuffer s = new StringBuffer ();
         				s.append("swap petition " + k + " from truck " + j + " to truck " + i);
-        				ret.add(new Successor (s.toString(), newState));
+        				Successor suc = new Successor (s.toString(), newState);
+        				ret.add(suc);
     				}
     			}
     		}
-    	}
+    	}*/
     	
+    	System.out.println (ret.size());
         return ret;
     }
 }
