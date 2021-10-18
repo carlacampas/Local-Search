@@ -1,9 +1,8 @@
 package Abastecimiento;
 
-import java.util.Scanner;
+import java.util.*;
 
 import IA.Gasolina.CentrosDistribucion;
-import IA.Gasolina.Distribucion;
 import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
@@ -13,23 +12,43 @@ import aima.search.informed.SimulatedAnnealingSearch;
 import aima.search.framework.SearchAgent;
 
 public class Main {
+	private static void printActions(List actions) {
+        for (int i = 0; i < actions.size(); i++) {
+            String action = (String) actions.get(i);
+            System.out.println(action);
+        }
+    }
+	
+	private static void printInstrumentation(Properties properties) {
+        Iterator keys = properties.keySet().iterator();
+        while (keys.hasNext()) {
+            String key = (String) keys.next();
+            String property = properties.getProperty(key);
+            System.out.println(key + " : " + property);
+        }
+
+    }
+	
 	public static void AbastecimientoHillClimbingHeuristic1 (AbastecimientoState state) {
-		System.out.println ("Abastecimiento Hill Climbing Heuristic 1");
+		System.out.println ("Solution using Hill Climbing + Heuristic1: ");
 		try {
+			state.print_state();
+			line();
 			long time = System.currentTimeMillis();
+			
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction1(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
+			newState.print_state();
+			line();
 			time = System.currentTimeMillis() - time;
-			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
 
 			System.out.println ("time to generate solution " + time + " ms");
 			
-			System.out.println (agent.getActions());
-			System.out.println (agent.getInstrumentation());
+			printActions (agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
 			
 			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
@@ -56,7 +75,7 @@ public class Main {
 			
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
 			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
+			System.out.println ("Solution using Hill Climbing + Heuristic2: ");
 			System.out.println (agent.getActions());
 			System.out.println(agent.getInstrumentation());
 			
@@ -204,9 +223,6 @@ public class Main {
     		    		case 1:
     		    			as.generateInitialSolution2();
     		    			break;
-    		    		//case 2:
-    		    			//as.generateInitialSolution3();
-    		    			//break;
     		    	}
     		    	
     		    	if (hillClibming && firstHeuristic) AbastecimientoHillClimbingHeuristic1(as);

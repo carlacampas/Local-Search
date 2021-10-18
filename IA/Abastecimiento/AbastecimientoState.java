@@ -41,10 +41,11 @@ public class AbastecimientoState {
     }
     
     public AbastecimientoState (AbastecimientoState as) {
-    	this.gasolineras = as.gasolineras;
+    	/*this.gasolineras = as.gasolineras;
     	this.centrosDistribucion = as.centrosDistribucion;
     	this.asignaciones = as.asignaciones;
-    	this.distancias = as.distancias;
+    	this.distancias = as.distancias;*/
+    	AbastecimientoState (as.asignaciones, as.distancias, as.gasolineras, as.centrosDistribucion);
     }
 
     // SETTERS.
@@ -230,18 +231,16 @@ public class AbastecimientoState {
 
 
    //Aux function for cambiaPeticion
-    private void renewDistances(int peticionesC) {
+    private boolean renewDistances(int peticionesC) {
     	ArrayList<Peticion> auxP = asignaciones.get(peticionesC);
 
     	asignaciones.set(peticionesC, new ArrayList<Peticion>());
+    	distancias.set(peticionesC, maxDist);
 
-    	for (int i = 0; i < auxP.size(); i++) {
-    		Peticion x = auxP.get(i);
-    		int dist = calcularDistancias(peticionesC, x.get());
-
-    		distancias.set(peticionesC, dist);
-    		asignaciones.get(peticionesC).add(i, x);
-    	}
+    	for (int i = 0; i < auxP.size(); i++) 
+    		if (!asignaPeticion (peticionesC, auxP.get(i).get())) return false;
+    	
+    	return true;
     }
 
     /*
@@ -262,21 +261,31 @@ public class AbastecimientoState {
     }
 
     public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){
-    	Peticion a = asignaciones.get(c).get(p);
-    	Peticion b = new Peticion(newP);
-
-        int newDist = actualizaDistancia(a.get(), b.get(), c);
-
-        if (newDist > 0){
-            asignaciones.get(c).remove(p.intValue());
-            asignaciones.get(c).add(p, b);
-
-            distancias.set(c, maxDist);
-            renewDistances(c);
-          
-            return true;
-        }
-        return false;
+    	for (int i=0; i<asignaciones.get(c).size(); i++) {
+    		Pair <Integer, Integer> a = asignaciones.get(c).get(i).get();
+    		System.out.print("(" + a.geta() + "," + a.getb() + ")  : ");
+    	}
+    	System.out.println();
+    	
+    	ArrayList <Peticion> assigs = asignaciones.get(c);
+    	Peticion store = assigs.get(p);
+    	
+    	assigs.set(p, new Peticion (newP));
+    	for (int i=0; i<assigs.size(); i++) {
+    		Pair <Integer, Integer> a = assigs.get(i).get();
+    		System.out.print("(" + a.geta() + "," + a.getb() + ")  : ");
+    	}
+    	System.out.println();
+    	
+    	asignaciones.set(c, assigs);
+    	
+    	if (!renewDistances(c)) {
+    		asignaciones.get(c).set(p, store);
+    		renewDistances(c);
+    		return false;
+    	}
+    	
+    	return true;
     }
 
     // INITIAL SOLUTION.
@@ -402,5 +411,16 @@ public class AbastecimientoState {
     public double getBenefit (){
     	AbastecimientoHeuristicFunction1 ah = new AbastecimientoHeuristicFunction1 ();
     	return ah.computeProfits(this);
+    }
+    
+    public void print_state () {
+    	for (int i=0; i<asignaciones.size(); i++) {
+        	ArrayList <Peticion> assigs = asignaciones.get(i);
+        	System.out.println ("(" + i + ") --> " + asignaciones.get(i) + ": ");
+	        for (Peticion p : assigs) {
+	        	System.out.print ("(" + p.get().a + "," + p.get().b + ")");
+	        }
+	        System.out.println();
+    	}
     }
 }
