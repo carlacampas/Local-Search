@@ -141,22 +141,30 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     		
 			sizeC = as.gasolineras.get(alGas).getPeticiones().size();
 			
-			pn = new Random();
-			alPeticionNoAsig = pn.nextInt(sizeC); 
-			
-			cn = new Random();
-			alCamion = cn.nextInt(nCamiones);
-	    			
-			pnc = new Random();
-			alPnCamion = pnc.nextInt(as.getAsignaciones().get(alCamion).size());
-			
-			x = new Pair<Integer, Integer> (alGas, alPeticionNoAsig);
-			
-			if (!asigned(as, x.makeString())) {				
-				b = as.cambioPeticionNoAsig(alPnCamion, alCamion, x);
+			if (sizeC > 0) {
+				pn = new Random();			
+				alPeticionNoAsig = pn.nextInt(sizeC); 
 				
-	    	    if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
-			}		    	    		 	    	
+				cn = new Random();
+				alCamion = cn.nextInt(nCamiones);
+		    	
+				int sizePnC =  as.getAsignaciones().get(alCamion).size();
+				
+				if (sizePnC > 0) {
+					pnc = new Random();
+					alPnCamion = pnc.nextInt(as.getAsignaciones().get(alCamion).size());
+				
+					x = new Pair<Integer, Integer> (alGas, alPeticionNoAsig);
+				
+					if (!asigned(as, x.makeString())) {				
+						b = as.cambioPeticionNoAsig(alPnCamion, alCamion, x);
+						
+			    	    if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
+					}
+				}
+			}
+			
+					    	    		 	    	
     	    break;	
 		}
     	
