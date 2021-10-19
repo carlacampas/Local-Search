@@ -156,9 +156,7 @@ public class AbastecimientoState {
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
         int n = asignaciones.get(c).size();
-        int dAct = 0;
-        
-
+      
         if (oldP.intValue()%2 == 0) {
             if (n-1 == oldP.intValue()){
             	
@@ -212,7 +210,7 @@ public class AbastecimientoState {
 	    	return true;
     	}
     	return false;
-	}
+	} 
 
     /*
     * Pre: la petición p está asignada al camión c y la petición p1 al camion c1
@@ -231,10 +229,10 @@ public class AbastecimientoState {
             asignaciones.get(c).set(p, b);
             asignaciones.get(c1).set(p1, a);
 
-            distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - x);
+            distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - x);
             distancias.set(c, x);
             
-            distTraveled = distTraveled - (640-distancias.get(c1)) + (maxDist - y);
+            distTraveled = distTraveled - (maxDist-distancias.get(c1)) + (maxDist - y);
             distancias.set(c1, y);
 
             return true;
