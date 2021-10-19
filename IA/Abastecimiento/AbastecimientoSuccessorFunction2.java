@@ -20,7 +20,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	AbastecimientoState nextState = null;
     	
     	s = new StringBuffer ();
-    	this.max = 5;
+    	this.max = 6;
     	
     	
     	Random rand = new Random();

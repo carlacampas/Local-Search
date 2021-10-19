@@ -155,10 +155,8 @@ public class AbastecimientoState {
         int dcToOldC = calcularDistancia(dCoord, oldCoord);
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
-        System.out.println (oldP);
         if (oldP%2 == 0) {
             if (asignaciones.get(c).size()-1 == oldP){
-            	System.out.println ("end of array case");
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
             Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
@@ -290,8 +288,6 @@ public class AbastecimientoState {
 
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get(), true)) {
-    		distTraveled = distTraveled - (maxDist - distancias.get(c));
-
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
     		return true;

@@ -20,7 +20,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	
     	for (int i = 0; i < ncen; i++) {
     		
-    		//asigna peticiones no asignadas -- FUNCIONA
+    		/*asigna peticiones no asignadas -- FUNCIONA*/
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
     				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
@@ -41,7 +41,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.intercambioOrden (j, k, i)) {
-    					System.out.println ("ENTERED");
 	    				StringBuffer s = new StringBuffer ();
 	    				s.append("swap petition order, truck " + i + " petition " + j + " changed with petition " + k);
 	    				ret.add(new Successor (s.toString(), newState));
@@ -80,10 +79,10 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
 	    			}
     			}
-    		}
+    		}//*/
     		
-    		//cambia peticiones -- NO FUNCIONA --> BEA
-    		/*for (int j = 0; j < ncen; j++) {
+    		/*cambia peticiones -- NO FUNCIONA --> BEA
+    		for (int j = 0; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
@@ -96,7 +95,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}*/
     	}
     	
-    	System.out.println ("here " + ret.size());
         return ret;
     }
 }

@@ -222,14 +222,6 @@ public class Main {
     		  
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
     		    	
-    		    	for (Gasolinera g: gasolineras) {
-    		    		for (Integer p : g.getPeticiones()) {
-    		    			System.out.print (p + "    :      ");
-    		    		}
-    		    		System.out.println();
-    		    	}
-    		    	System.out.println("------------------------------");
-    		    	
     		    	switch (initialSolution) {
     		    		case 0:
     		    			as.generateInitialSolution1();
