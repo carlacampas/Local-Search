@@ -143,7 +143,6 @@ public class AbastecimientoState {
 
     public Integer actualizaDistancia(Integer oldP, Pair <Integer, Integer> newP, int c){
         Peticion oldPn = asignaciones.get(c).get(oldP);
-       System.out.println(oldPn.get().a + "," + oldPn.get().b  + ")");
     	
     	Distribucion d = centrosDistribucion.get(c);
         Gasolinera gOld = gasolineras.get(oldPn.get().a);
@@ -172,7 +171,6 @@ public class AbastecimientoState {
             int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
             int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
 
-            System.out.println ("DISTANCE IN METHOD" + (distancias.get(c) + dOld - dNew));
             return distancias.get(c) + dOld - dNew;
         }
         
@@ -186,7 +184,6 @@ public class AbastecimientoState {
         int dOld = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
         int dNew = dcToMidC + calcularDistancia(midCoord, newCoord) + dcToNewC;
 
-        System.out.println ("DISTANCE IN METHOD" + (distancias.get(c) + dOld - dNew));
         return distancias.get(c) + dOld - dNew;
     }
 
@@ -248,49 +245,23 @@ public class AbastecimientoState {
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
     public boolean intercambioOrden (Integer p, Integer p1, int c) {
-    	//return false;
-    	/*if (p == p1) return false; 								//same petition, hence already swapped since nothing changes.
-
-    	Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c).get(p1);
-
-        int x = actualizaDistancia(p, b.get(), c); 
-        System.out.println ("x");
-        System.out.println ("DISTANCE SHOULD BE " + x);
-        int ogDistance = distancias.get(c); // dista original
-
-        if (x > 0){
-            distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
-            
-            int y = actualizaDistancia(p1, a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
-            System.out.println ("Y " + y);
-            
-            if (y > 0){
-            	if (y > 640) {System.out.println ("IT FAILS BITCH"); return false;}
-                asignaciones.get(c).set(p1, a);
-                asignaciones.get(c).set(p, b);
-
-                distTraveled = distTraveled - (maxDist-ogDistance) + (maxDist - y);
-                distancias.set(c, y);
-                
-                return true;
-            }
-            else distancias.set(c, ogDistance);                 //si pasa cambiamos al valor original y aquí no ha pasado nada :)
-
-            return false;
-        }
-        return false;*/
     	int dist = distancias.get(c), distStore = distTraveled;
     	Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c).get(p1);
+        
         asignaciones.get(c).set(p1, a);
         asignaciones.get(c).set(p, b);
+        
         renewDistances(c);
+        
         if (distancias.get(c) < 0) {
+        	
         	distancias.set(c, dist);
         	distTraveled = distStore;
+        	
         	asignaciones.get(c).set(p, a);
             asignaciones.get(c).set(p1, b);
+            
             return false;
         }
         return true;
