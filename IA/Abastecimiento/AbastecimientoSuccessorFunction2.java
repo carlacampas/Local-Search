@@ -20,7 +20,11 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	AbastecimientoState nextState = null;
     	
     	s = new StringBuffer ();
+<<<<<<< Updated upstream
     	this.max = 4;
+=======
+    	this.max = 5;
+>>>>>>> Stashed changes
     	
     	
     	Random rand = new Random();
@@ -52,7 +56,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	Pair<Integer, Integer> x;
     	
     	switch (rnd){
-		case 1:									           //modificamos el estado mediante la asignaPeticion
+		case 0:									           //modificamos el estado mediante la asignaPeticion
 			
 			gn = new Random();
 			alGas = gn.nextInt(nGasos);			//Escoge las peticiones de una gasolinera aleatoria
@@ -68,7 +72,8 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				x = new Pair<Integer, Integer> (alGas, alPeticion);	    			
     	    	
 				if (!asigned(as, x.makeString())) {
-    	    		b = as.asignaPeticion(alCamion, x, true);
+					AbastecimientoState newState = new AbastecimientoState (as);
+    	    		b = newState.asignaPeticion(alCamion, x, true);
 	    			
     	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
 				}
@@ -76,7 +81,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 
 			break;    			
 			
-		case 2:														//Modificamos el estado mediante intercambiaPeticiones			 			
+		case 1:														//Modificamos el estado mediante intercambiaPeticiones			 			
 			
 			cn1 = new Random();
 			cn2 = new Random();
@@ -91,14 +96,15 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				pn2 = new Random();
 				alPn1 =  pn1.nextInt(sizeC1);
 				alPn2  = pn2.nextInt(sizeC2);
-
-	    		b = as.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
+				
+				AbastecimientoState newState = new AbastecimientoState (as);
+	    		b = newState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
     	    																					
 	    		if (b) s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
 			}
 			break;
 			
-		case 3:														//Modificamos el estado mediante intercambioOrden		
+		case 2:														//Modificamos el estado mediante intercambioOrden		
 			cn = new Random();
 			alCamion = cn.nextInt(nCamiones);
     			
@@ -110,13 +116,20 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			alPn2 = pn2.nextInt(sizeC);
 	    			
 			if (alPn1 != alPn2) {
-				b = as.intercambioOrden(alPn1, alPn2, alCamion);
+				AbastecimientoState newState = new AbastecimientoState (as);
+				b = newState.intercambioOrden(alPn1, alPn2, alCamion);
+			
 				if (b) s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
 			}
 					
 			break;
+<<<<<<< Updated upstream
 		/*	
 		case 4:														//Modificamos el estado mediante cambiaPeticion	
+=======
+			
+		case 3:														//Modificamos el estado mediante cambiaPeticion	
+>>>>>>> Stashed changes
 			cn1 = new Random();
 			cn2 = new Random();
     		alCamion1 = cn1.nextInt(nCamiones);
@@ -128,7 +141,8 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				pn = new Random();
 				alPn = pn.nextInt(sizeC1);
 				
-				b = as.cambiaPeticion(alPn, alCamion1, alCamion2);
+				AbastecimientoState newState = new AbastecimientoState (as);
+				b = newState.cambiaPeticion(alPn, alCamion1, alCamion2);
 			
 				if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
 			}
@@ -141,8 +155,35 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     		
 			sizeC = as.gasolineras.get(alGas).getPeticiones().size();
 			
+<<<<<<< Updated upstream
 			pn = new Random();
 			alPeticionNoAsig = pn.nextInt(sizeC); 
+=======
+			if (sizeC > 0) {
+				pn = new Random();			
+				alPeticionNoAsig = pn.nextInt(sizeC); 
+				
+				cn = new Random();
+				alCamion = cn.nextInt(nCamiones);
+		    	
+				int sizePnC =  as.getAsignaciones().get(alCamion).size();
+				
+				if (sizePnC > 0) {
+					pnc = new Random();
+					alPnCamion = pnc.nextInt(as.getAsignaciones().get(alCamion).size());
+				
+					x = new Pair<Integer, Integer> (alGas, alPeticionNoAsig);
+				
+					if (!asigned(as, x.makeString())) {	
+						
+						AbastecimientoState newState = new AbastecimientoState (as);
+						b = newState.cambioPeticionNoAsig(alPnCamion, alCamion, x);
+						
+			    	    if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
+					}
+				}
+			}
+>>>>>>> Stashed changes
 			
 			cn = new Random();
 			alCamion = cn.nextInt(nCamiones);
