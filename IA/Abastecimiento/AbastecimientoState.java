@@ -110,12 +110,10 @@ public class AbastecimientoState {
     	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
     }
 
-    public Integer actualizaDistancia(Pair <Integer, Integer> oldP, Pair <Integer, Integer> newP, int c){
+    public Integer actualizaDistancia(Integer oldP, Pair <Integer, Integer> newP, int c){
         Distribucion d = centrosDistribucion.get(c);
-        Gasolinera gOld = gasolineras.get(oldP.a);
+        Gasolinera gOld = gasolineras.get(oldP.get().a);
         Gasolinera gNew = gasolineras.get(newP.a);
-
-        Peticion oldPet = new Peticion (oldP);
 
         Pair <Integer, Integer> dCoord = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
         Pair <Integer, Integer> oldCoord = new Pair <Integer, Integer> (gOld.getCoordX(), gOld.getCoordY());
@@ -125,10 +123,8 @@ public class AbastecimientoState {
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
         int n = asignaciones.get(c).size();
-        int dAct=0;
-        int pos = 0;
-
-        while (asignaciones.get(c).get(pos).get() != oldP) ++pos;
+        int dAct = 0;
+        int pos = asignaciones.get(c).indexOf(oldP);
 
         if (pos%2 == 0) {
 
