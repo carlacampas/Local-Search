@@ -206,8 +206,10 @@ public class AbastecimientoState {
 	    	}
 	    	
 	    	peticionesDesatendidas.remove(p.makeString());
+	    	System.out.println (distTraveled);
 	    	return true;
     	}
+    	System.out.println (distTraveled);
     	return false;
 	}
 
@@ -234,8 +236,10 @@ public class AbastecimientoState {
             distTraveled = distTraveled - (maxDist-distancias.get(c1)) + (maxDist - y);
             distancias.set(c1, y);
 
+            System.out.println (distTraveled);
             return true;
         }
+        System.out.println (distTraveled);
         return false;
     }
     /*
@@ -260,8 +264,10 @@ public class AbastecimientoState {
         	asignaciones.get(c).set(p, a);
             asignaciones.get(c).set(p1, b);
             
+            System.out.println (distTraveled);
             return false;
         }
+        System.out.println (distTraveled);
         return true;
     }
 
@@ -290,8 +296,10 @@ public class AbastecimientoState {
     	if (asignaPeticion(c1, a.get(), false)) {
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
+    		System.out.println (distTraveled);
     		return true;
         }
+    	System.out.println (distTraveled);
         return false;
     }
     
@@ -357,8 +365,10 @@ public class AbastecimientoState {
 
     	    		distTraveled = distTraveled - oldDist + newDist;
     	    		
+    	    		System.out.println (distTraveled);
     	    		return true;
     			}
+    			System.out.println (distTraveled);
     			return false;
     		}
     		
@@ -384,9 +394,11 @@ public class AbastecimientoState {
     		
     		peticionesDesatendidas.remove(newP.makeString());
     		
+    		System.out.println (distTraveled);
     		return true;
     	}
     	
+    	System.out.println (distTraveled);
     	return false;
     }
 

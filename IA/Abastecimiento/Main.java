@@ -99,7 +99,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(250000, 10, 5, 0.5);
+			Search search = new SimulatedAnnealingSearch(2500, 10, 5, 0.5);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -113,6 +113,7 @@ public class Main {
 			newState.print_state();
 			line();
 			
+			System.out.println (agent.getActions().toString());
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());

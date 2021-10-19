@@ -16,32 +16,16 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	
     	ArrayList <Successor> saSucesores = new ArrayList<>();
         
-    	AbastecimientoState currentState = (AbastecimientoState) state;
-    	AbastecimientoState nextState = null;
+    	AbastecimientoState nextState = (AbastecimientoState) state;;
     	
     	s = new StringBuffer ();
-    	this.max = 6;
+    	this.max = 5;
     	
     	
     	Random rand = new Random();
     	int randomNum = rand.nextInt(max);
-        	    	
-        nextState = getNextStateNoLoops(currentState, randomNum);
-    	
-        nextState = (nextState == null ? currentState : nextState);
 		
-    			
-    	saSucesores.add(new Successor(s.toString(), nextState));
-    	return saSucesores;
-    }
-    
-    private boolean asigned(AbastecimientoState as, String alPn) {
-    	return as.getPeticionesDesatendidas().contains(alPn);
-    }
-    
-    private AbastecimientoState getNextStateNoLoops(AbastecimientoState as, int rnd) {
-    	
-    	int nCamiones = as.centrosDistribucion.size(), nGasos = as.gasolineras.size(), nPeticiones;
+        int nCamiones = nextState.centrosDistribucion.size(), nGasos = nextState.gasolineras.size(), nPeticiones;
 
     	boolean b = false;
     	
@@ -51,13 +35,13 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	
     	Pair<Integer, Integer> x;
     	
-    	switch (rnd){
-		case 1:									           //modificamos el estado mediante la asignaPeticion
+    	switch (randomNum){
+		case 0:									           //modificamos el estado mediante la asignaPeticion
 			
 			gn = new Random();
 			alGas = gn.nextInt(nGasos);			//Escoge las peticiones de una gasolinera aleatoria
 			
-			nPeticiones = as.gasolineras.get(alGas).getPeticiones().size();
+			nPeticiones = nextState.gasolineras.get(alGas).getPeticiones().size();
 			
 			if (nPeticiones > 0) {
 				pn = new Random();
@@ -67,8 +51,8 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				alCamion = cn.nextInt(nCamiones);
 				x = new Pair<Integer, Integer> (alGas, alPeticion);	    			
     	    	
-				if (!asigned(as, x.makeString())) {
-    	    		b = as.asignaPeticion(alCamion, x, true);
+				if (asigned(nextState, x.makeString())) {
+    	    		b = nextState.asignaPeticion(alCamion, x, true);
 	    			
     	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
 				}
@@ -76,7 +60,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 
 			break;    			
 			
-		case 2:														//Modificamos el estado mediante intercambiaPeticiones			 			
+		case 1:														//Modificamos el estado mediante intercambiaPeticiones			 			
 			
 			cn1 = new Random();
 			cn2 = new Random();
@@ -84,25 +68,25 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			alCamion2 = cn2.nextInt(nCamiones);			
     		
 			if (alCamion1 != alCamion2) {
-				sizeC1 = as.getAsignaciones().get(alCamion1).size();
-				sizeC2 = as.getAsignaciones().get(alCamion2).size();
+				sizeC1 = nextState.getAsignaciones().get(alCamion1).size();
+				sizeC2 = nextState.getAsignaciones().get(alCamion2).size();
 				
 				pn1 = new Random();
 				pn2 = new Random();
 				alPn1 =  pn1.nextInt(sizeC1);
 				alPn2  = pn2.nextInt(sizeC2);
 
-	    		b = as.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
+	    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
     	    																					
 	    		if (b) s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
 			}
 			break;
 			
-		case 3:														//Modificamos el estado mediante intercambioOrden		
+		case 2:														//Modificamos el estado mediante intercambioOrden		
 			cn = new Random();
 			alCamion = cn.nextInt(nCamiones);
     			
-			sizeC = as.getAsignaciones().get(alCamion).size();
+			sizeC = nextState.getAsignaciones().get(alCamion).size();
 				
 			pn1 = new Random();
 			pn2 = new Random();
@@ -110,36 +94,36 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			alPn2 = pn2.nextInt(sizeC);
 	    			
 			if (alPn1 != alPn2) {
-				b = as.intercambioOrden(alPn1, alPn2, alCamion);
+				b = nextState.intercambioOrden(alPn1, alPn2, alCamion);
 				if (b) s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
 			}
 					
 			break;
 			
-		case 4:														//Modificamos el estado mediante cambiaPeticion	
+		case 3:														//Modificamos el estado mediante cambiaPeticion	
 			cn1 = new Random();
 			cn2 = new Random();
     		alCamion1 = cn1.nextInt(nCamiones);
     		alCamion2 = cn2.nextInt(nCamiones);
 				
 			if (alCamion1 != alCamion2) {
-				sizeC1 = as.getAsignaciones().get(alCamion1).size();
+				sizeC1 = nextState.getAsignaciones().get(alCamion1).size();
 
 				pn = new Random();
 				alPn = pn.nextInt(sizeC1);
 				
-				b = as.cambiaPeticion(alPn, alCamion1, alCamion2);
+				b = nextState.cambiaPeticion(alPn, alCamion1, alCamion2);
 			
 				if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
 			}
 			break;
 		 		
-		case 5:														//Modificamos el estado mediante cambioPeticionNoAsig
+		case 4:														//Modificamos el estado mediante cambioPeticionNoAsig
 			
 			gn = new Random();
 			alGas = gn.nextInt(nGasos);			
     		
-			sizeC = as.gasolineras.get(alGas).getPeticiones().size();
+			sizeC = nextState.gasolineras.get(alGas).getPeticiones().size();
 			
 			if (sizeC > 0) {
 				pn = new Random();			
@@ -148,16 +132,16 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				cn = new Random();
 				alCamion = cn.nextInt(nCamiones);
 		    	
-				int sizePnC =  as.getAsignaciones().get(alCamion).size();
+				int sizePnC =  nextState.getAsignaciones().get(alCamion).size();
 				
 				if (sizePnC > 0) {
 					pnc = new Random();
-					alPnCamion = pnc.nextInt(as.getAsignaciones().get(alCamion).size());
+					alPnCamion = pnc.nextInt(nextState.getAsignaciones().get(alCamion).size());
 				
 					x = new Pair<Integer, Integer> (alGas, alPeticionNoAsig);
 				
-					if (!asigned(as, x.makeString())) {				
-						b = as.cambioPeticionNoAsig(alPnCamion, alCamion, x);
+					if (asigned(nextState, x.makeString())) {				
+						b = nextState.cambioPeticionNoAsig(alPnCamion, alCamion, x);
 						
 			    	    if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
 					}
@@ -166,10 +150,17 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			
 					    	    		 	    	
     	    break;	
+    	    
+    	   default:
+    		   System.out.println("uooo you shouldn't be here...");
+    	   		break;
 		}
-    	
-    	return (!b ? null : as);
-
+    			
+    	saSucesores.add(new Successor(s.toString(), nextState));
+    	return saSucesores;
     }
-
+    
+    private boolean asigned(AbastecimientoState as, String alPn) {
+    	return as.getPeticionesDesatendidas().contains(alPn);
+    }
 }
