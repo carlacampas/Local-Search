@@ -22,12 +22,13 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	s = new StringBuffer ();
     	this.max = 5;
     	
-    	while (nextState == null) {
-    		Random rand = new Random();
-    		int randomNum = rand.nextInt(max);
+    	
+    	Random rand = new Random();
+    	int randomNum = rand.nextInt(max);
         	    	
-        	nextState = getNextStateNoLoops(currentState, randomNum);
-    	}
+        nextState = getNextStateNoLoops(currentState, randomNum);
+    	
+        nextState = (nextState == null ? currentState : nextState);
 		
     			
     	saSucesores.add(new Successor(s.toString(), nextState));
@@ -300,8 +301,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 					
 			break;
 			
-		case 4:														//Modificamos el estado mediante cambiaPeticion
-				
+		case 4:														//Modificamos el estado mediante cambiaPeticion	
 			cn1 = new Random();
 			cn2 = new Random();
     		alCamion1 = cn1.nextInt(nCamiones);
