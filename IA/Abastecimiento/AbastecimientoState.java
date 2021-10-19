@@ -287,7 +287,7 @@ public class AbastecimientoState {
     	if (c == c1) return true;		//No cambia nada
 
     	Peticion a = asignaciones.get(c).get(p); 
-    	if (asignaPeticion(c1, a.get(), true)) {
+    	if (asignaPeticion(c1, a.get(), false)) {
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
     		return true;
