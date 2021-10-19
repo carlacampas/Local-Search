@@ -17,6 +17,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	}
 	
     public List getSuccessors (Object state) {
+    	System.out.println("here");
     	ArrayList <Successor> ret = new ArrayList<>();
     	AbastecimientoState as = (AbastecimientoState) state;
     	
@@ -86,7 +87,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
     		
     		//cambia peticiones
-    		for (int j = i + 1; j < ncen; j++) {
+    	/*	for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
@@ -96,7 +97,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
         				ret.add(suc);
     				}
     			}
-    		}
+    		}*/
     	}
     	
         return ret;

@@ -27,50 +27,25 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
         // Recorrido por las asignaciones para calcular la suma del precio
         // de las peticiones atendidas, y para borrar las peticiones atendidas
     	// de la lista peticionesDesatendidas.
-    	double precioEnDepositos = 0.0;
-        for (ArrayList<Peticion> listaPeticiones : estado.getAsignaciones()) {
-            for (int i = 0; i < listaPeticiones.size(); i++) {
-
-                Peticion peticion = listaPeticiones.get(i);
-                Integer gasolineraId = peticion.get().a;
-                Integer peticionId = peticion.get().b;
-                
-                Gasolinera gasolinera = estado.gasolineras.get(gasolineraId);
-                
-                // Marcar peticion peticionId de la gasolinera gasolineraId como atendida
-                borrarPeticionDeGasolinera(gasolineraId, peticionId);
-
-                // Añadir precio de una peticion al precio total:
-                int diasPendientes = gasolinera.getPeticiones().get(peticionId);
-                if (diasPendientes == 0) precioEnDepositos += 1.02;
-                else precioEnDepositos += (100 - Math.pow(2, diasPendientes)) / 100;
-            }
-        }
+    	double precioEnDepositos = estado.getPrecioEnDepositos();
         // Calculo de la suma de las distancias recorridas por todos los camiones
-        double kilometros = 0;
-        ArrayList<Integer> distancias = estado.getDistancias();
-        for (Integer distancia : distancias) {
-        	kilometros += AbastecimientoState.maxDist - distancia;
-        }
+        double kilometros = estado.getDistTraveled();
     	
         return VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros;
     }
     
-    protected double computePenalisations(Integer exp) {
+    protected double computePenalisations(Integer exp, AbastecimientoState estado) {
     	double penalisation = 0;
     	// Iteración sobre las peticiones desatendidas para calcular la penalización por retraso
-		for (ArrayList<Integer> g : peticionesDesatendidas) {
-			for (Integer dias : g) {
-				if (dias > 0) penalisation += Math.pow(exp, dias) / 100;
-			}
+		for (String g : estado.getPeticionesDesatendidas()) {
+			Pair <Integer, Integer> p = new Pair();
+			
+			int a = Integer.parseInt(p.fromStringA(g));
+			int b = Integer.parseInt(p.fromStringB(g));
+			
+			int dias = estado.gasolineras.get(a).getPeticiones().get(b);
+			penalisation += Math.pow(exp, dias) / 100;
 		}
 		return VALOR_DEPOSITO * penalisation;
-    }
-    
-    // Función que dada unas Gasolineras, marca la petición con índice peticionId de la gasolinera con índice gasolineraId con un -1
-    private void borrarPeticionDeGasolinera(int gasolineraId, int peticionId) {
-		ArrayList<Integer> peticiones = peticionesDesatendidas.get(gasolineraId);
-		peticiones.set(peticionId, -1);
-		peticionesDesatendidas.set(gasolineraId, peticiones);
     }
 }
