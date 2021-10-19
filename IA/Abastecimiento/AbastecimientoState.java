@@ -160,26 +160,13 @@ public class AbastecimientoState {
         
 
         if (oldP.intValue()%2 == 0) {
-
-<<<<<<< HEAD
             if (n-1 == oldP.intValue()){
-                dAct = distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
-                //distancias.set(c, dAct);
-            }
-            else {
-
-                Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
-                Gasolinera gMid = gasolineras.get(pMid.get().a);
-=======
-            if (n-1 == pos){
             	distTraveled = distTraveled - 2*dcToOldC + 2*dcToNewC;
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
-            
-            Peticion pMid = asignaciones.get(c).get(pos+1);
+            Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
             Gasolinera gMid = gasolineras.get(pMid.get().a);
->>>>>>> main
-
+            
             Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
             int dcToMidC = calcularDistancia(dCoord, midCoord);
@@ -190,14 +177,9 @@ public class AbastecimientoState {
             distTraveled = distTraveled - dOld + dNew;
             return distancias.get(c) + dOld - dNew;
         }
-<<<<<<< HEAD
-        else {
-            Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
-            Gasolinera gMid = gasolineras.get(pMid.get().a);
-=======
-        Peticion pMid = asignaciones.get(c).get(pos-1);
+        
+        Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
         Gasolinera gMid = gasolineras.get(pMid.get().a);
->>>>>>> main
 
         Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
