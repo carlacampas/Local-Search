@@ -52,6 +52,7 @@ public class Main {
 			
 			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
 			
 			System.out.println();
 			
@@ -74,7 +75,6 @@ public class Main {
 			time = System.currentTimeMillis() - time;
 			
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			
 			System.out.println ("Solution using Hill Climbing + Heuristic2: ");
 			System.out.println (agent.getActions());
 			System.out.println(agent.getInstrumentation());
@@ -97,7 +97,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch();
+			Search search = new SimulatedAnnealingSearch(250000, 10, 5, 0.5);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -105,12 +105,15 @@ public class Main {
 			
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
 			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			//printActions (agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+			
+			newState.print_state();
+			line();
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
 			
 			System.out.println();
 			
@@ -126,7 +129,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
-			Search search = new SimulatedAnnealingSearch();
+			Search search = new SimulatedAnnealingSearch(250000, 10, 5, 0.5);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -135,7 +138,7 @@ public class Main {
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
 			
 			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
+			//System.out.println agent.getActions());
 			System.out.println(agent.getInstrumentation());
 			
 			System.out.println ("time to generate solution " + time + " ms");
@@ -277,7 +280,7 @@ public class Main {
     				}
     				
     				break;
-    			case "heurisitca":
+    			case "heuristica":
     				int heuristics = sc.nextInt();
 
     				if (heuristics == 0) firstHeuristic = true;

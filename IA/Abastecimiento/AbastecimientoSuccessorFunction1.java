@@ -12,7 +12,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	}
 	
     public List getSuccessors (Object state) {
-    	System.out.println("here");
     	ArrayList <Successor> ret = new ArrayList<>();
     	AbastecimientoState as = (AbastecimientoState) state;
     	
@@ -21,7 +20,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	
     	for (int i = 0; i < ncen; i++) {
     		
-    		// asigna peticiones no asignadas
+    		/*asigna peticiones no asignadas
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
     				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
@@ -34,7 +33,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				}
     				}
     			}
-    		}
+    		}*/
     		
     		// mover paquetes dentro del camion
     		int m = as.getAsignaciones().get(i).size();
@@ -65,10 +64,9 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
     				}
     			}
-    		} 
+    		}
     		
-    		/*mover paquetes con los que ya estan asignados
->>>>>>> Stashed changes
+    		/*mover paquetes con los que ya estan assignados
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
@@ -83,7 +81,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
     		
     		//cambia peticiones
-    	/*	for (int j = i + 1; j < ncen; j++) {
+    		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
@@ -96,6 +94,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}*/
     	}
     	
+    	System.out.println ("here " + ret.size());
         return ret;
     }
 }

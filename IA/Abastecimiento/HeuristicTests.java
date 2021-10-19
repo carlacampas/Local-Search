@@ -94,7 +94,7 @@ public class HeuristicTests {
     	double result = 300;
     	
     	AbastecimientoHeuristicFunction1 heuristic = new AbastecimientoHeuristicFunction1();
-    	heuristic.peticionesDesatendidas = gs;
+    	//heuristic.peticionesDesatendidas = gs;
     	
     	//assertEquals (result, heuristic.computePenalisations(2), "Penalisation value should be equal");
     }

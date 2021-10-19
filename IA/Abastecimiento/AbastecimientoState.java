@@ -15,8 +15,8 @@ public class AbastecimientoState {
     Gasolineras gasolineras;
     CentrosDistribucion centrosDistribucion;
     
-    int distTraveled;
-    double precioEnDepositos;
+   private int distTraveled;
+   private double precioEnDepositos;
     
     private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
@@ -48,6 +48,8 @@ public class AbastecimientoState {
     
     public AbastecimientoState (AbastecimientoState as) {
     	this(as.gasolineras, as.centrosDistribucion);
+    	
+    	this.distTraveled = as.distTraveled;
     
     	for (int i=0; i<as.asignaciones.size(); i++) {
     		int size = as.asignaciones.get(i).size();
@@ -67,7 +69,6 @@ public class AbastecimientoState {
     		int x = distancias.get(i);
     		this.distancias.set(i, x);
     	}
-    	
     }
 
     // SETTERS.
@@ -132,12 +133,10 @@ public class AbastecimientoState {
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
 	    		
-	    		distTraveled = distTraveled - prevD*2 + newD;
 	    		return distancias.get(c) + prevD*2 - newD;
 	    	}
 		}
 
-		distTraveled = distTraveled + calcularDistancia(coord1, coord3)*2;
     	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
     }
 
@@ -161,7 +160,7 @@ public class AbastecimientoState {
 
         if (oldP.intValue()%2 == 0) {
             if (n-1 == oldP.intValue()){
-            	distTraveled = distTraveled - 2*dcToOldC + 2*dcToNewC;
+            	
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
             Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
@@ -174,7 +173,6 @@ public class AbastecimientoState {
             int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
             int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
 
-            distTraveled = distTraveled - dOld + dNew;
             return distancias.get(c) + dOld - dNew;
         }
         
@@ -188,7 +186,6 @@ public class AbastecimientoState {
         int dOld = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
         int dNew = dcToMidC + calcularDistancia(midCoord, newCoord) + dcToNewC;
 
-        distTraveled = distTraveled - dOld + dNew;
         return distancias.get(c) + dOld - dNew;
     }
 
@@ -204,6 +201,7 @@ public class AbastecimientoState {
 	    	cAssig.add(new Peticion (p));
 	    	asignaciones.set(c, cAssig);
 
+	    	distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - dist);
 	    	distancias.set(c, dist);
 	    	
 	    	int diasPendientes = gasolineras.get(p.a).getPeticiones().get(p.b);
@@ -234,7 +232,10 @@ public class AbastecimientoState {
             asignaciones.get(c1).set(p1, a);
 
             distancias.set(c, x);
+            distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - x);
+            
             distancias.set(c1, y);
+            distTraveled = distTraveled - (640-distancias.get(c1)) + (maxDist - y);
 
             return true;
         }
@@ -255,17 +256,20 @@ public class AbastecimientoState {
 
         if (x > 0){
             distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
+            
             int y = actualizaDistancia(p1, a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
             if (y > 0){
                 asignaciones.get(c).set(p1, a);
                 asignaciones.get(c).set(p, b);
 
+                distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - y);
                 distancias.set(c, y);
 
                 return true;
             }
             else distancias.set(c, ogDistance);                 //si pasa cambiamos al valor original y aquí no ha pasado nada :)
+
             return false;
         }
         return false;
@@ -295,6 +299,7 @@ public class AbastecimientoState {
 
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get())) {
+    		distTraveled = distTraveled - (640 - distancias.get(c));
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
     		return true;
@@ -323,7 +328,6 @@ public class AbastecimientoState {
     	if (changeFirst) newD = calcularDistancia (cd, n) + calcularDistancia (n, s) + calcularDistancia (s, cd);
     	else newD = calcularDistancia (cd, f) + calcularDistancia (f, n) + calcularDistancia (n, cd);
     	
-    	distTraveled = distTraveled - oldD + newD;
     	return distancias.get(c) + oldD - newD;
     }
 
@@ -418,6 +422,7 @@ public class AbastecimientoState {
     			}
     		}
     	}
+    	System.out.println(distTraveled);
     }
 
     private int ponderarCoste (int dist, int dias) {
@@ -493,13 +498,16 @@ public class AbastecimientoState {
     }
     
     public void print_state () {
+    	int total_dist = 0;
     	for (int i=0; i<asignaciones.size(); i++) {
         	ArrayList <Peticion> assigs = asignaciones.get(i);
-        	System.out.println ("(" + i + ") --> " + asignaciones.get(i) + ": ");
+        	System.out.println ("(" + i + ") --> " + distancias.get(i) + ": ");
+        	total_dist += (640-distancias.get(i));
 	        for (Peticion p : assigs) {
 	        	System.out.print ("(" + p.get().a + "," + p.get().b + ")");
 	        }
 	        System.out.println();
     	}
+    	System.out.println ("Total distance " + total_dist);
     }
 }
