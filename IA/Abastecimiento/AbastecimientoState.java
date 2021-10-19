@@ -155,11 +155,11 @@ public class AbastecimientoState {
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
         int n = asignaciones.get(c).size();
-        int dAct = 0;
+        //int dAct = 0;
         
 
         if (oldP.intValue()%2 == 0) {
-            if (n-1 == oldP.intValue()){
+        	if (n-1 == oldP.intValue()){
             	
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
@@ -198,10 +198,9 @@ public class AbastecimientoState {
 
         // control de restricciones de distancia y número de peticiones asignadas
     	if (dist > 0 && (n/2) < 5) {
-	    	cAssig.add(new Peticion (p));
-	    	asignaciones.set(c, cAssig);
-
-	    	distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - dist);
+	    	asignaciones.get(c).add(new Peticion(p));
+	    	
+	    	distTraveled = distTraveled - (maxDist - distancias.get(c)) + (maxDist - dist);
 	    	distancias.set(c, dist);
 	    	
 	    	int diasPendientes = gasolineras.get(p.a).getPeticiones().get(p.b);
@@ -231,11 +230,11 @@ public class AbastecimientoState {
             asignaciones.get(c).set(p, b);
             asignaciones.get(c1).set(p1, a);
 
+            distTraveled = distTraveled - (maxDist - distancias.get(c)) + (maxDist - x);
             distancias.set(c, x);
-            distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - x);
-            
+
+            distTraveled = distTraveled - (maxDist - distancias.get(c1)) + (maxDist - y);
             distancias.set(c1, y);
-            distTraveled = distTraveled - (640-distancias.get(c1)) + (maxDist - y);
 
             return true;
         }
@@ -263,7 +262,7 @@ public class AbastecimientoState {
                 asignaciones.get(c).set(p1, a);
                 asignaciones.get(c).set(p, b);
 
-                distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - y);
+                distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - y);
                 distancias.set(c, y);
 
                 return true;
