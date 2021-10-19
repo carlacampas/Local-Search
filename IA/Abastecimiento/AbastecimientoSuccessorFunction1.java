@@ -19,7 +19,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	int ngas = as.gasolineras.size();
     	
     	for (int i = 0; i < ncen; i++) {
-    		
+    		/*
     		//asigna peticiones no asignadas -- FUNCIONA
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
@@ -80,10 +80,10 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
 	    			}
     			}
-    		}
+    		}*/
     		
     		//cambia peticiones -- NO FUNCIONA --> BEA
-    		/*for (int j = 0; j < ncen; j++) {
+    		for (int j = 0; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
@@ -93,7 +93,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
         				ret.add(suc);
     				}
     			}
-    		}*/
+    		}
     	}
     	
     	System.out.println ("here " + ret.size());

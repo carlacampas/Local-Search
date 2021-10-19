@@ -286,11 +286,12 @@ public class AbastecimientoState {
      * */
 
     public boolean cambiaPeticion (Integer p, int c, int c1) {
-    	if (c == c1) return true;		//No cambia nada
+    	if (c == c1) return false;		//No cambia nada
 
     	Peticion a = asignaciones.get(c).get(p); 
-    	if (asignaPeticion(c1, a.get(), true)) {
-    		distTraveled = distTraveled - (maxDist - distancias.get(c));
+    	if (asignaPeticion(c1, a.get(), false)) {
+    		int dist = calcularDistancias(c1, a.get());
+    		distTraveled -= ((maxDist - distancias.get(c))); /*+ (maxDist - dist))*/;
 
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
