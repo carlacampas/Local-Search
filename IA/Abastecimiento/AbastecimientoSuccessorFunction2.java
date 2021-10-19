@@ -38,7 +38,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	switch (randomNum){
 		case 0:									           //modificamos el estado mediante la asignaPeticion
 			
-			gn = new Random();
+			/*gn = new Random();
 			alGas = gn.nextInt(nGasos);			//Escoge las peticiones de una gasolinera aleatoria
 			
 			nPeticiones = nextState.gasolineras.get(alGas).getPeticiones().size();
@@ -56,13 +56,13 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 	    			
     	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
 				}
-			}
+			}*/
 
 			break;    			
 			
 		case 1:														//Modificamos el estado mediante intercambiaPeticiones			 			
 			
-			cn1 = new Random();
+			/*cn1 = new Random();
 			cn2 = new Random();
 			alCamion1 = cn1.nextInt(nCamiones); 
 			alCamion2 = cn2.nextInt(nCamiones);			
@@ -79,11 +79,11 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 	    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
     	    																					
 	    		if (b) s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
-			}
+			}*/
 			break;
 			
 		case 2:														//Modificamos el estado mediante intercambioOrden		
-			cn = new Random();
+			/*cn = new Random();
 			alCamion = cn.nextInt(nCamiones);
     			
 			sizeC = nextState.getAsignaciones().get(alCamion).size();
@@ -96,12 +96,12 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			if (alPn1 != alPn2) {
 				b = nextState.intercambioOrden(alPn1, alPn2, alCamion);
 				if (b) s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
-			}
+			}*/
 					
 			break;
 			
 		case 3:														//Modificamos el estado mediante cambiaPeticion	
-			cn1 = new Random();
+			/*cn1 = new Random();
 			cn2 = new Random();
     		alCamion1 = cn1.nextInt(nCamiones);
     		alCamion2 = cn2.nextInt(nCamiones);
@@ -115,7 +115,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				b = nextState.cambiaPeticion(alPn, alCamion1, alCamion2);
 			
 				if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
-			}
+			}*/
 			break;
 		 		
 		case 4:														//Modificamos el estado mediante cambioPeticionNoAsig
