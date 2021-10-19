@@ -495,7 +495,7 @@ public class AbastecimientoState {
     public void print_state () {
     	for (int i=0; i<asignaciones.size(); i++) {
         	ArrayList <Peticion> assigs = asignaciones.get(i);
-        	System.out.println ("(" + i + ") --> " + asignaciones.get(i) + ": ");
+        	System.out.println ("(" + i + ") --> " + distancias.get(i) + ": ");
 	        for (Peticion p : assigs) {
 	        	System.out.print ("(" + p.get().a + "," + p.get().b + ")");
 	        }
