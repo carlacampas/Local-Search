@@ -23,6 +23,8 @@ public class AbastecimientoState {
     private Set <String> peticionesDesatendidas;
 
     // CONSTRUCTORS.
+    public AbastecimientoState () {}
+    
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
         this.gasolineras = gasolineras;
         this.centrosDistribucion = centrosDistribucion;
@@ -139,12 +141,12 @@ public class AbastecimientoState {
     	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
     }
 
-    public Integer actualizaDistancia(Pair <Integer, Integer> oldP, Pair <Integer, Integer> newP, int c){
-        Distribucion d = centrosDistribucion.get(c);
-        Gasolinera gOld = gasolineras.get(oldP.a);
+    public Integer actualizaDistancia(Integer oldP, Pair <Integer, Integer> newP, int c){
+        Peticion oldPn = asignaciones.get(c).get(oldP.intValue());
+    	
+    	Distribucion d = centrosDistribucion.get(c);
+        Gasolinera gOld = gasolineras.get(oldPn.get().a);
         Gasolinera gNew = gasolineras.get(newP.a);
-
-        Peticion oldPet = new Peticion (oldP);
 
         Pair <Integer, Integer> dCoord = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
         Pair <Integer, Integer> oldCoord = new Pair <Integer, Integer> (gOld.getCoordX(), gOld.getCoordY());
@@ -154,21 +156,17 @@ public class AbastecimientoState {
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
         int n = asignaciones.get(c).size();
-        int dAct=0;
-        int pos = 0;
+        int dAct = 0;
+        
 
-        while (asignaciones.get(c).get(pos).get() != oldP) ++pos;
-
-        if (pos%2 == 0) {
-
-            if (n-1 == pos){
+        if (oldP.intValue()%2 == 0) {
+            if (n-1 == oldP.intValue()){
             	distTraveled = distTraveled - 2*dcToOldC + 2*dcToNewC;
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
-            
-            Peticion pMid = asignaciones.get(c).get(pos+1);
+            Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
             Gasolinera gMid = gasolineras.get(pMid.get().a);
-
+            
             Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
             int dcToMidC = calcularDistancia(dCoord, midCoord);
@@ -179,7 +177,8 @@ public class AbastecimientoState {
             distTraveled = distTraveled - dOld + dNew;
             return distancias.get(c) + dOld - dNew;
         }
-        Peticion pMid = asignaciones.get(c).get(pos-1);
+        
+        Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
         Gasolinera gMid = gasolineras.get(pMid.get().a);
 
         Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
@@ -227,8 +226,8 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c1).get(p1);
 
-        int x = actualizaDistancia(a.get(), b.get(), c);
-        int y = actualizaDistancia(b.get(), a.get(), c1);
+        int x = actualizaDistancia(p, b.get(), c);
+        int y = actualizaDistancia(p1, a.get(), c1);
 
         if (x > 0 && y > 0){
             asignaciones.get(c).set(p, b);
@@ -251,12 +250,12 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c).get(p1);
 
-        int x = actualizaDistancia(a.get(), b.get(), c);
+        int x = actualizaDistancia(p, b.get(), c);
         int ogDistance = distancias.get(c);
 
         if (x > 0){
             distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
-            int y = actualizaDistancia(b.get(), a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
+            int y = actualizaDistancia(p1, a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
             if (y > 0){
                 asignaciones.get(c).set(p1, a);
