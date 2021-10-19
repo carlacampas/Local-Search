@@ -306,7 +306,7 @@ public class AbastecimientoState {
     	distancias.set(peticionesC, maxDist);
 
     	for (int i = 0; i < auxP.size(); i++) 
-    		asignaPeticion (peticionesC, auxP.get(i).get(), true);
+    		asignaPeticion (peticionesC, auxP.get(i).get(), false);
     }
 
     /*

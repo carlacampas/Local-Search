@@ -19,7 +19,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	int ngas = as.gasolineras.size();
     	
     	for (int i = 0; i < ncen; i++) {
-    		
+    	/*	
     		//asigna peticiones no asignadas -- FUNCIONA
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
@@ -33,11 +33,11 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				}
     				}
     			}
-    		}
+    		}*/
     		
     		// mover paquetes dentro del camion -- NO FUNCIONAM, BEA 
     		int m = as.getAsignaciones().get(i).size();
-    		/*for (int j = 0; j < m; j++) {
+    		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.intercambioOrden (j, k, i)) {
@@ -47,8 +47,8 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				ret.add(new Successor (s.toString(), newState));
     				}
     			}
-    		}*/
-    		    		
+    		}
+    		/*    		
     		// mover paquetes con los que no estan asignados -- FUNCIONA
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
