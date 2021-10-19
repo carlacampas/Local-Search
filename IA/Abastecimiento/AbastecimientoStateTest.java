@@ -73,7 +73,7 @@ public class AbastecimientoStateTest {
     	    	
     	//640 - 2*(74+40) + 2*(74+40) - 2*54 
     	//640 --> 532
-    	assertEquals (532, as.actualizaDistancia(oldPCase1, newP, 0), "Incorrect distance update (case 1)");
+    	assertEquals (532, as.actualizaDistancia(0, newP, 0), "Incorrect distance update (case 1)");
     	
     	
     	//caso 2: más de una petición y posición de oldP es par
@@ -83,14 +83,14 @@ public class AbastecimientoStateTest {
     	
     	//640 - (114+50+84 + 154+110+84)+(154+110+84)-(54+90+84) 
     	//44 --> 164
-    	assertEquals (164, as.actualizaDistancia(oldPCase2, newP, 0), "Incorrect distance update (case 2)");
+    	assertEquals (164, as.actualizaDistancia(2, newP, 0), "Incorrect distance update (case 2)");
     	
     	//caso 3: indice de la petición impar 
     	//no nos importa si está por el medio o es la ultima, la posición impar siempre completa un viaje
     	
     	//640 - (114+50+84 + 154+110+84)+(114+50+84)-(114+60+54)
     	//44 --> 64
-    	assertEquals (64, as.actualizaDistancia(oldPCase3, newP, 0), "Incorrect distance update (case 3)");
+    	assertEquals (64, as.actualizaDistancia(1, newP, 0), "Incorrect distance update (case 3)");
     }
     
     @Test
