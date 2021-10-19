@@ -9,21 +9,10 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
     
 	final static int COSTE_KILOMETRO = 2;
     final static int VALOR_DEPOSITO = 1000;
-    
-    public ArrayList<ArrayList<Integer>> peticionesDesatendidas = new ArrayList<ArrayList<Integer>>();
-    
+
     public abstract double getHeuristicValue (Object state);
     
     protected double computeProfits(AbastecimientoState estado) {
-        // Hard copy del array de las gasolineras con todas sus peticiones para monitorizar
-    	// las peticiones desatendidas
-    	for (Gasolinera g : estado.gasolineras) {
-    		ArrayList<Integer> gasolinera = new ArrayList<Integer>();
-    		for (Integer peticion : g.getPeticiones())
-    			gasolinera.add(Integer.valueOf(peticion));
-    		peticionesDesatendidas.add(gasolinera);
-    	}
-
         // Recorrido por las asignaciones para calcular la suma del precio
         // de las peticiones atendidas, y para borrar las peticiones atendidas
     	// de la lista peticionesDesatendidas.

@@ -277,7 +277,7 @@ public class Main {
     				}
     				
     				break;
-    			case "heurisitca":
+    			case "heuristica":
     				int heuristics = sc.nextInt();
 
     				if (heuristics == 0) firstHeuristic = true;

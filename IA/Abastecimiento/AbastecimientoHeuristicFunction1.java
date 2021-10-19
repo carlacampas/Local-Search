@@ -7,8 +7,8 @@ package Abastecimiento;
 public class AbastecimientoHeuristicFunction1 extends AbstractHeuristic {
 
 	@Override
-	public double getHeuristicValue (Object state) {
-    	AbastecimientoState estado = (AbastecimientoState) state;
+	public double getHeuristicValue (Object s) {
+    	AbastecimientoState estado = (AbastecimientoState) s;
     	return -1*(computeProfits(estado) - computePenalisations(2, estado));
 	}
 }
