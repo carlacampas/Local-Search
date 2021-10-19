@@ -14,9 +14,13 @@ public class AbastecimientoState {
 
     Gasolineras gasolineras;
     CentrosDistribucion centrosDistribucion;
-
+    
+    int distTraveled;
+    double precioEnDepositos;
+    
     private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
+    private Set <String> peticionesDesatendidas;
 
     // CONSTRUCTORS.
     public AbastecimientoState () {}
@@ -24,7 +28,10 @@ public class AbastecimientoState {
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
         this.gasolineras = gasolineras;
         this.centrosDistribucion = centrosDistribucion;
+        this.distTraveled = 0;
+        this.precioEnDepositos = 0.0;
 
+        this.peticionesDesatendidas = new HashSet <> ();
         this.asignaciones = new ArrayList <> (centrosDistribucion.size());
         this.distancias = new ArrayList <> (centrosDistribucion.size());
 
@@ -32,24 +39,26 @@ public class AbastecimientoState {
             this.distancias.add(maxDist);
             this.asignaciones.add(new ArrayList <>());
         }
-    }
-
-    public AbastecimientoState (ArrayList<ArrayList<Peticion>> asignaciones, ArrayList <Integer> distancias,
-                                Gasolineras gasolineras, CentrosDistribucion centrosDistribucion) {
-        this.asignaciones = asignaciones;
-        this.distancias = distancias;
-        this.gasolineras = gasolineras;
-        this.centrosDistribucion = centrosDistribucion;
+        
+        for (int i = 0; i < gasolineras.size(); i++) {
+        	for (int j=0; j < gasolineras.get(i).getPeticiones().size(); j++)
+        		peticionesDesatendidas.add(new Pair <Integer, Integer> (i, j).makeString());
+        }
     }
     
     public AbastecimientoState (AbastecimientoState as) {
-    	this (as.gasolineras, as.centrosDistribucion);
+    	this(as.gasolineras, as.centrosDistribucion);
+    
     	for (int i=0; i<as.asignaciones.size(); i++) {
     		int size = as.asignaciones.get(i).size();
     		ArrayList <Peticion> aux = new ArrayList <> ();
     		for (int j=0; j<size; j++) {
     			Pair <Integer, Integer> p = as.asignaciones.get(i).get(j).get();
-    			aux.add(new Peticion (new Pair <Integer, Integer> (p.a, p.b)));
+    			
+    			Pair <Integer, Integer> p1 = new Pair <Integer, Integer> (p.a, p.b);
+    			this.peticionesDesatendidas.remove(p1.makeString());
+    			
+    			aux.add(new Peticion (p1));
     		}
     		this.asignaciones.set(i, aux);
     	}
@@ -69,6 +78,14 @@ public class AbastecimientoState {
     public void setDistances (ArrayList <Integer> distancias) {
         this.distancias = distancias;
     }
+    
+    public void setDistTraveled (int distTraveled) {
+    	this.distTraveled = distTraveled;
+    }
+    
+    public void setPrecioEnDepositos (int precioEnDepositos) {
+    	this.precioEnDepositos = precioEnDepositos;
+    }
 
     // GETTERS.
     public ArrayList<ArrayList<Peticion>> getAsignaciones() {
@@ -77,6 +94,18 @@ public class AbastecimientoState {
 
     public ArrayList<Integer> getDistancias () {
         return distancias;
+    }
+    
+    public int getDistTraveled () {
+    	return this.distTraveled;
+    }
+    
+    public double getPrecioEnDepositos () {
+    	return this.precioEnDepositos;
+    }
+    
+    public Set <String> getPeticionesDesatendidas () {
+    	return this.peticionesDesatendidas;
     }
 
     // OPERADORS.
@@ -102,11 +131,13 @@ public class AbastecimientoState {
 
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
-
+	    		
+	    		distTraveled = distTraveled - prevD*2 + newD;
 	    		return distancias.get(c) + prevD*2 - newD;
 	    	}
 		}
 
+		distTraveled = distTraveled + calcularDistancia(coord1, coord3)*2;
     	return distancias.get(c) - calcularDistancia(coord1, coord3)*2;
     }
 
@@ -130,6 +161,7 @@ public class AbastecimientoState {
 
         if (oldP.intValue()%2 == 0) {
 
+<<<<<<< HEAD
             if (n-1 == oldP.intValue()){
                 dAct = distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
                 //distancias.set(c, dAct);
@@ -138,33 +170,44 @@ public class AbastecimientoState {
 
                 Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
                 Gasolinera gMid = gasolineras.get(pMid.get().a);
-
-                Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
-
-                int dcToMidC = calcularDistancia(dCoord, midCoord);
-
-                int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
-                int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
-
-                dAct = distancias.get(c) + dOld - dNew;
-                //distancias.set(c, dAct);
+=======
+            if (n-1 == pos){
+            	distTraveled = distTraveled - 2*dcToOldC + 2*dcToNewC;
+                return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
-        }
-        else {
-            Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
+            
+            Peticion pMid = asignaciones.get(c).get(pos+1);
             Gasolinera gMid = gasolineras.get(pMid.get().a);
+>>>>>>> main
 
             Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
             int dcToMidC = calcularDistancia(dCoord, midCoord);
 
-            int dOld = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
-            int dNew = dcToMidC + calcularDistancia(midCoord, newCoord) + dcToNewC;
+            int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
+            int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
 
-            dAct = distancias.get(c) + dOld - dNew;
-            //distancias.set(c, dAct);
+            distTraveled = distTraveled - dOld + dNew;
+            return distancias.get(c) + dOld - dNew;
         }
-        return dAct;
+<<<<<<< HEAD
+        else {
+            Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
+            Gasolinera gMid = gasolineras.get(pMid.get().a);
+=======
+        Peticion pMid = asignaciones.get(c).get(pos-1);
+        Gasolinera gMid = gasolineras.get(pMid.get().a);
+>>>>>>> main
+
+        Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
+
+        int dcToMidC = calcularDistancia(dCoord, midCoord);
+
+        int dOld = dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
+        int dNew = dcToMidC + calcularDistancia(midCoord, newCoord) + dcToNewC;
+
+        distTraveled = distTraveled - dOld + dNew;
+        return distancias.get(c) + dOld - dNew;
     }
 
 
@@ -180,6 +223,12 @@ public class AbastecimientoState {
 	    	asignaciones.set(c, cAssig);
 
 	    	distancias.set(c, dist);
+	    	
+	    	int diasPendientes = gasolineras.get(p.a).getPeticiones().get(p.b);
+	    	if (diasPendientes == 0) precioEnDepositos += 1.02;
+	    	else precioEnDepositos += (100 - Math.pow(2, diasPendientes)) / 100;
+	    	
+	    	peticionesDesatendidas.remove(p.makeString());
 	    	return true;
     	}
     	return false;
@@ -262,7 +311,7 @@ public class AbastecimientoState {
     public boolean cambiaPeticion (Integer p, int c, int c1) {
     	if (c == c1) return true;		//No cambia nada
 
-    	Peticion a = asignaciones.get(c).get(p); //
+    	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get())) {
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
@@ -270,22 +319,98 @@ public class AbastecimientoState {
         }
         return false;
     }
+    
+    public Pair <Integer, Integer> getCoordGas (Pair <Integer, Integer> p){
+    	return new Pair <Integer, Integer> (gasolineras.get(p.a).getCoordX(), gasolineras.get(p.a).getCoordY());
+    }
+    
+    public int recalcDist (Pair <Integer, Integer> f, Pair <Integer, Integer> s, 
+    			Pair <Integer, Integer> n, int c, boolean changeFirst) {
+    	
+    	Distribucion d = centrosDistribucion.get(c);
+    	Pair <Integer, Integer> cd = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
+    	
+    	f = getCoordGas(f);
+    	s = getCoordGas(s);
+    	n = getCoordGas(n);
+    	
+    	int oldD = calcularDistancia (cd, f) + calcularDistancia (f, s) + calcularDistancia (s, cd);
+    	
+    	int newD = 0;
+    	
+    	if (changeFirst) newD = calcularDistancia (cd, n) + calcularDistancia (n, s) + calcularDistancia (s, cd);
+    	else newD = calcularDistancia (cd, f) + calcularDistancia (f, n) + calcularDistancia (n, cd);
+    	
+    	distTraveled = distTraveled - oldD + newD;
+    	return distancias.get(c) + oldD - newD;
+    }
 
-    public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){    	
-    	ArrayList <Peticion> assigs = asignaciones.get(c);
-    	Peticion store = assigs.get(p);
+    public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){  
+    	Pair <Integer, Integer> f, s;
+    	Pair <Integer, Integer> fc, sc, newPCoord;
     	
-    	System.out.println (asignaciones.get(c).size());
+    	f = asignaciones.get(c).get(p).get();
+    	fc = getCoordGas(f);
+    	newPCoord = getCoordGas(newP);
     	
-    	asignaciones.set(c, assigs);
+    	double addPrecioEnDepositos;
+    	int diasPendientes = gasolineras.get(newP.a).getPeticiones().get(newP.b);
+    	if (diasPendientes == 0) addPrecioEnDepositos = 1.02;
+    	else addPrecioEnDepositos = (100 - Math.pow(2, diasPendientes)) / 100;
     	
-    	if (!renewDistances(c)) {
-    		asignaciones.get(c).set(p, store);
-    		renewDistances(c);
-    		return false;
+    	double removePrecioEnDespositos;
+    	diasPendientes = gasolineras.get(f.a).getPeticiones().get(f.b);
+    	if (diasPendientes == 0) removePrecioEnDespositos = 1.02;
+    	else removePrecioEnDespositos = (100 - Math.pow(2, diasPendientes)) / 100;
+
+    	int dist = 0;
+    	boolean firstPos = true;
+    	
+    	if (p%2 == 0) {
+    		if (p == asignaciones.get(c).size()-1) {
+    			Distribucion d = centrosDistribucion.get(c);
+    	    	Pair <Integer, Integer> cd = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
+    	    	
+    			int oldDist = calcularDistancia (fc, cd)*2;
+    			int newDist = calcularDistancia (newPCoord, cd)*2;
+    			
+    			dist = distancias.get(c) + oldDist - newDist;
+    			if (dist > 0) {
+    				distancias.set(c, dist);
+    	    		asignaciones.get(c).set(p, new Peticion (newP));
+    	    		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
+    	    		
+    	    		peticionesDesatendidas.add(newP.makeString());
+    	    		peticionesDesatendidas.remove(f.makeString());
+    	    		
+    	    		return true;
+    			}
+    			return false;
+    		}
+    		
+    		s = asignaciones.get(c).get(p+1).get();
+    		sc = getCoordGas(s);
+    		
+    	} else {
+    		f = asignaciones.get(c).get(p-1).get();
+    		s = asignaciones.get(c).get(p).get();
+    		
+    		fc = getCoordGas(f);
+    		sc = getCoordGas(s);
+    		
+    		firstPos = false;
     	}
     	
-    	return true;
+    	dist = recalcDist (fc, sc, newPCoord, c, firstPos);
+    	
+    	if (dist > 0) {
+    		distancias.set(c, dist);
+    		asignaciones.get(c).set(p, new Peticion (newP));
+    		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
+    		return true;
+    	}
+    	
+    	return false;
     }
 
     // INITIAL SOLUTION.
@@ -342,35 +467,7 @@ public class AbastecimientoState {
     	}
     	return pOrg;
     }
-
-    // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
-    // beneficis. Maximizar distancies en tots els camions.
-    /*public void generateInitialSolution2 () {
-    	Set <String> used = new HashSet <String> ();
-    	Set <String> coordVisited = new HashSet <String> ();
-
-    	int n = centrosDistribucion.size();
-    	for (int i=0; i<n; i++) {
-    		Distribucion cd = centrosDistribucion.get(i);
-    		Pair <Integer, Integer> coords = new Pair <Integer, Integer> (cd.getCoordX(), cd.getCoordY());
-
-    		if (!coordVisited.isEmpty() && coordVisited.contains(coords.makeString())) continue;
-    		coordVisited.add(coords.makeString());
-
-    		SortedMap<Integer, ArrayList<Pair<Integer, Integer>>> pOrg = organizarPeticiones (coords);
-
-    		for (int j=i; j<n; j++) {
-    			Distribucion cd1 = centrosDistribucion.get(j);
-    			if (!coords.equals(cd1.getCoordX(), cd1.getCoordY())) continue;
-
-	    		for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
-	    			for (Pair <Integer, Integer> p : v)
-	    				if (!used.contains(p.makeString()) && asignaPeticion(j, p)) used.add(p.makeString());
-	    		}
-    		}
-    	}
-    }*/
-
+    
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
     public void generateInitialSolution2 () {

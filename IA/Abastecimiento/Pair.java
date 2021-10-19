@@ -49,4 +49,23 @@ class Pair<L, R>
     String makeString() {
     	return "(" + a + "," + b + ")";
     }
+    
+    String fromStringA(String p) {
+    	int i = 1;
+    	String s = "";
+    	
+    	while (p.charAt(i) != ',') { s += p.charAt(i); i++; }
+    	return s;
+    }
+    
+    String fromStringB(String p) {
+    	int i = 1;
+    	String s = "";
+    	
+    	while (p.charAt(i) != ',') i++;
+    	i++;
+    	while (p.charAt(i) != ')') { s += p.charAt(i); i++; }
+    	
+    	return s;
+    }
 }
