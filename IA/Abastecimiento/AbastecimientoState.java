@@ -50,6 +50,7 @@ public class AbastecimientoState {
     	this(as.gasolineras, as.centrosDistribucion);
     	
     	this.distTraveled = as.distTraveled;
+    	this.precioEnDepositos = as.precioEnDepositos;
     
     	for (int i=0; i<as.asignaciones.size(); i++) {
     		int size = as.asignaciones.get(i).size();
@@ -66,7 +67,7 @@ public class AbastecimientoState {
     	}
     	
     	for (int i=0; i<as.distancias.size(); i++) {
-    		int x = distancias.get(i);
+    		int x = as.distancias.get(i);
     		this.distancias.set(i, x);
     	}
     }
@@ -155,11 +156,11 @@ public class AbastecimientoState {
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
         int n = asignaciones.get(c).size();
-        //int dAct = 0;
+        int dAct = 0;
         
 
         if (oldP.intValue()%2 == 0) {
-        	if (n-1 == oldP.intValue()){
+            if (n-1 == oldP.intValue()){
             	
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
@@ -198,14 +199,14 @@ public class AbastecimientoState {
 
         // control de restricciones de distancia y número de peticiones asignadas
     	if (dist > 0 && (n/2) < 5) {
-	    	asignaciones.get(c).add(new Peticion(p));
-	    	
-	    	distTraveled = distTraveled - (maxDist - distancias.get(c)) + (maxDist - dist);
+	    	asignaciones.get(c).add(new Peticion (p));
+
+	    	distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - dist);
 	    	distancias.set(c, dist);
 	    	
 	    	int diasPendientes = gasolineras.get(p.a).getPeticiones().get(p.b);
 	    	if (diasPendientes == 0) precioEnDepositos += 1.02;
-	    	else precioEnDepositos += (100 - Math.pow(2, diasPendientes)) / 100;
+	    	else precioEnDepositos += ((100 - Math.pow(2, diasPendientes)) / 100);
 	    	
 	    	peticionesDesatendidas.remove(p.makeString());
 	    	return true;
@@ -230,12 +231,10 @@ public class AbastecimientoState {
             asignaciones.get(c).set(p, b);
             asignaciones.get(c1).set(p1, a);
 
-
-            distTraveled = distTraveled - (maxDist - distancias.get(c)) + (maxDist - x);
+            distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - x);
             distancias.set(c, x);
-
-            distTraveled = distTraveled - (maxDist - distancias.get(c1)) + (maxDist - y);
-
+            
+            distTraveled = distTraveled - (640-distancias.get(c1)) + (maxDist - y);
             distancias.set(c1, y);
 
             return true;
@@ -265,8 +264,7 @@ public class AbastecimientoState {
                 asignaciones.get(c).set(p1, a);
                 asignaciones.get(c).set(p, b);
 
-                distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - y);
-
+                distTraveled = distTraveled - (640-storeDist) + (maxDist - y);
                 distancias.set(c, y);
 
                 return true;
@@ -280,16 +278,14 @@ public class AbastecimientoState {
 
 
    //Aux function for cambiaPeticion
-    private boolean renewDistances(int peticionesC) {
+    private void renewDistances(int peticionesC) {
     	ArrayList<Peticion> auxP = asignaciones.get(peticionesC);
 
     	asignaciones.set(peticionesC, new ArrayList<Peticion>());
     	distancias.set(peticionesC, maxDist);
 
     	for (int i = 0; i < auxP.size(); i++) 
-    		if (!asignaPeticion (peticionesC, auxP.get(i).get())) return false;
-    	
-    	return true;
+    		asignaPeticion (peticionesC, auxP.get(i).get());
     }
 
     /*
@@ -303,6 +299,7 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get())) {
     		distTraveled = distTraveled - (640 - distancias.get(c));
+
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
     		return true;
@@ -331,16 +328,13 @@ public class AbastecimientoState {
     	if (changeFirst) newD = calcularDistancia (cd, n) + calcularDistancia (n, s) + calcularDistancia (s, cd);
     	else newD = calcularDistancia (cd, f) + calcularDistancia (f, n) + calcularDistancia (n, cd);
     	
-    	return distancias.get(c) + oldD - newD;
+    	return oldD - newD;
     }
 
     public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){  
     	Pair <Integer, Integer> f, s;
-    	Pair <Integer, Integer> fc, sc, newPCoord;
-    	
+
     	f = asignaciones.get(c).get(p).get();
-    	fc = getCoordGas(f);
-    	newPCoord = getCoordGas(newP);
     	
     	double addPrecioEnDepositos;
     	int diasPendientes = gasolineras.get(newP.a).getPeticiones().get(newP.b);
@@ -360,17 +354,20 @@ public class AbastecimientoState {
     			Distribucion d = centrosDistribucion.get(c);
     	    	Pair <Integer, Integer> cd = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
     	    	
-    			int oldDist = calcularDistancia (fc, cd)*2;
-    			int newDist = calcularDistancia (newPCoord, cd)*2;
+    			int oldDist = calcularDistancia (getCoordGas(f), cd)*2;
+    			int newDist = calcularDistancia (getCoordGas(newP), cd)*2;
     			
     			dist = distancias.get(c) + oldDist - newDist;
     			if (dist > 0) {
     				distancias.set(c, dist);
     	    		asignaciones.get(c).set(p, new Peticion (newP));
+    	    		
     	    		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
     	    		
-    	    		peticionesDesatendidas.add(newP.makeString());
-    	    		peticionesDesatendidas.remove(f.makeString());
+    	    		peticionesDesatendidas.add(f.makeString());
+    	    		peticionesDesatendidas.remove(newP.makeString());
+
+    	    		distTraveled = distTraveled - oldDist + newDist;
     	    		
     	    		return true;
     			}
@@ -378,24 +375,27 @@ public class AbastecimientoState {
     		}
     		
     		s = asignaciones.get(c).get(p+1).get();
-    		sc = getCoordGas(s);
-    		
     	} else {
     		f = asignaciones.get(c).get(p-1).get();
     		s = asignaciones.get(c).get(p).get();
     		
-    		fc = getCoordGas(f);
-    		sc = getCoordGas(s);
-    		
     		firstPos = false;
     	}
     	
-    	dist = recalcDist (fc, sc, newPCoord, c, firstPos);
+    	dist = recalcDist (f, s, newP, c, firstPos);
+    	int d = distancias.get(c) + dist;
     	
-    	if (dist > 0) {
+    	if (d > 0) {
     		distancias.set(c, dist);
     		asignaciones.get(c).set(p, new Peticion (newP));
     		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
+    		distTraveled = distTraveled - dist;
+    		
+    		if (firstPos) peticionesDesatendidas.add(f.makeString());
+    		else peticionesDesatendidas.add(s.makeString());
+    		
+    		peticionesDesatendidas.remove(newP.makeString());
+    		
     		return true;
     	}
     	
@@ -425,7 +425,6 @@ public class AbastecimientoState {
     			}
     		}
     	}
-    	System.out.println(distTraveled);
     }
 
     private int ponderarCoste (int dist, int dias) {

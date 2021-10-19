@@ -8,6 +8,10 @@ import aima.search.framework.SuccessorFunction;
 public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	
 	public boolean assignacionsContains (AbastecimientoState as, Pair <Integer, Integer> p) {
+		for (String s : as.getPeticionesDesatendidas()) {
+			System.out.print(s + "      :      ");
+		}
+		System.out.println ("-------------------------------");
 		return as.getPeticionesDesatendidas().contains(p.makeString());
 	}
 	
@@ -37,6 +41,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		
     		// mover paquetes dentro del camion
     		int m = as.getAsignaciones().get(i).size();
+    		/*
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -46,7 +51,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				ret.add(new Successor (s.toString(), newState));
     				}
     			}
-    		}
+    		}*/
     		    		
     		//mover paquetes con los que no estan assignados
     		for (int j = 0; j < ngas; j++) {
@@ -65,6 +70,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				}
     			}
     		}
+    		
     		
     		/*mover paquetes con los que ya estan assignados
     		for (int j = i + 1; j < ncen; j++) {

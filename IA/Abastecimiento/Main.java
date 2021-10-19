@@ -3,6 +3,7 @@ package Abastecimiento;
 import java.util.*;
 
 import IA.Gasolina.CentrosDistribucion;
+import IA.Gasolina.Gasolinera;
 import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
@@ -220,6 +221,14 @@ public class Main {
     		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seedCen);
     		  
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
+    		    	
+    		    	for (Gasolinera g: gasolineras) {
+    		    		for (Integer p : g.getPeticiones()) {
+    		    			System.out.print (p + "    :      ");
+    		    		}
+    		    		System.out.println();
+    		    	}
+    		    	System.out.println("------------------------------");
     		    	
     		    	switch (initialSolution) {
     		    		case 0:

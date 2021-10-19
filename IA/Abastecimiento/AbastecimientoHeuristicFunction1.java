@@ -9,6 +9,10 @@ public class AbastecimientoHeuristicFunction1 extends AbstractHeuristic {
 	@Override
 	public double getHeuristicValue (Object s) {
     	AbastecimientoState estado = (AbastecimientoState) s;
-    	return -1*(computeProfits(estado) - computePenalisations(2, estado));
+    	//estado.print_state();
+    	//System.out.println ("-------------------------------------");
+    	//System.out.println (computeProfits(estado));
+    	//System.out.println (computePenalisations(2, estado));
+    	return (computeProfits(estado) - computePenalisations(2, estado));
 	}
 }
