@@ -20,7 +20,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	AbastecimientoState nextState = null;
     	
     	s = new StringBuffer ();
-    	this.max = 5;
+    	this.max = 4;
     	
     	
     	Random rand = new Random();
@@ -115,7 +115,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			}
 					
 			break;
-			
+		/*	
 		case 4:														//Modificamos el estado mediante cambiaPeticion	
 			cn1 = new Random();
 			cn2 = new Random();
@@ -132,9 +132,9 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			
 				if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
 			}
-			break;
+			break;*/
 		 		
-		case 5:														//Modificamos el estado mediante cambioPeticionNoAsig
+		case 4:														//Modificamos el estado mediante cambioPeticionNoAsig
 			
 			gn = new Random();
 			alGas = gn.nextInt(nGasos);			
