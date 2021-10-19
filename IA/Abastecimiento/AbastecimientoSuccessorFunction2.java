@@ -68,7 +68,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				x = new Pair<Integer, Integer> (alGas, alPeticion);	    			
     	    	
 				if (!asigned(as, x.makeString())) {
-    	    		b = as.asignaPeticion(alCamion, x);
+    	    		b = as.asignaPeticion(alCamion, x, true);
 	    			
     	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
 				}

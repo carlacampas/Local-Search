@@ -13,6 +13,6 @@ public class AbastecimientoHeuristicFunction1 extends AbstractHeuristic {
     	//System.out.println ("-------------------------------------");
     	//System.out.println (computeProfits(estado));
     	//System.out.println (computePenalisations(2, estado));
-    	return (computeProfits(estado) - computePenalisations(2, estado));
+    	return -1*(computeProfits(estado) - computePenalisations(2, estado));
 	}
 }
