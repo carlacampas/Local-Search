@@ -35,12 +35,8 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	return saSucesores;
     }
     
-    private boolean asigned(AbastecimientoState as, Pair <Integer, Integer > alPn) {
-    	for (ArrayList <Peticion> pns : as.getAsignaciones())
-    		for (Peticion p : pns){
-    			if (p.get().equals(alPn)) return true; 		
-    	}
-    	return false;
+    private boolean asigned(AbastecimientoState as, String alPn) {
+    	return as.getPeticionesDesatendidas().contains(alPn);
     }
     
     private AbastecimientoState getNextStateNoLoops(AbastecimientoState as, int rnd) {
@@ -71,7 +67,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				alCamion = cn.nextInt(nCamiones);
 				x = new Pair<Integer, Integer> (alGas, alPeticion);	    			
     	    	
-				if (!asigned(as, x)) {
+				if (!asigned(as, x.makeString())) {
     	    		b = as.asignaPeticion(alCamion, x);
 	    			
     	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
@@ -156,7 +152,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			
 			x = new Pair<Integer, Integer> (alGas, alPeticionNoAsig);
 			
-			if (!asigned(as, x)) {				
+			if (!asigned(as, x.makeString())) {				
 				b = as.cambioPeticionNoAsig(alPnCamion, alCamion, x);
 				
 	    	    if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
