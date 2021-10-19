@@ -19,8 +19,8 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	int ngas = as.gasolineras.size();
     	
     	for (int i = 0; i < ncen; i++) {
-    		/*
-    		//asigna peticiones no asignadas -- FUNCIONA
+    		
+    		// asigna peticiones no asignadas -- FUNCIONA
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
     				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
@@ -35,13 +35,12 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			}
     		}
     		
-    		// mover paquetes dentro del camion -- NO FUNCIONAM, BEA 
+    		// mover paquetes dentro del camion -- FUNCIONA
     		int m = as.getAsignaciones().get(i).size();
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.intercambioOrden (j, k, i)) {
-    					System.out.println ("ENTERED");
 	    				StringBuffer s = new StringBuffer ();
 	    				s.append("swap petition order, truck " + i + " petition " + j + " changed with petition " + k);
 	    				ret.add(new Successor (s.toString(), newState));
@@ -68,7 +67,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
     		
     		
-    		// mover paquetes con los que ya estan asignados -- CHECK DISTANCIAS, AT LEAST IT FINISHES :), CARLA
+    		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
@@ -80,9 +79,9 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
 	    			}
     			}
-    		}*/
+    		}
     		
-    		//cambia peticiones -- NO FUNCIONA --> BEA
+    		//cambia peticiones -- FUNCIONA
     		for (int j = 0; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -96,7 +95,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
     	}
     	
-    	System.out.println ("here " + ret.size());
         return ret;
     }
 }

@@ -20,10 +20,7 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
         // Calculo de la suma de las distancias recorridas por todos los camiones
         
     	double kilometros = estado.getDistTraveled();
-    	//alfSystem.out.println(kilometros);
-        System.out.println ("pd " + precioEnDepositos + " km " + kilometros);
-        //System.out.println ("pd " + precioEnDepositos + " km " + kilometros);
-        //System.out.println (VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros);
+
         return (VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros);
     }
     

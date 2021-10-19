@@ -155,10 +155,8 @@ public class AbastecimientoState {
         int dcToOldC = calcularDistancia(dCoord, oldCoord);
         int dcToNewC = calcularDistancia(dCoord, newCoord);
 
-        System.out.println (oldP);
         if (oldP%2 == 0) {
             if (asignaciones.get(c).size()-1 == oldP){
-            	System.out.println ("end of array case");
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
             Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
@@ -208,8 +206,10 @@ public class AbastecimientoState {
 	    	}
 	    	
 	    	peticionesDesatendidas.remove(p.makeString());
+	    	System.out.println (distTraveled);
 	    	return true;
     	}
+    	System.out.println (distTraveled);
     	return false;
 	}
 
@@ -236,8 +236,10 @@ public class AbastecimientoState {
             distTraveled = distTraveled - (maxDist-distancias.get(c1)) + (maxDist - y);
             distancias.set(c1, y);
 
+            System.out.println (distTraveled);
             return true;
         }
+        System.out.println (distTraveled);
         return false;
     }
     /*
@@ -262,8 +264,10 @@ public class AbastecimientoState {
         	asignaciones.get(c).set(p, a);
             asignaciones.get(c).set(p1, b);
             
+            System.out.println (distTraveled);
             return false;
         }
+        System.out.println (distTraveled);
         return true;
     }
 
@@ -286,17 +290,16 @@ public class AbastecimientoState {
      * */
 
     public boolean cambiaPeticion (Integer p, int c, int c1) {
-    	if (c == c1) return false;		//No cambia nada
+    	if (c == c1) return true;		//No cambia nada
 
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get(), false)) {
-    		int dist = calcularDistancias(c1, a.get());
-    		distTraveled -= ((maxDist - distancias.get(c))); /*+ (maxDist - dist))*/;
-
     		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
+    		System.out.println (distTraveled);
     		return true;
         }
+    	System.out.println (distTraveled);
         return false;
     }
     
@@ -362,8 +365,10 @@ public class AbastecimientoState {
 
     	    		distTraveled = distTraveled - oldDist + newDist;
     	    		
+    	    		System.out.println (distTraveled);
     	    		return true;
     			}
+    			System.out.println (distTraveled);
     			return false;
     		}
     		
@@ -389,9 +394,11 @@ public class AbastecimientoState {
     		
     		peticionesDesatendidas.remove(newP.makeString());
     		
+    		System.out.println (distTraveled);
     		return true;
     	}
     	
+    	System.out.println (distTraveled);
     	return false;
     }
 
