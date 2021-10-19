@@ -35,7 +35,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			}
     		}
     		
-    		// mover paquetes dentro del camion -- NO FUNCIONAM, BEA 
+    		// mover paquetes dentro del camion -- FUNCIONA
     		int m = as.getAsignaciones().get(i).size();
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
@@ -68,7 +68,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
     		
     		
-    		// mover paquetes con los que ya estan asignados -- CHECK DISTANCIAS, AT LEAST IT FINISHES :), CARLA
+    		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
