@@ -111,8 +111,10 @@ public class AbastecimientoState {
     }
 
     public Integer actualizaDistancia(Integer oldP, Pair <Integer, Integer> newP, int c){
-        Distribucion d = centrosDistribucion.get(c);
-        Gasolinera gOld = gasolineras.get(oldP.get().a);
+        Peticion oldPn = asignaciones.get(c).get(oldP.intValue());
+    	
+    	Distribucion d = centrosDistribucion.get(c);
+        Gasolinera gOld = gasolineras.get(oldPn.get().a);
         Gasolinera gNew = gasolineras.get(newP.a);
 
         Pair <Integer, Integer> dCoord = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
@@ -124,17 +126,17 @@ public class AbastecimientoState {
 
         int n = asignaciones.get(c).size();
         int dAct = 0;
-        int pos = asignaciones.get(c).indexOf(oldP);
+        
 
-        if (pos%2 == 0) {
+        if (oldP.intValue()%2 == 0) {
 
-            if (n-1 == pos){
+            if (n-1 == oldP.intValue()){
                 dAct = distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
                 //distancias.set(c, dAct);
             }
             else {
 
-                Peticion pMid = asignaciones.get(c).get(pos+1);
+                Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
                 Gasolinera gMid = gasolineras.get(pMid.get().a);
 
                 Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
@@ -149,7 +151,7 @@ public class AbastecimientoState {
             }
         }
         else {
-            Peticion pMid = asignaciones.get(c).get(pos-1);
+            Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
             Gasolinera gMid = gasolineras.get(pMid.get().a);
 
             Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
@@ -193,8 +195,8 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c1).get(p1);
 
-        int x = actualizaDistancia(a.get(), b.get(), c);
-        int y = actualizaDistancia(b.get(), a.get(), c1);
+        int x = actualizaDistancia(p, b.get(), c);
+        int y = actualizaDistancia(p1, a.get(), c1);
 
         if (x > 0 && y > 0){
             asignaciones.get(c).set(p, b);
@@ -217,12 +219,12 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p);
         Peticion b = asignaciones.get(c).get(p1);
 
-        int x = actualizaDistancia(a.get(), b.get(), c);
+        int x = actualizaDistancia(p, b.get(), c);
         int ogDistance = distancias.get(c);
 
         if (x > 0){
             distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
-            int y = actualizaDistancia(b.get(), a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
+            int y = actualizaDistancia(p1, a.get(), c);    //el arraylist de distancias aunque pueda ser incorrecto (si y < 0 y por lo tando no se de el intercambio)
 
             if (y > 0){
                 asignaciones.get(c).set(p1, a);
