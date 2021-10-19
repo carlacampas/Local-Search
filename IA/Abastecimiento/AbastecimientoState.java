@@ -231,11 +231,11 @@ public class AbastecimientoState {
             asignaciones.get(c).set(p, b);
             asignaciones.get(c1).set(p1, a);
 
-            distancias.set(c, x);
             distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - x);
+            distancias.set(c, x);
             
-            distancias.set(c1, y);
             distTraveled = distTraveled - (640-distancias.get(c1)) + (maxDist - y);
+            distancias.set(c1, y);
 
             return true;
         }
@@ -253,6 +253,7 @@ public class AbastecimientoState {
 
         int x = actualizaDistancia(p, b.get(), c);
         int ogDistance = distancias.get(c);
+        int storeDist = distancias.get(c);
 
         if (x > 0){
             distancias.set(c, x);                               //para poder calcular la distancia correcta en el segundo cambio (int y) me veo obligada a actualizar
@@ -263,7 +264,7 @@ public class AbastecimientoState {
                 asignaciones.get(c).set(p1, a);
                 asignaciones.get(c).set(p, b);
 
-                distTraveled = distTraveled - (640-distancias.get(c)) + (maxDist - y);
+                distTraveled = distTraveled - (640-storeDist) + (maxDist - y);
                 distancias.set(c, y);
 
                 return true;

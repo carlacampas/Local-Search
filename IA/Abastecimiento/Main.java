@@ -53,6 +53,7 @@ public class Main {
 			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
 			System.out.println();
 			
@@ -114,6 +115,7 @@ public class Main {
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
 			System.out.println();
 			
