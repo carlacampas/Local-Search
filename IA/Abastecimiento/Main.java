@@ -52,6 +52,7 @@ public class Main {
 			
 			System.out.println (newState.toString());
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
 			
 			System.out.println();
 			
