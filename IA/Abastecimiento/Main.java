@@ -46,15 +46,19 @@ public class Main {
 			line();
 			time = System.currentTimeMillis() - time;
 
-			System.out.println ("time to generate solution " + time + " ms");
+			System.out.println ("SOLUTION STATS: ");
 			
+			line();
 			printActions (agent.getActions());
 			printInstrumentation(agent.getInstrumentation());
+			line();
 			
-			System.out.println (newState.toString());
+			line();
+			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			line();
 			
 			System.out.println();
 			
@@ -77,13 +81,19 @@ public class Main {
 			time = System.currentTimeMillis() - time;
 			
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			System.out.println ("Solution using Hill Climbing + Heuristic2: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			System.out.println ("SOLUTION STATS: ");
 			
+			line();
+			printActions (agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+			line();
+			
+			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			line();
 			
 			System.out.println();
 			
@@ -105,15 +115,8 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
+			System.out.println ("SOLUTION STATS: ");
 			
-			//printActions (agent.getActions());
-			printInstrumentation(agent.getInstrumentation());
-			
-			newState.print_state();
-			line();
-			
-			System.out.println (agent.getActions().toString());
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
@@ -139,14 +142,12 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			//System.out.println agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
 			System.out.println();
 			

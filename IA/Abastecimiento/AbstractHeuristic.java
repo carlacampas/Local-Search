@@ -18,9 +18,8 @@ public abstract class AbstractHeuristic implements HeuristicFunction {
     	// de la lista peticionesDesatendidas.
     	double precioEnDepositos = estado.getPrecioEnDepositos();
         // Calculo de la suma de las distancias recorridas por todos los camiones
-        
     	double kilometros = estado.getDistTraveled();
-
+        //System.out.println("dT " + kilometros);
         return (VALOR_DEPOSITO * precioEnDepositos - COSTE_KILOMETRO * kilometros);
     }
     
