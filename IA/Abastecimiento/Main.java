@@ -109,7 +109,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(2500, 10, 5, 0.5);
+			Search search = new SimulatedAnnealingSearch(100000, 10, 125, 0.0001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();

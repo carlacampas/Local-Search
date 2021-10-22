@@ -70,15 +70,17 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			if (alCamion1 != alCamion2) {
 				sizeC1 = nextState.getAsignaciones().get(alCamion1).size();
 				sizeC2 = nextState.getAsignaciones().get(alCamion2).size();
-				
-				pn1 = new Random();
-				pn2 = new Random();
-				alPn1 =  pn1.nextInt(sizeC1);
-				alPn2  = pn2.nextInt(sizeC2);
+				if (sizeC1 > 0 && sizeC2 > 0) {
+					pn1 = new Random();
+					pn2 = new Random();
+					alPn1 =  pn1.nextInt(sizeC1);
+					alPn2  = pn2.nextInt(sizeC2);
 
-	    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
-    	    																					
-	    		if (b) s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
+		    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
+	    	    																					
+		    		if (b) s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
+				}
+				
 			}
 			break;
 			
@@ -87,16 +89,18 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 			alCamion = cn.nextInt(nCamiones);
     			
 			sizeC = nextState.getAsignaciones().get(alCamion).size();
-				
-			pn1 = new Random();
-			pn2 = new Random();
-			alPn1 = pn1.nextInt(sizeC);
-			alPn2 = pn2.nextInt(sizeC);
-	    			
-			if (alPn1 != alPn2) {
-				b = nextState.intercambioOrden(alPn1, alPn2, alCamion);
-				if (b) s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
+			if (sizeC > 0) {
+				pn1 = new Random();
+				pn2 = new Random();
+				alPn1 = pn1.nextInt(sizeC);
+				alPn2 = pn2.nextInt(sizeC);
+		    			
+				if (alPn1 != alPn2) {
+					b = nextState.intercambioOrden(alPn1, alPn2, alCamion);
+					if (b) s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
+				}
 			}
+			
 					
 			break;
 			
@@ -108,13 +112,15 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				
 			if (alCamion1 != alCamion2) {
 				sizeC1 = nextState.getAsignaciones().get(alCamion1).size();
-
-				pn = new Random();
-				alPn = pn.nextInt(sizeC1);
+				if (sizeC1 > 0) {
+					pn = new Random();
+					alPn = pn.nextInt(sizeC1);
+					
+					b = nextState.cambiaPeticion(alPn, alCamion1, alCamion2);
 				
-				b = nextState.cambiaPeticion(alPn, alCamion1, alCamion2);
-			
-				if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
+					if (b) s.append("change petition" + alPn + ", from truck " + alCamion1 + " to truck " + alCamion2);
+				}
+				
 			}
 			break;
 		 		
@@ -133,18 +139,21 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				 pn = new Random();
 				 alPeticionNoAsig = pn.nextInt(sizeC);
 				 
-				 cn = new Random();
-				 alPnCamion = cn.nextInt(sizeC1);
+				 if (sizeC1 > 0) {
+				 	cn = new Random();
+				 	alPnCamion = cn.nextInt(sizeC1);
 				 
-				 x = new Pair <Integer, Integer> (alGas, alPeticionNoAsig);
+					 x = new Pair <Integer, Integer> (alGas, alPeticionNoAsig);
+					 
+					 if (!asigned(nextState, x.makeString())) {
+						 AbastecimientoState next = new AbastecimientoState (nextState);
+						 
+						 
+						 b = (next.cambioPeticionNoAsig(alPnCamion, alCamion, x));
+						 
+						 if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion); 
+					 }
 				 
-				 if (!asigned(nextState, x.makeString())) {
-					 AbastecimientoState next = new AbastecimientoState (nextState);
-					 
-					 
-					 b = (next.cambioPeticionNoAsig(alPnCamion, alCamion, x));
-					 
-					 if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion); 
 				 }
 					 
 			 }
