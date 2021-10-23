@@ -218,6 +218,7 @@ public class AbastecimientoState {
     * Post: La asignación de las peticiones se invierte.
     * */
     public boolean intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
+    	
         if (c == c1) return false;
 
     	Peticion a = asignaciones.get(c).get(p);
@@ -294,7 +295,7 @@ public class AbastecimientoState {
 
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get(), false)) {
-    		asignaciones.get(c).remove(p.intValue());
+    		asignaciones.get(c).remove(p);
     		renewDistances(c);
     		//System.out.println (distTraveled);
     		return true;
