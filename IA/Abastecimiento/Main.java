@@ -7,6 +7,7 @@ import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
+import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 import aima.search.framework.SearchAgent;
