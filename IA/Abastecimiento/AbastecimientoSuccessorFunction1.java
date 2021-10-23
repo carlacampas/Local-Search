@@ -48,7 +48,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			}
     		}
     		    		
-    		/* mover paquetes con los que no estan asignados -- FUNCIONA
+    		//mover paquetes con los que no estan asignados -- FUNCIONA
     		for (int j = 0; j < ngas; j++) {
     			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
     				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
@@ -64,11 +64,11 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
     				}
     			}
-    		}*/
+    		}
     		
     		
     		// mover paquetes con los que ya estan asignados -- FUNCIONA
-    		for (int j = i + 1; j < ncen; j++) {
+    		/*for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
     					AbastecimientoState newState = new AbastecimientoState (as);
@@ -79,7 +79,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
 	    			}
     			}
-    		}
+    		}*/
     		
     		// cambia peticiones -- FUNCIONA
     		for (int j = 0; j < ncen; j++) {

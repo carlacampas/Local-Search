@@ -17,7 +17,10 @@ public class AbastecimientoState {
     
    private int distTraveled;
    private double precioEnDepositos;
-    
+   //-------------------------------------------------
+   private int peticionesTotales;
+   //-------------------------------------------------
+
     private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
     private Set <String> peticionesDesatendidas;
@@ -44,6 +47,10 @@ public class AbastecimientoState {
         	for (int j=0; j < gasolineras.get(i).getPeticiones().size(); j++)
         		peticionesDesatendidas.add(new Pair <Integer, Integer> (i, j).makeString());
         }
+        //-------------------------------------------------
+        this.peticionesTotales = peticionesDesatendidas.size();
+        //-------------------------------------------------
+
     }
     
     public AbastecimientoState (AbastecimientoState as) {
@@ -109,6 +116,12 @@ public class AbastecimientoState {
     public Set <String> getPeticionesDesatendidas () {
     	return this.peticionesDesatendidas;
     }
+    
+    //----------------------------------
+    public int getPeticionesTotales() {
+    	return this.peticionesTotales;
+    }
+    //----------------------------------
 
     // OPERADORS.
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
@@ -291,11 +304,11 @@ public class AbastecimientoState {
      * */
 
     public boolean cambiaPeticion (Integer p, int c, int c1) {
-    	if (c == c1) return true;		//No cambia nada
+    	if (c == c1) return false;		//No cambia nada
 
     	Peticion a = asignaciones.get(c).get(p); 
     	if (asignaPeticion(c1, a.get(), false)) {
-    		asignaciones.get(c).remove(p);
+    		asignaciones.get(c).remove(p.intValue());
     		renewDistances(c);
     		//System.out.println (distTraveled);
     		return true;
@@ -503,6 +516,7 @@ public class AbastecimientoState {
     }
     
     public void print_state () {
+    	int nPns = peticionesTotales - peticionesDesatendidas.size();
     	int total_dist = 0;
     	for (int i=0; i<asignaciones.size(); i++) {
         	ArrayList <Peticion> assigs = asignaciones.get(i);
@@ -514,5 +528,6 @@ public class AbastecimientoState {
 	        System.out.println();
     	}
     	System.out.println ("Total distance " + total_dist);
+    	System.out.println("Peticiones asignadas " + nPns);
     }
 }

@@ -53,11 +53,14 @@ public class Main {
 			printInstrumentation(agent.getInstrumentation());
 			line();
 			
+			int nPns = newState.getPeticionesTotales() - newState.getPeticionesDesatendidas().size();
+			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			System.out.println ("peticiones atendidas " + nPns);
 			line();
 			
 			System.out.println();
@@ -88,11 +91,14 @@ public class Main {
 			printInstrumentation(agent.getInstrumentation());
 			line();
 			
+			int nPns = newState.getPeticionesTotales() - newState.getPeticionesDesatendidas().size();
+			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			System.out.println ("peticiones atendidas " + nPns);
 			line();
 			
 			System.out.println();
@@ -115,6 +121,8 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
+			int nPns = newState.getPeticionesTotales() - newState.getPeticionesDesatendidas().size();
+			
 			newState.print_state();
 			
 			System.out.println ("SOLUTION STATS: ");
@@ -123,7 +131,9 @@ public class Main {
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			System.out.println ("peticiones atendidas " + nPns);
 			
+			//newState.getPeticionesDesatendidas().forEach(p -> System.out.println("peticion " + p));
 			
 			System.out.println();
 			
@@ -145,13 +155,18 @@ public class Main {
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
+			int nPns = newState.getPeticionesTotales() - newState.getPeticionesDesatendidas().size();
+			
 			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			System.out.println ("peticiones atendidas " + nPns);
 			
+			//newState.getPeticionesDesatendidas().forEach(p -> System.out.println("peticion " + p));
+
 			System.out.println();
 			
 		}
