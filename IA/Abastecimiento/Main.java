@@ -3,11 +3,11 @@ package Abastecimiento;
 import java.util.*;
 
 import IA.Gasolina.CentrosDistribucion;
+import IA.Gasolina.Gasolinera;
 import IA.Gasolina.Gasolineras;
 
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
-import aima.search.framework.SearchAgent;
 import aima.search.informed.HillClimbingSearch;
 import aima.search.informed.SimulatedAnnealingSearch;
 import aima.search.framework.SearchAgent;
@@ -46,13 +46,19 @@ public class Main {
 			line();
 			time = System.currentTimeMillis() - time;
 
-			System.out.println ("time to generate solution " + time + " ms");
+			System.out.println ("SOLUTION STATS: ");
 			
+			line();
 			printActions (agent.getActions());
 			printInstrumentation(agent.getInstrumentation());
+			line();
 			
-			System.out.println (newState.toString());
+			line();
+			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			line();
 			
 			System.out.println();
 			
@@ -75,14 +81,19 @@ public class Main {
 			time = System.currentTimeMillis() - time;
 			
 			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
+			System.out.println ("SOLUTION STATS: ");
 			
-			System.out.println ("Solution using Hill Climbing + Heuristic2: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			line();
+			printActions (agent.getActions());
+			printInstrumentation(agent.getInstrumentation());
+			line();
 			
+			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			line();
 			
 			System.out.println();
 			
@@ -98,20 +109,21 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch();
+			Search search = new SimulatedAnnealingSearch(100000, 10, 125, 0.0001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
+			newState.print_state();
 			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
+			
 			
 			System.out.println();
 			
@@ -127,20 +139,18 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
-			Search search = new SimulatedAnnealingSearch();
+			Search search = new SimulatedAnnealingSearch(250000, 10, 5, 0.5);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
 			time = System.currentTimeMillis() - time;
 			
-			//AbastecimientoGoalTest test = new AbastecimientoGoalTest();
-			
-			System.out.println ("Solution using Hill Climbing + Heuristic1: ");
-			System.out.println (agent.getActions());
-			System.out.println(agent.getInstrumentation());
+			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
 			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("km: " + newState.getDistTraveled());
+			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
 			System.out.println();
 			
@@ -166,30 +176,40 @@ public class Main {
 		System.out.println("algo -- cambiar algoritmo de busqueda (hc == hill climbing, sa == simulated annealing)");
 		System.out.println("inicial -- cambiar solucion inicial (0 - randomizada, 1 - ponderada");
 		System.out.println("heuristica -- cambiar heuristica (0 - , 1 -)");
+		System.out.println ("seed - cambiar la semilla aleatoria");
 		System.out.println("print -- ver opciones escogidas");
 		line();
 		System.out.println();
 	}
 	
-	public static void init () {
+	public static void init (int ngas, int ncen, int mult, boolean ini, boolean heur, int estIni, int seed) {
 		line();
 		System.out.println("VALORES POR DEFECTO: ");
-		System.out.println("num. gasolineras: 100");
-		System.out.println("num. centros distribucion: 10");
-		System.out.println("multiplicidad (camiones por centro distribucion): 1");
-		System.out.println("algoritmo de busqueda: Hill Climbing");
-		System.out.println("heuristica: 0");
-		System.out.println("estado inicial: 0 (randomizado)");
+		System.out.println("num. gasolineras: " + ngas);
+		System.out.println("num. centros distribucion: " + ncen);
+		System.out.println("multiplicidad (camiones por centro distribucion): " + mult);
+		
+		if (ini) System.out.println("algoritmo de busqueda: hill climbing");
+		else System.out.println("algoritmo de busqueda: simulated annealing");
+		
+		if(heur) System.out.println("heuristica 1");
+		else System.out.println("heuristica 2");
+		
+		System.out.println("estado inicial: "+ estIni + " (randomizado)");
+		System.out.println("seed " + seed);
+		
 		line();
 		opts();
 	}
 	
     public static void main(String[] args) {
     	//inicializacion gasolinera
-    	int ngas = 100, seedGas = 1234;
+    	int ngas = 100;
     	
     	//inicializacion centros distribucion
-    	int ncen = 10, mult = 1, seedCen = 1234;
+    	int ncen = 10, mult = 1;
+    	
+    	int seed = 1234;
     	
     	// valores para experimentar
     	int costeKm = 2;
@@ -199,7 +219,7 @@ public class Main {
     	int initialSolution = 0;
     	boolean firstHeuristic = true;
 
-    	init();
+    	init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed);
     	
     	Scanner sc = new Scanner(System.in);
     	
@@ -212,8 +232,8 @@ public class Main {
     		
     		switch (cmd) {
     			case "run":
-    				Gasolineras gasolineras = new Gasolineras (ngas, seedGas);
-    		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seedCen);
+    				Gasolineras gasolineras = new Gasolineras (ngas, seed);
+    		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
     		  
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
     		    	
@@ -278,7 +298,7 @@ public class Main {
     				}
     				
     				break;
-    			case "heurisitca":
+    			case "heuristica":
     				int heuristics = sc.nextInt();
 
     				if (heuristics == 0) firstHeuristic = true;
@@ -290,7 +310,11 @@ public class Main {
     				}
     				
     				break;
+    			case "seed":
+    				seed = sc.nextInt();
+    				break;
     			case "print":
+    				init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed);
     				break;
     			default:
     				System.out.println ("please enter valid option");

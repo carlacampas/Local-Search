@@ -25,7 +25,8 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	int ngas = as.gasolineras.size();
 
     	for (int i = 0; i < ncen; i++) {
-
+    		int m = as.getAsignaciones().get(i).size();
+    		
     		// asigna peticiones no asignadas -- FUNCIONA
     		System.out.println ("SIZE IN METHOD " + as.getPeticionesDesatendidas().size());
     		for (String s : as.getPeticionesDesatendidas()) {
@@ -42,6 +43,15 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 					StringBuffer sb = new StringBuffer ();
         			sb.append("add petition");
         			ret.add(new Successor (sb.toString(), newState));
+				}
+				
+				newState = new AbastecimientoState (as);
+    			for (int l = 0; l < m; l++) {
+					if (newState.cambioPeticionNoAsig (l, i, p)) {
+        				StringBuffer sb = new StringBuffer ();
+        				sb.append("cambio peticion no assig");
+        				ret.add(new Successor (sb.toString(), newState));
+					}
 				}
     		}
 
@@ -60,7 +70,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}*/
 
     		// mover paquetes dentro del camion
-    		int m = as.getAsignaciones().get(i).size();
+    		
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -70,27 +80,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				ret.add(new Successor (s.toString(), newState));
     				}
     			}
-    		}
-
-    		// mover paquetes con los que no estan asignados -- FUNCIONA
-    		System.out.println ("SIZE IN METHOD CASSIG " + as.getPeticionesDesatendidas().size());
-    		for (String s : as.getPeticionesDesatendidas()) {
-    			System.out.println ("desatendida " + s);
-    			Pair <Integer, Integer> p = new Pair <Integer, Integer> ();
-    			int a = Integer.parseInt(p.fromStringA(s));
-    			int b = Integer.parseInt(p.fromStringB(s));
-
-    			p.seta(a);
-    			p.setb(b);
-
-    			AbastecimientoState newState = new AbastecimientoState (as);
-    			for (int l = 0; l < m; l++) {
-					if (newState.cambioPeticionNoAsig (l, i, p)) {
-        				StringBuffer sb = new StringBuffer ();
-        				sb.append("cambio peticion no assig");
-        				ret.add(new Successor (sb.toString(), newState));
-					}
-				}
     		}
 
     		/*for (int j = 0; j < ngas; j++) {
@@ -108,10 +97,10 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     					}
     				}
     			}
-    		}
+    		}*/
 
 
-    		/* mover paquetes con los que ya estan asignados -- FUNCIONA
+    		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
@@ -126,7 +115,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
 
     		//cambia peticiones
-    	/*	for (int j = i + 1; j < ncen; j++) {
+    		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
     				if (newState.cambiaPeticion(k, j, i)) {
@@ -136,7 +125,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
         				ret.add(suc);
     				}
     			}
-    		}*/
+    		}
     	}
 
         return ret;
