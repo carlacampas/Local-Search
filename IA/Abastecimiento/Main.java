@@ -37,6 +37,7 @@ public class Main {
 			line();
 			long time = System.currentTimeMillis();
 			
+			System.out.println ("loading: ");
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction1(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
 			Search search = new HillClimbingSearch();
 			SearchAgent agent = new SearchAgent (problem, search);
@@ -109,7 +110,7 @@ public class Main {
 		try {
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(100000, 10, 125, 0.0001);
+			Search search = new SimulatedAnnealingSearch(300000, 10, 5, 0.000001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();

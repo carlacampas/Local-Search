@@ -17,7 +17,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	}
 
     public List getSuccessors (Object state) {
-    	System.out.println("here");
+    	System.out.print ("-");
     	ArrayList <Successor> ret = new ArrayList<>();
     	AbastecimientoState as = new AbastecimientoState ((AbastecimientoState) state);
 
@@ -28,9 +28,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		int m = as.getAsignaciones().get(i).size();
     		
     		// asigna peticiones no asignadas -- FUNCIONA
-    		System.out.println ("SIZE IN METHOD " + as.getPeticionesDesatendidas().size());
     		for (String s : as.getPeticionesDesatendidas()) {
-    			System.out.println ("desatendida " + s);
     			Pair <Integer, Integer> p = new Pair <Integer, Integer> ();
     			int a = Integer.parseInt(p.fromStringA(s));
     			int b = Integer.parseInt(p.fromStringB(s));
@@ -55,22 +53,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 				}
     		}
 
-    		/*for (int j = 0; j < ngas; j++) {
-    			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
-    				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
-    				if (assignacionsContains (as, p)) {
-    					AbastecimientoState newState = new AbastecimientoState (as);
-	    				if (newState.asignaPeticion(i, p, true)) {
-	    					StringBuffer s = new StringBuffer ();
-		        			s.append("add petition gas station: " + j + " petition " + k + " to truck " + i);
-		        			ret.add(new Successor (s.toString(), newState));
-	    				}
-    				}
-    			}
-    		}*/
-
     		// mover paquetes dentro del camion
-    		
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -81,24 +64,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				}
     			}
     		}
-
-    		/*for (int j = 0; j < ngas; j++) {
-    			for (int k = 0; k < as.gasolineras.get(j).getPeticiones().size(); k++) {
-    				Pair <Integer, Integer> p = new Pair <Integer, Integer>(j, k);
-    				if (!assignacionsContains (as.getAsignaciones(), p)) {
-    					for (int l = 0; l < m; l++) {
-	    					AbastecimientoState newState = new AbastecimientoState (as);
-	    					if (newState.cambioPeticionNoAsig (l, i, p)) {
-		        				StringBuffer s = new StringBuffer ();
-		        				s.append("swap petition order, truck " + i + " petition (" + j + "," + k + ")" +
-		        							" changed with petition pos " + l);
-		        				ret.add(new Successor (s.toString(), newState));
-	    					}
-    					}
-    				}
-    			}
-    		}*/
-
 
     		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {

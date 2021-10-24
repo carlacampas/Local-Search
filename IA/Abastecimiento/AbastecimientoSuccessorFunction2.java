@@ -13,7 +13,6 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 	private int max;
 	    
     public List getSuccessors (Object state) {
-    	
     	ArrayList <Successor> saSucesores = new ArrayList<>();
         
     	AbastecimientoState currentState = (AbastecimientoState) state;
@@ -27,7 +26,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	int randomNum = rand.nextInt(max);
 		
         int nCamiones = nextState.centrosDistribucion.size(), nGasos = nextState.gasolineras.size(), nPeticiones;
-
+        int nPet = currentState.getPeticionesDesatendidas().size();
     	boolean b = false;
     	
     	Integer alGas, alCamion, alCamion1, alCamion2, alPeticion, alPn, alPn1, alPn2, alPeticionNoAsig, alPnCamion;
@@ -36,23 +35,29 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	Pair<Integer, Integer> x;
     	
     	switch (randomNum){
-		case 0:									           //modificamos el estado mediante la asignaPeticion
-			
-			alGas = rand.nextInt(nGasos);			//Escoge las peticiones de una gasolinera aleatoria
-			
-			nPeticiones = nextState.gasolineras.get(alGas).getPeticiones().size();
-			
-			if (nPeticiones > 0) {
-				alPeticion = rand.nextInt(nPeticiones); 
+		case 0:
+			if (nPet > 0) {
+				alPeticion = rand.nextInt(nPet); 
     		
 				alCamion = rand.nextInt(nCamiones);
-				x = new Pair<Integer, Integer> (alGas, alPeticion);	    			
-    	    	
-				if (asigned(nextState, x.makeString())) {
-    	    		b = nextState.asignaPeticion(alCamion, x, true);
-	    			
-    	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
+				x = new Pair<Integer, Integer> ();	    
+				
+				int i = 0;
+				String nextPet = "";
+				for (String sn : currentState.getPeticionesDesatendidas()) {
+					nextPet = sn;
+					if (i == alPeticion) break;
+					i++;
 				}
+				
+				int petA = Integer.parseInt(x.fromStringA(nextPet));
+    			int petB = Integer.parseInt(x.fromStringB(nextPet));
+
+    			x.seta(petA);
+    			x.setb(petB);
+    	    	
+    	    	b = nextState.asignaPeticion(alCamion, x, true);
+	    		if (b) s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
 			}
 
 			break;    			
@@ -113,32 +118,35 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 		case 4:														//Modificamos el estado mediante cambioPeticionNoAsig
 			alCamion = rand.nextInt(nCamiones);
 			
-			alGas = rand.nextInt(nGasos);
+			sizeC = nextState.getAsignaciones().get(alCamion).size();
+			if (nPet == 0) break;
+			alPeticion = rand.nextInt(nPet); 
 			
-			sizeC = nextState.gasolineras.get(alGas).getPeticiones().size();
-			sizeC1 = nextState.getAsignaciones().get(alCamion).size();
+			if (sizeC == 0) break;
+			alPnCamion = rand.nextInt(sizeC);
 			
-			 if (sizeC > 0) {
-				 alPeticionNoAsig = rand.nextInt(sizeC);
-				 
-				 if (sizeC1 > 0) {
-				 	alPnCamion = rand.nextInt(sizeC1);
-				 
-					 x = new Pair <Integer, Integer> (alGas, alPeticionNoAsig);
-					 
-					 if (!asigned(nextState, x.makeString())) {
-						 AbastecimientoState next = new AbastecimientoState (nextState);
-						 
-						 
-						 b = (next.cambioPeticionNoAsig(alPnCamion, alCamion, x));
-						 
-						 if (b) s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion); 
-					 }
-				 
-				 }
-					 
-			 }
-			 
+			
+			x = new Pair<Integer, Integer> ();	 
+			
+			int i = 0;
+			String nextPet = "";
+			for (String sn : currentState.getPeticionesDesatendidas()) {
+				nextPet = sn;
+				if (i == alPeticion) break;
+				i++;
+			}
+			
+			int petA = Integer.parseInt(x.fromStringA(nextPet));
+			int petB = Integer.parseInt(x.fromStringB(nextPet));
+
+			x.seta(petA);
+			x.setb(petB);
+			
+			AbastecimientoState next = new AbastecimientoState (nextState);
+							 
+			b = (next.cambioPeticionNoAsig(alPnCamion, alCamion, x));
+			if (b) s.append("cambio peticion no assig"); //s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion); 
+
     	    break;	
     	    
     	   default:
@@ -146,11 +154,6 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	   		break;
 		}
     			
-    	saSucesores.add(new Successor(s.toString(), nextState));
     	return saSucesores;
-    }
-    
-    private boolean asigned(AbastecimientoState as, String alPn) {
-    	return as.getPeticionesDesatendidas().contains(alPn);
     }
 }

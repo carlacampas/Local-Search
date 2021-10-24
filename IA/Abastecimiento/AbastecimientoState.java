@@ -60,24 +60,14 @@ public class AbastecimientoState {
     		ArrayList <Peticion> aux = new ArrayList <> ();
     		for (int j=0; j<size; j++) {
     			Pair <Integer, Integer> p = as.asignaciones.get(i).get(j).get();
-    			
     			Pair <Integer, Integer> p1 = new Pair <Integer, Integer> (p.a, p.b);
-    			if (this.peticionesDesatendidas.contains(p1.makeString())) {
-    				this.peticionesDesatendidas.remove(p1.makeString());
-    			} else {
-    				System.out.println ("SOMETHINGS WRONG");
-    			}
     			
+    			this.peticionesDesatendidas.remove(p1.makeString());
+    		
     			aux.add(new Peticion (p1));
     		}
     		this.asignaciones.set(i, aux);
     	}
-    	
-    	System.out.println ("SIZE " + this.peticionesDesatendidas.size());
-    	for (String s : this.peticionesDesatendidas) {
-    		System.out.print (s + " : ");
-    	}
-    	System.out.println ();
     }
 
     // SETTERS.
@@ -226,18 +216,6 @@ public class AbastecimientoState {
     * Post: La asignación de las peticiones se invierte.
     * */
     public boolean intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
-    	System.out.println ("INTERCAMBIA PETICION PRE C" + distancias.get(c));
-		for (Peticion pet : asignaciones.get(c)) {
-			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-		}
-		System.out.println();
-		
-		System.out.println ("INTERCAMBIA PETICION PRE C1" + distancias.get(c1));
-		for (Peticion pet : asignaciones.get(c1)) {
-			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-		}
-		System.out.println();
-    	
         if (c == c1) return false;
 
     	Peticion a = asignaciones.get(c).get(p.intValue());
@@ -252,17 +230,10 @@ public class AbastecimientoState {
         asignaciones.get(c).set(p.intValue(), b);
         asignaciones.get(c1).set(p1.intValue(), a);
         
-        int checkc = actualizaDistancia(p, b.get(), c); //renewDistances(c);
-        int checkc1 = actualizaDistancia(p1, a.get(), c1);//renewDistances(c1);
+        int checkc = actualizaDistancia(p, b.get(), c);
+        int checkc1 = actualizaDistancia(p1, a.get(), c1);
         
         if (checkc < 0 || checkc1 < 0) {
-        	/*distancias.set(c, distc);
-        	distancias.set(c1, distc1);
-        	
-        	distTraveled = distStore;
-        	
-        	asignaciones.set(c, auxAsigC);
-        	asignaciones.set(c1, auxAsigC1);*/
         	
             return false;
         }else {
@@ -275,49 +246,6 @@ public class AbastecimientoState {
         	distancias.set(c1, checkc1);
         	return true;
         }
-
-        /*int x = actualizaDistancia(p.intValue(), b.get(), c);
-        int y = actualizaDistancia(p1.intValue(), a.get(), c1);
-
-        if (x > 0 && y > 0){
-            asignaciones.get(c).set(p.intValue(), b);
-            asignaciones.get(c1).set(p1.intValue(), a);
-
-            distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - x);
-            distancias.set(c, x);
-            
-            distTraveled = distTraveled - (maxDist-distancias.get(c1)) + (maxDist - y);
-            distancias.set(c1, y);
-
-            //System.out.println (distTraveled);
-            
-            System.out.println ("INTERCAMBIA PETICION POST GOOD C" + distancias.get(c));
-    		for (Peticion pet : asignaciones.get(c)) {
-    			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-    		}
-    		System.out.println();
-    		
-    		System.out.println ("INTERCAMBIA PETICION POST GOOD C1" + distancias.get(c1));
-    		for (Peticion pet : asignaciones.get(c1)) {
-    			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-    		}
-    		System.out.println();
-            
-            return true;
-        }
-       // System.out.println (distTraveled);
-        System.out.println ("INTERCAMBIA PETICION POST BAD C" + distancias.get(c));
-		for (Peticion pet : asignaciones.get(c)) {
-			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-		}
-		System.out.println();
-		
-		System.out.println ("INTERCAMBIA PETICION POST BAD C1" + distancias.get(c1));
-		for (Peticion pet : asignaciones.get(c1)) {
-			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
-		}
-		System.out.println();
-        return false;*/
     }
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
