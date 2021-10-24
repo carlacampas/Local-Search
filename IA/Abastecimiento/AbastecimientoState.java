@@ -251,28 +251,63 @@ public class AbastecimientoState {
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
-    public boolean intercambioOrden (Integer p, Integer p1, int c) {
+	public boolean intercambioOrden (Integer p, Integer p1, int c) {
 		int dist = distancias.get(c), distStore = distTraveled;
-    	Peticion a = asignaciones.get(c).get(p.intValue());
-        Peticion b = asignaciones.get(c).get(p1.intValue());
-        
-        ArrayList <Peticion> auxAsig = asignaciones.get(c);
-        
-        asignaciones.get(c).set(p1.intValue(), a);
-        asignaciones.get(c).set(p.intValue(), b);
-        
-        boolean check = renewDistances(c);
-        
-        if (!check) {
-        	distancias.set(c, dist);
-        	distTraveled = distStore;
-        	
-        	asignaciones.set(c, auxAsig);
-            
-            return false;
-        }
-        return true;
-    }
+		Peticion a = asignaciones.get(c).get(p.intValue());
+		Peticion b = asignaciones.get(c).get(p1.intValue());
+
+		ArrayList <Peticion> auxAsig = asignaciones.get(c);
+
+		asignaciones.get(c).set(p1.intValue(), a);
+		asignaciones.get(c).set(p.intValue(), b);
+
+		boolean check = false;
+		int distAfterSwap = dist;
+		if (asignaciones.get(c).size() == 2) {
+			// Si el camión tiene dos asignaciones no hay cambios en las distancias recorridas,
+			// ya que hará el mismo recorrido en el sentido contrario.
+			check = true;
+		} else {
+			if (p + p1 == 1) {
+				// De forma análoga al caso con 2 peticiones, si las dos peticiones a intercambiar son
+				// las primeras en atender, solo cambia el sentido del recorrido antes de volver al centro
+				check = true;
+			} else {
+				Gasolinera first = gasolineras.get(0);
+				Gasolinera second = gasolineras.get(1);
+				Gasolinera third = gasolineras.get(2);
+				Distribucion center = centrosDistribucion.get(c);
+				Pair<Integer, Integer> firstCoords = new Pair<Integer, Integer>(first.getCoordX(), first.getCoordY());
+				Pair<Integer, Integer> secondCoords = new Pair<Integer, Integer>(second.getCoordX(), second.getCoordY());
+				Pair<Integer, Integer> thirdCoords = new Pair<Integer, Integer>(third.getCoordX(), third.getCoordY());
+				Pair<Integer, Integer> centerCoords = new Pair<Integer, Integer>(center.getCoordX(), center.getCoordY());
+				int add = calcularDistancia(firstCoords, secondCoords) + calcularDistancia(thirdCoords, centerCoords);
+				int substract = 0;
+				if (p + p1 == 2) {
+					// Cambiar la primera y la tercera petición
+					substract = calcularDistancia(firstCoords, thirdCoords) + calcularDistancia(centerCoords, secondCoords);
+				}
+				if (p + p1 == 3) {
+					// Cambiar la segunda y la tercera petición
+					substract = calcularDistancia(thirdCoords, secondCoords) + calcularDistancia(firstCoords, centerCoords);
+				}
+				distAfterSwap += add - substract;
+				if (distAfterSwap > 0) {
+					check = true;
+					distStore = distStore - (distAfterSwap - dist);
+				}
+			}
+		}
+		if (check) {
+			distancias.set(c, distAfterSwap);
+			distTraveled = distStore;
+
+			asignaciones.set(c, auxAsig);
+
+			return false;
+		}
+		return true;
+	}
 
 
    //Aux function for cambiaPeticion
