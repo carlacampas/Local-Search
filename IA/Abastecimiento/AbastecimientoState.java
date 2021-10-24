@@ -246,6 +246,7 @@ public class AbastecimientoState {
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
+	// TODO: Que funcioni quan hi hagi fins a 10 asignacions
 	public boolean intercambioOrden (Integer p, Integer p1, int c) {
 		int dist = distancias.get(c), distStore = distTraveled;
 		Peticion a = asignaciones.get(c).get(p.intValue());
