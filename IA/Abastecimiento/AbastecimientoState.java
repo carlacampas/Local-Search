@@ -221,11 +221,8 @@ public class AbastecimientoState {
     	Peticion a = asignaciones.get(c).get(p.intValue());
         Peticion b = asignaciones.get(c1).get(p1.intValue());
         
-        int distc = distancias.get(c), distStore = distTraveled;
+        int distc = distancias.get(c);
         int distc1 = distancias.get(c1);
-        
-        ArrayList <Peticion> auxAsigC = asignaciones.get(c);
-        ArrayList <Peticion> auxAsigC1 = asignaciones.get(c1);
         
         asignaciones.get(c).set(p.intValue(), b);
         asignaciones.get(c1).set(p1.intValue(), a);
@@ -233,10 +230,8 @@ public class AbastecimientoState {
         int checkc = actualizaDistancia(p, b.get(), c);
         int checkc1 = actualizaDistancia(p1, a.get(), c1);
         
-        if (checkc < 0 || checkc1 < 0) {
-        	
-            return false;
-        }else {
+        if (checkc < 0 || checkc1 < 0) return false;
+        else {
         	asignaciones.get(c).set(p.intValue(), b);
         	asignaciones.get(c1).set(p1.intValue(), a);
         	
