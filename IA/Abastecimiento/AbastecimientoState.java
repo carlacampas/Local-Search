@@ -251,11 +251,6 @@ public class AbastecimientoState {
 		Peticion a = asignaciones.get(c).get(p.intValue());
 		Peticion b = asignaciones.get(c).get(p1.intValue());
 
-		ArrayList <Peticion> auxAsig = asignaciones.get(c);
-
-		asignaciones.get(c).set(p1.intValue(), a);
-		asignaciones.get(c).set(p.intValue(), b);
-
 		boolean check = false;
 		int distAfterSwap = dist;
 		if (asignaciones.get(c).size() == 2) {
@@ -263,19 +258,22 @@ public class AbastecimientoState {
 			// ya que hará el mismo recorrido en el sentido contrario.
 			check = true;
 		} else {
+			// En este caso siempre habrá 3 asignaciones, dadas las restricciones del problema (5 viajes)
 			if (p + p1 == 1) {
 				// De forma análoga al caso con 2 peticiones, si las dos peticiones a intercambiar son
 				// las primeras en atender, solo cambia el sentido del recorrido antes de volver al centro
 				check = true;
 			} else {
-				Gasolinera first = gasolineras.get(0);
-				Gasolinera second = gasolineras.get(1);
-				Gasolinera third = gasolineras.get(2);
+				// Obtener las coordenadas de las gasolineras que han hecho la petición, y las del centro al que pertenece el camión.
+				Gasolinera first = gasolineras.get(asignaciones.get(c).get(0).get().a);
+				Gasolinera second = gasolineras.get(asignaciones.get(c).get(1).get().a);
+				Gasolinera third = gasolineras.get(asignaciones.get(c).get(2).get().a);
 				Distribucion center = centrosDistribucion.get(c);
 				Pair<Integer, Integer> firstCoords = new Pair<Integer, Integer>(first.getCoordX(), first.getCoordY());
 				Pair<Integer, Integer> secondCoords = new Pair<Integer, Integer>(second.getCoordX(), second.getCoordY());
 				Pair<Integer, Integer> thirdCoords = new Pair<Integer, Integer>(third.getCoordX(), third.getCoordY());
 				Pair<Integer, Integer> centerCoords = new Pair<Integer, Integer>(center.getCoordX(), center.getCoordY());
+				
 				int add = calcularDistancia(firstCoords, secondCoords) + calcularDistancia(thirdCoords, centerCoords);
 				int substract = 0;
 				if (p + p1 == 2) {
@@ -294,10 +292,12 @@ public class AbastecimientoState {
 			}
 		}
 		if (check) {
+			
+			asignaciones.get(c).set(p1.intValue(), a);
+			asignaciones.get(c).set(p.intValue(), b);
+			
 			distancias.set(c, distAfterSwap);
 			distTraveled = distStore;
-
-			asignaciones.set(c, auxAsig);
 
 			return false;
 		}
@@ -323,7 +323,9 @@ public class AbastecimientoState {
 
     /*
      * Pre: La petición p estaba asignada al camion c
-     * Post: La petición p deja de estar asignada al camion c y pasa a formar parte de las asignaciones de c1
+     * Post: La petición p deja de estar asignada al camion c y pas+
+     * 
+     * a a formar parte de las asignaciones de c1
      * */
 
     public boolean cambiaPeticion (Integer p, int c, int c1) {
