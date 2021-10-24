@@ -17,10 +17,7 @@ public class AbastecimientoState {
     
    private int distTraveled;
    private double precioEnDepositos;
-   //-------------------------------------------------
-   private int peticionesTotales;
-   //-------------------------------------------------
-
+    
     private ArrayList<ArrayList<Peticion>> asignaciones;
     private ArrayList <Integer> distancias;
     private Set <String> peticionesDesatendidas;
@@ -47,10 +44,6 @@ public class AbastecimientoState {
         	for (int j=0; j < gasolineras.get(i).getPeticiones().size(); j++)
         		peticionesDesatendidas.add(new Pair <Integer, Integer> (i, j).makeString());
         }
-        //-------------------------------------------------
-        this.peticionesTotales = peticionesDesatendidas.size();
-        //-------------------------------------------------
-
     }
     
     public AbastecimientoState (AbastecimientoState as) {
@@ -60,23 +53,31 @@ public class AbastecimientoState {
     	this.precioEnDepositos = as.precioEnDepositos;
     
     	for (int i=0; i<as.asignaciones.size(); i++) {
+    		int x = as.distancias.get(i);
+    		this.distancias.set(i, x);
+    		
     		int size = as.asignaciones.get(i).size();
     		ArrayList <Peticion> aux = new ArrayList <> ();
     		for (int j=0; j<size; j++) {
     			Pair <Integer, Integer> p = as.asignaciones.get(i).get(j).get();
     			
     			Pair <Integer, Integer> p1 = new Pair <Integer, Integer> (p.a, p.b);
-    			this.peticionesDesatendidas.remove(p1.makeString());
+    			if (this.peticionesDesatendidas.contains(p1.makeString())) {
+    				this.peticionesDesatendidas.remove(p1.makeString());
+    			} else {
+    				System.out.println ("SOMETHINGS WRONG");
+    			}
     			
     			aux.add(new Peticion (p1));
     		}
     		this.asignaciones.set(i, aux);
     	}
     	
-    	for (int i=0; i<as.distancias.size(); i++) {
-    		int x = as.distancias.get(i);
-    		this.distancias.set(i, x);
+    	System.out.println ("SIZE " + this.peticionesDesatendidas.size());
+    	for (String s : this.peticionesDesatendidas) {
+    		System.out.print (s + " : ");
     	}
+    	System.out.println ();
     }
 
     // SETTERS.
@@ -116,12 +117,6 @@ public class AbastecimientoState {
     public Set <String> getPeticionesDesatendidas () {
     	return this.peticionesDesatendidas;
     }
-    
-    //----------------------------------
-    public int getPeticionesTotales() {
-    	return this.peticionesTotales;
-    }
-    //----------------------------------
 
     // OPERADORS.
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)
@@ -132,7 +127,7 @@ public class AbastecimientoState {
     	int n = cAssig.size();
 
     	Distribucion d = centrosDistribucion.get(c);
-    	Gasolinera g1 = gasolineras.get(p.a);
+    	Gasolinera g1 = gasolineras.get(p.a.intValue());
 
 		Pair <Integer, Integer> coord1 = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
 		Pair <Integer, Integer> coord3 = new Pair <Integer, Integer> (g1.getCoordX(), g1.getCoordY());
@@ -147,6 +142,8 @@ public class AbastecimientoState {
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
 	    		
+	    		int dCheck = distancias.get(c) + prevD*2 - newD;
+	    		if (dCheck > maxDist) System.out.println ("WROOONG " + dCheck + " new " + newD + " prevD " + prevD);
 	    		return distancias.get(c) + prevD*2 - newD;
 	    	}
 		}
@@ -155,11 +152,11 @@ public class AbastecimientoState {
     }
 
     public Integer actualizaDistancia(Integer oldP, Pair <Integer, Integer> newP, int c){
-        Peticion oldPn = asignaciones.get(c).get(oldP);
+        Peticion oldPn = asignaciones.get(c).get(oldP.intValue());
     	
     	Distribucion d = centrosDistribucion.get(c);
-        Gasolinera gOld = gasolineras.get(oldPn.get().a);
-        Gasolinera gNew = gasolineras.get(newP.a);
+        Gasolinera gOld = gasolineras.get(oldPn.get().a.intValue());
+        Gasolinera gNew = gasolineras.get(newP.a.intValue());
 
         Pair <Integer, Integer> dCoord = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
         Pair <Integer, Integer> oldCoord = new Pair <Integer, Integer> (gOld.getCoordX(), gOld.getCoordY());
@@ -173,7 +170,7 @@ public class AbastecimientoState {
                 return distancias.get(c) + 2*dcToOldC - 2*dcToNewC;
             }
             Peticion pMid = asignaciones.get(c).get(oldP.intValue()+1);
-            Gasolinera gMid = gasolineras.get(pMid.get().a);
+            Gasolinera gMid = gasolineras.get(pMid.get().a.intValue());
             
             Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
@@ -186,7 +183,7 @@ public class AbastecimientoState {
         }
         
         Peticion pMid = asignaciones.get(c).get(oldP.intValue()-1);
-        Gasolinera gMid = gasolineras.get(pMid.get().a);
+        Gasolinera gMid = gasolineras.get(pMid.get().a.intValue());
 
         Pair <Integer, Integer> midCoord = new Pair <Integer, Integer> (gMid.getCoordX(), gMid.getCoordY());
 
@@ -213,13 +210,11 @@ public class AbastecimientoState {
 	    	distancias.set(c, dist);
 	    	
 	    	if (addDays) {
-		    	int diasPendientes = gasolineras.get(p.a).getPeticiones().get(p.b);
+		    	int diasPendientes = gasolineras.get(p.a.intValue()).getPeticiones().get(p.b.intValue());
 		    	if (diasPendientes == 0) precioEnDepositos += 1.02;
 		    	else precioEnDepositos += ((100 - Math.pow(2, diasPendientes)) / 100);
 	    	}
-	    	
-	    	peticionesDesatendidas.remove(p.makeString());
-	    	//System.out.println (distTraveled);
+	    	else peticionesDesatendidas.remove(p.makeString());
 	    	return true;
     	}
     	//System.out.println (distTraveled);
@@ -231,18 +226,54 @@ public class AbastecimientoState {
     * Post: La asignación de las peticiones se invierte.
     * */
     public boolean intercambiaPeticiones (Integer p, Integer p1, int c, int c1){
+    	System.out.println ("INTERCAMBIA PETICION PRE C" + distancias.get(c));
+		for (Peticion pet : asignaciones.get(c)) {
+			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+		}
+		System.out.println();
+		
+		System.out.println ("INTERCAMBIA PETICION PRE C1" + distancias.get(c1));
+		for (Peticion pet : asignaciones.get(c1)) {
+			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+		}
+		System.out.println();
     	
         if (c == c1) return false;
 
-    	Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c1).get(p1);
+    	Peticion a = asignaciones.get(c).get(p.intValue());
+        Peticion b = asignaciones.get(c1).get(p1.intValue());
+        
+        int distc = distancias.get(c), distStore = distTraveled;
+        int distc1 = distancias.get(c1);
+        
+        ArrayList <Peticion> auxAsigC = asignaciones.get(c);
+        ArrayList <Peticion> auxAsigC1 = asignaciones.get(c1);
+        
+        asignaciones.get(c).set(p.intValue(), b);
+        asignaciones.get(c1).set(p1.intValue(), a);
+        
+        boolean checkc = renewDistances(c);
+        boolean checkc1 = renewDistances(c1);
+        
+        if (!checkc || !checkc1) {
+        	distancias.set(c, distc);
+        	distancias.set(c1, distc1);
+        	
+        	distTraveled = distStore;
+        	
+        	asignaciones.set(c, auxAsigC);
+        	asignaciones.set(c1, auxAsigC1);
+        	
+            return false;
+        }
+        return true;
 
-        int x = actualizaDistancia(p, b.get(), c);
-        int y = actualizaDistancia(p1, a.get(), c1);
+        /*int x = actualizaDistancia(p.intValue(), b.get(), c);
+        int y = actualizaDistancia(p1.intValue(), a.get(), c1);
 
         if (x > 0 && y > 0){
-            asignaciones.get(c).set(p, b);
-            asignaciones.get(c1).set(p1, a);
+            asignaciones.get(c).set(p.intValue(), b);
+            asignaciones.get(c1).set(p1.intValue(), a);
 
             distTraveled = distTraveled - (maxDist-distancias.get(c)) + (maxDist - x);
             distancias.set(c, x);
@@ -251,51 +282,77 @@ public class AbastecimientoState {
             distancias.set(c1, y);
 
             //System.out.println (distTraveled);
+            
+            System.out.println ("INTERCAMBIA PETICION POST GOOD C" + distancias.get(c));
+    		for (Peticion pet : asignaciones.get(c)) {
+    			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+    		}
+    		System.out.println();
+    		
+    		System.out.println ("INTERCAMBIA PETICION POST GOOD C1" + distancias.get(c1));
+    		for (Peticion pet : asignaciones.get(c1)) {
+    			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+    		}
+    		System.out.println();
+            
             return true;
         }
        // System.out.println (distTraveled);
-        return false;
+        System.out.println ("INTERCAMBIA PETICION POST BAD C" + distancias.get(c));
+		for (Peticion pet : asignaciones.get(c)) {
+			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+		}
+		System.out.println();
+		
+		System.out.println ("INTERCAMBIA PETICION POST BAD C1" + distancias.get(c1));
+		for (Peticion pet : asignaciones.get(c1)) {
+			System.out.print ("(" + pet.get().a + ", " + pet.get().b + "), ");
+		}
+		System.out.println();
+        return false;*/
     }
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
     public boolean intercambioOrden (Integer p, Integer p1, int c) {
-    	int dist = distancias.get(c), distStore = distTraveled;
-    	Peticion a = asignaciones.get(c).get(p);
-        Peticion b = asignaciones.get(c).get(p1);
+		int dist = distancias.get(c), distStore = distTraveled;
+    	Peticion a = asignaciones.get(c).get(p.intValue());
+        Peticion b = asignaciones.get(c).get(p1.intValue());
         
-        asignaciones.get(c).set(p1, a);
-        asignaciones.get(c).set(p, b);
+        ArrayList <Peticion> auxAsig = asignaciones.get(c);
         
-        renewDistances(c);
+        asignaciones.get(c).set(p1.intValue(), a);
+        asignaciones.get(c).set(p.intValue(), b);
         
-        if (distancias.get(c) < 0) {
-        	
+        boolean check = renewDistances(c);
+        
+        if (!check) {
         	distancias.set(c, dist);
         	distTraveled = distStore;
         	
-        	asignaciones.get(c).set(p, a);
-            asignaciones.get(c).set(p1, b);
+        	asignaciones.set(c, auxAsig);
             
-           // System.out.println (distTraveled);
             return false;
         }
-        //System.out.println (distTraveled);
         return true;
     }
 
 
    //Aux function for cambiaPeticion
-    private void renewDistances(int peticionesC) {
+    private boolean renewDistances(int peticionesC) {
     	ArrayList<Peticion> auxP = asignaciones.get(peticionesC);
 
-    	distTraveled -= (maxDist - distancias.get(peticionesC));
+    	int dStore = distancias.get(peticionesC);
+    	distTraveled -= (maxDist - dStore);
     	asignaciones.set(peticionesC, new ArrayList<Peticion>());
+    	
     	distancias.set(peticionesC, maxDist);
 
     	for (int i = 0; i < auxP.size(); i++) 
-    		asignaPeticion (peticionesC, auxP.get(i).get(), false);
+    		if (!asignaPeticion (peticionesC, auxP.get(i).get(), false)) return false;
+    	
+    	return true;
     }
 
     /*
@@ -306,19 +363,20 @@ public class AbastecimientoState {
     public boolean cambiaPeticion (Integer p, int c, int c1) {
     	if (c == c1) return false;		//No cambia nada
 
-    	Peticion a = asignaciones.get(c).get(p); 
+    	Peticion a = asignaciones.get(c).get(p.intValue()); 
     	if (asignaPeticion(c1, a.get(), false)) {
+    		//System.out.println (distancias.get(c1));
+    		
     		asignaciones.get(c).remove(p.intValue());
+    		
     		renewDistances(c);
-    		//System.out.println (distTraveled);
     		return true;
         }
-    	//System.out.println (distTraveled);
         return false;
     }
     
     public Pair <Integer, Integer> getCoordGas (Pair <Integer, Integer> p){
-    	return new Pair <Integer, Integer> (gasolineras.get(p.a).getCoordX(), gasolineras.get(p.a).getCoordY());
+    	return new Pair <Integer, Integer> (gasolineras.get(p.a.intValue()).getCoordX(), gasolineras.get(p.a.intValue()).getCoordY());
     }
     
     public int recalcDist (Pair <Integer, Integer> f, Pair <Integer, Integer> s, 
@@ -344,15 +402,15 @@ public class AbastecimientoState {
     public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){  
     	Pair <Integer, Integer> f, s;
 
-    	f = asignaciones.get(c).get(p).get();
+    	f = asignaciones.get(c).get(p.intValue()).get();
     	
     	double addPrecioEnDepositos;
-    	int diasPendientes = gasolineras.get(newP.a).getPeticiones().get(newP.b);
+    	int diasPendientes = gasolineras.get(newP.a.intValue()).getPeticiones().get(newP.b.intValue());
     	if (diasPendientes == 0) addPrecioEnDepositos = 1.02;
     	else addPrecioEnDepositos = (100 - Math.pow(2, diasPendientes)) / 100;
     	
     	double removePrecioEnDespositos;
-    	diasPendientes = gasolineras.get(f.a).getPeticiones().get(f.b);
+    	diasPendientes = gasolineras.get(f.a.intValue()).getPeticiones().get(f.b.intValue());
     	if (diasPendientes == 0) removePrecioEnDespositos = 1.02;
     	else removePrecioEnDespositos = (100 - Math.pow(2, diasPendientes)) / 100;
 
@@ -373,7 +431,7 @@ public class AbastecimientoState {
     			//System.out.println("distancias + old - new " + dist);
     			if (dist > 0) {
     				distancias.set(c, dist);
-    	    		asignaciones.get(c).set(p, new Peticion (newP));
+    	    		asignaciones.get(c).set(p.intValue(), new Peticion (newP));
     	    		
     	    		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
     	    		
@@ -381,17 +439,15 @@ public class AbastecimientoState {
     	    		peticionesDesatendidas.remove(newP.makeString());
 
     	    		distTraveled = distTraveled - oldDist + newDist;
-    	    		//System.out.println (distTraveled);
     	    		return true;
     			}
-    			//System.out.println (distTraveled);
     			return false;
     		}
     		
-    		s = asignaciones.get(c).get(p+1).get();
+    		s = asignaciones.get(c).get(p.intValue()+1).get();
     	} else {
-    		f = asignaciones.get(c).get(p-1).get();
-    		s = asignaciones.get(c).get(p).get();
+    		f = asignaciones.get(c).get(p.intValue()-1).get();
+    		s = asignaciones.get(c).get(p.intValue()).get();
     		
     		firstPos = false;
     	}
@@ -400,8 +456,9 @@ public class AbastecimientoState {
     	int d = distancias.get(c) + dist;
     	
     	if (d > 0) {
+    		//System.out.println (d);
     		distancias.set(c, d);
-    		asignaciones.get(c).set(p, new Peticion (newP));
+    		asignaciones.get(c).set(p.intValue(), new Peticion (newP));
     		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
     		distTraveled = distTraveled + (maxDist - distancias.get(c)) - dist;
     		
@@ -409,12 +466,8 @@ public class AbastecimientoState {
     		else peticionesDesatendidas.add(s.makeString());
     		
     		peticionesDesatendidas.remove(newP.makeString());
-    		
-    		//System.out.println (distTraveled);
     		return true;
     	}
-    	
-    	//System.out.println (distTraveled);
     	return false;
     }
 
@@ -516,18 +569,24 @@ public class AbastecimientoState {
     }
     
     public void print_state () {
-    	int nPns = peticionesTotales - peticionesDesatendidas.size();
     	int total_dist = 0;
+    	int petitions = 0;
     	for (int i=0; i<asignaciones.size(); i++) {
         	ArrayList <Peticion> assigs = asignaciones.get(i);
         	System.out.println ("(" + i + ") --> " + distancias.get(i) + ": ");
         	total_dist += (640-distancias.get(i));
 	        for (Peticion p : assigs) {
+	        	petitions++;
 	        	System.out.print ("(" + p.get().a + "," + p.get().b + ")");
 	        }
 	        System.out.println();
     	}
     	System.out.println ("Total distance " + total_dist);
-    	System.out.println("Peticiones asignadas " + nPns);
+    	
+    	for (String s : peticionesDesatendidas) {
+    		System.out.print(s + ", ");
+    	}
+    	System.out.println();
+    	System.out.println ("num petitions " + petitions);
     }
 }
