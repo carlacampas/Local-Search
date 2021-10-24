@@ -252,21 +252,29 @@ public class AbastecimientoState {
         asignaciones.get(c).set(p.intValue(), b);
         asignaciones.get(c1).set(p1.intValue(), a);
         
-        boolean checkc = renewDistances(c);
-        boolean checkc1 = renewDistances(c1);
+        int checkc = actualizaDistancia(p, b.get(), c); //renewDistances(c);
+        int checkc1 = actualizaDistancia(p1, a.get(), c1);//renewDistances(c1);
         
-        if (!checkc || !checkc1) {
-        	distancias.set(c, distc);
+        if (checkc < 0 || checkc1 < 0) {
+        	/*distancias.set(c, distc);
         	distancias.set(c1, distc1);
         	
         	distTraveled = distStore;
         	
         	asignaciones.set(c, auxAsigC);
-        	asignaciones.set(c1, auxAsigC1);
+        	asignaciones.set(c1, auxAsigC1);*/
         	
             return false;
+        }else {
+        	asignaciones.get(c).set(p.intValue(), b);
+        	asignaciones.get(c1).set(p1.intValue(), a);
+        	
+        	distTraveled = distTraveled + (maxDist-distc) + (maxDist-distc1) - (maxDist - checkc) - (maxDist - checkc1);
+        	
+        	distancias.set(c, checkc);
+        	distancias.set(c1, checkc1);
+        	return true;
         }
-        return true;
 
         /*int x = actualizaDistancia(p.intValue(), b.get(), c);
         int y = actualizaDistancia(p1.intValue(), a.get(), c1);
