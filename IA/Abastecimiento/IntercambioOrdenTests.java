@@ -49,7 +49,7 @@ public class IntercambioOrdenTests {
         // Intercambiar peticion 0 y peticion 1 del camion 0
         boolean done = estado.intercambioOrden(0, 1, 0);
         
-        assertEquals (false, done, "Change is done successfully");
+        assertEquals (true, done, "Change is done successfully");
         
     	assertEquals (1, estado.getAsignaciones().get(0).get(0).get().a, "First petition should have id 1");
     	assertEquals (5, estado.getAsignaciones().get(0).get(0).get().b, "First petition should have 5 days");
@@ -73,7 +73,7 @@ public class IntercambioOrdenTests {
         // Intercambiar peticion 0 y peticion 1 del camion 0
         boolean done = estado.intercambioOrden(0, 1, 0);
         
-        assertEquals (false, done, "Change is done successfully");
+        assertEquals (true, done, "Change is done successfully");
         
     	assertEquals (1, estado.getAsignaciones().get(0).get(0).get().a, "First petition should have id 1");
     	assertEquals (5, estado.getAsignaciones().get(0).get(0).get().b, "First petition should have 5 days");
@@ -95,7 +95,7 @@ public class IntercambioOrdenTests {
     	
         boolean done = estado.intercambioOrden(0, 2, 0);
         
-        assertEquals (false, done, "Change is done successfully");
+        assertEquals (true, done, "Change is done successfully");
         
     	assertEquals (2, estado.getAsignaciones().get(0).get(0).get().a, "First petition should have id 2");
     	assertEquals (7, estado.getAsignaciones().get(0).get(0).get().b, "First petition should have 7 days");
@@ -118,7 +118,7 @@ public class IntercambioOrdenTests {
     	
         boolean done = estado.intercambioOrden(1, 2, 0);
         
-        assertEquals (false, done, "Change is done successfully");
+        assertEquals (true, done, "Change is done successfully");
         
     	assertEquals (2, estado.getAsignaciones().get(0).get(1).get().a, "Second petition should have id 2");
     	assertEquals (7, estado.getAsignaciones().get(0).get(1).get().b, "Second petition should have 7 days");
@@ -148,7 +148,7 @@ public class IntercambioOrdenTests {
     	
         boolean done = estado.intercambioOrden(1, 2, 0);
         
-        assertEquals (true, done, "Change wasn't done because it exceeded the maximum distance");
+        assertEquals (false, done, "Change wasn't done because it exceeded the maximum distance");
     }
         
     
