@@ -247,7 +247,14 @@ public class AbastecimientoState {
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
 	public boolean intercambioOrden (Integer p, Integer p1, int c) {
-		int distStore = distTraveled;
+		
+		// Distancia recorrida actualmente por el camion c
+		int cDist = AbastecimientoState.maxDist - distancias.get(c);
+		int cDistStore = cDist;
+		
+		// Distancia total recorrida por todos los camiones
+		int totalDistStore = distTraveled;
+		
 		Peticion a = asignaciones.get(c).get(p.intValue());
 		Peticion b = asignaciones.get(c).get(p1.intValue());
 
@@ -300,15 +307,15 @@ public class AbastecimientoState {
 				
 				if (m % 2 == 0) { // Trayecto centro -> m -> m1 -> centro
 					if (mEsUltimo) {
-						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, centerCoords);
-						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, centerCoords);
+						cDist = cDist - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, centerCoords);
+						cDist = cDist + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, centerCoords);
 					} else {
-						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, m1Coords);
-						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, m1Coords);
+						cDist = cDist - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, m1Coords);
+						cDist = cDist + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, m1Coords);
 					}
 				} else { // Trayecto centro -> m_1 -> m -> centro
-						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(m_1Coords, mCoords);
-						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(m_1Coords, nCoords);
+						cDist = cDist - calcularDistancia(nCoords, n1Coords) - calcularDistancia(m_1Coords, mCoords);
+						cDist = cDist + calcularDistancia(mCoords, n1Coords) + calcularDistancia(m_1Coords, nCoords);
 				}
 			} else { // Trayecto centro -> n_1 -> n -> centro
 				// Obtener las coordenadas de la gasolinera que se visita antes de n
@@ -317,18 +324,18 @@ public class AbastecimientoState {
 				
 				if (m % 2 == 0) { // Trayecto centro -> m -> m1 -> centro
 					if (mEsUltimo) {
-						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, centerCoords);
-						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, centerCoords);
+						cDist = cDist - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, centerCoords);
+						cDist = cDist + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, centerCoords);
 					} else {
-						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, m1Coords);
-						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, m1Coords);
+						cDist = cDist - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, m1Coords);
+						cDist = cDist + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, m1Coords);
 					}
 				} else { // Trayecto centro -> m_1 -> m -> centro
-						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(m_1Coords, mCoords);
-						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(m_1Coords, nCoords);
+						cDist = cDist - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(m_1Coords, mCoords);
+						cDist = cDist + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(m_1Coords, nCoords);
 				}
 			}
-			if (distStore <= AbastecimientoState.maxDist) check = true;
+			if (cDist < AbastecimientoState.maxDist) check = true;
 		}
 		
 		if (check) {
@@ -336,8 +343,8 @@ public class AbastecimientoState {
 			asignaciones.get(c).set(p1.intValue(), a);
 			asignaciones.get(c).set(p.intValue(), b);
 			
-			distancias.set(c, AbastecimientoState.maxDist - distStore);
-			distTraveled = distStore;
+			distancias.set(c, AbastecimientoState.maxDist - cDist);
+			distTraveled = totalDistStore - cDistStore + cDist;
 
 			return false;
 		}
