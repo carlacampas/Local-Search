@@ -204,7 +204,7 @@ public class AbastecimientoState {
 		    	if (diasPendientes == 0) precioEnDepositos += 1.02;
 		    	else precioEnDepositos += ((100 - Math.pow(2, diasPendientes)) / 100);
 	    	}
-	    	else peticionesDesatendidas.remove(p.makeString());
+	    	peticionesDesatendidas.remove(p.makeString());
 	    	return true;
     	}
     	//System.out.println (distTraveled);
@@ -411,7 +411,7 @@ public class AbastecimientoState {
     	if (changeFirst) newD = calcularDistancia (cd, n) + calcularDistancia (n, s) + calcularDistancia (s, cd);
     	else newD = calcularDistancia (cd, f) + calcularDistancia (f, n) + calcularDistancia (n, cd);
     	
-    	return oldD - newD;
+    	return distancias.get(c) + oldD - newD;
     }
 
     public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){  
@@ -433,17 +433,14 @@ public class AbastecimientoState {
     	boolean firstPos = true;
     	
     	if (p%2 == 0) {
-    		if (p == asignaciones.get(c).size()-1) {
+    		if (p+1 == asignaciones.get(c).size()) {
     			Distribucion d = centrosDistribucion.get(c);
     	    	Pair <Integer, Integer> cd = new Pair <Integer, Integer> (d.getCoordX(), d.getCoordY());
     	    	
     			int oldDist = calcularDistancia (getCoordGas(f), cd)*2;
     			int newDist = calcularDistancia (getCoordGas(newP), cd)*2;
     			
-    			//System.out.println("old " + oldDist + " new " + newDist);
-    			
     			dist = distancias.get(c) + oldDist - newDist;
-    			//System.out.println("distancias + old - new " + dist);
     			if (dist > 0) {
     				distancias.set(c, dist);
     	    		asignaciones.get(c).set(p.intValue(), new Peticion (newP));
@@ -468,19 +465,18 @@ public class AbastecimientoState {
     	}
     	
     	dist = recalcDist (f, s, newP, c, firstPos);
-    	int d = distancias.get(c) + dist;
     	
-    	if (d > 0) {
-    		//System.out.println (d);
-    		distancias.set(c, d);
-    		asignaciones.get(c).set(p.intValue(), new Peticion (newP));
+    	if (dist > 0) {
     		precioEnDepositos = precioEnDepositos - removePrecioEnDespositos + addPrecioEnDepositos;
-    		distTraveled = distTraveled + (maxDist - distancias.get(c)) - dist;
+    		distTraveled = distTraveled - distancias.get(c) + dist;
     		
+    		distancias.set(c, dist);
+    		asignaciones.get(c).set(p.intValue(), new Peticion (newP));
+    		
+    		peticionesDesatendidas.remove(newP.makeString());
     		if (firstPos) peticionesDesatendidas.add(f.makeString());
     		else peticionesDesatendidas.add(s.makeString());
     		
-    		peticionesDesatendidas.remove(newP.makeString());
     		return true;
     	}
     	return false;

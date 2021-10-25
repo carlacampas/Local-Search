@@ -6,7 +6,6 @@ import aima.search.framework.Successor;
 import aima.search.framework.SuccessorFunction;
 
 public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
-
 	public boolean assignacionsContains (@SuppressWarnings("exports") ArrayList<ArrayList<Peticion>> assig, Pair <Integer, Integer> p) {
 		for (ArrayList <Peticion> a : assig) {
 			for (Peticion pet : a) {
@@ -27,7 +26,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	for (int i = 0; i < ncen; i++) {
     		int m = as.getAsignaciones().get(i).size();
     		
-    		/* asigna peticiones no asignadas -- FUNCIONA
+    		// asigna peticiones no asignadas -- FUNCIONA
     		for (String s : as.getPeticionesDesatendidas()) {
     			Pair <Integer, Integer> p = new Pair <Integer, Integer> ();
     			int a = Integer.parseInt(p.fromStringA(s));
@@ -43,17 +42,17 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
         			ret.add(new Successor (sb.toString(), newState));
 				}
 				
-				newState = new AbastecimientoState (as);
     			for (int l = 0; l < m; l++) {
+    				newState = new AbastecimientoState (as);
 					if (newState.cambioPeticionNoAsig (l, i, p)) {
         				StringBuffer sb = new StringBuffer ();
         				sb.append("cambio peticion no assig");
         				ret.add(new Successor (sb.toString(), newState));
 					}
 				}
-    		}*/
+    		}
 
-    		// mover paquetes dentro del camion
+    		/* mover paquetes dentro del camion
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -65,7 +64,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			}
     		}
 
-    		/* mover paquetes con los que ya estan asignados -- FUNCIONA
+    		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(i).size(); k++) {
     				for (int l = 0; l < as.getAsignaciones().get(j).size(); l++) {
