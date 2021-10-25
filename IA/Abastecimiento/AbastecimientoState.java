@@ -224,23 +224,19 @@ public class AbastecimientoState {
         int distc = distancias.get(c);
         int distc1 = distancias.get(c1);
         
-        asignaciones.get(c).set(p.intValue(), b);
-        asignaciones.get(c1).set(p1.intValue(), a);
-        
         int checkc = actualizaDistancia(p, b.get(), c);
         int checkc1 = actualizaDistancia(p1, a.get(), c1);
         
         if (checkc < 0 || checkc1 < 0) return false;
-        else {
-        	asignaciones.get(c).set(p.intValue(), b);
-        	asignaciones.get(c1).set(p1.intValue(), a);
+        
+        asignaciones.get(c).set(p.intValue(), b);
+        asignaciones.get(c1).set(p1.intValue(), a);
+        
+        distTraveled = distTraveled + (maxDist-distc) + (maxDist-distc1) - (maxDist - checkc) - (maxDist - checkc1);
         	
-        	distTraveled = distTraveled + (maxDist-distc) + (maxDist-distc1) - (maxDist - checkc) - (maxDist - checkc1);
-        	
-        	distancias.set(c, checkc);
-        	distancias.set(c1, checkc1);
-        	return true;
-        }
+        distancias.set(c, checkc);
+        distancias.set(c1, checkc1);
+        return true;
     }
     /*
     * Pre: Both p y p1 son peticiones asignadas al camión c
