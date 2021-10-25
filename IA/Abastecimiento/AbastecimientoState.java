@@ -249,7 +249,7 @@ public class AbastecimientoState {
 	public boolean intercambioOrden (Integer p, Integer p1, int c) {
 		
 		// Distancia recorrida actualmente por el camion c
-		int cDist = AbastecimientoState.maxDist - distancias.get(c);
+		int cDist = maxDist - distancias.get(c);
 		int cDistStore = cDist;
 		
 		// Distancia total recorrida por todos los camiones
