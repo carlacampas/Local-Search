@@ -346,9 +346,9 @@ public class AbastecimientoState {
 			distancias.set(c, AbastecimientoState.maxDist - cDist);
 			distTraveled = totalDistStore - cDistStore + cDist;
 
-			return false;
+			return true;
 		}
-		return true;
+		return false;
 	}
 
 
