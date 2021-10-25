@@ -246,58 +246,97 @@ public class AbastecimientoState {
     * Pre: Both p y p1 son peticiones asignadas al camión c
     * Post: El orden en que estaban asignadas p y p1 se invierte
     */
-	// TODO: Que funcioni quan hi hagi fins a 10 asignacions
 	public boolean intercambioOrden (Integer p, Integer p1, int c) {
-		int dist = distancias.get(c), distStore = distTraveled;
+		int distStore = distTraveled;
 		Peticion a = asignaciones.get(c).get(p.intValue());
 		Peticion b = asignaciones.get(c).get(p1.intValue());
 
 		boolean check = false;
-		int distAfterSwap = dist;
-		if (asignaciones.get(c).size() == 2) {
-			// Si el camión tiene dos asignaciones no hay cambios en las distancias recorridas,
-			// ya que hará el mismo recorrido en el sentido contrario.
+		
+		// Asignar a n el índice menor y a m el índice mayor
+		int n = 0, m = 0;
+		if (p < p1) { n = p; m = p1; }
+		else if (p1 > p) { n = p1; m = p; }
+		else return false;
+		
+		// Si las peticiones son contiguas y pertenecen al mismo viaje, no implican ningún cambio en la distancia recorrida,
+		// Ya que se hace el mismo viaje en el sentido contrario
+		if (m - n == 1 && n % 2 == 0) {
 			check = true;
 		} else {
-			// En este caso siempre habrá 3 asignaciones, dadas las restricciones del problema (5 viajes)
-			if (p + p1 == 1) {
-				// De forma análoga al caso con 2 peticiones, si las dos peticiones a intercambiar son
-				// las primeras en atender, solo cambia el sentido del recorrido antes de volver al centro
-				check = true;
-			} else {
-				// Obtener las coordenadas de las gasolineras que han hecho la petición, y las del centro al que pertenece el camión.
-				Gasolinera first = gasolineras.get(asignaciones.get(c).get(0).get().a);
-				Gasolinera second = gasolineras.get(asignaciones.get(c).get(1).get().a);
-				Gasolinera third = gasolineras.get(asignaciones.get(c).get(2).get().a);
-				Distribucion center = centrosDistribucion.get(c);
-				Pair<Integer, Integer> firstCoords = new Pair<Integer, Integer>(first.getCoordX(), first.getCoordY());
-				Pair<Integer, Integer> secondCoords = new Pair<Integer, Integer>(second.getCoordX(), second.getCoordY());
-				Pair<Integer, Integer> thirdCoords = new Pair<Integer, Integer>(third.getCoordX(), third.getCoordY());
-				Pair<Integer, Integer> centerCoords = new Pair<Integer, Integer>(center.getCoordX(), center.getCoordY());
+			// Obtener las coordenadas del centro y las gasolineras que han hecho las peticiones n y m
+			Gasolinera nGas = gasolineras.get(asignaciones.get(c).get(n).get().a);
+			Gasolinera mGas = gasolineras.get(asignaciones.get(c).get(m).get().a);
+			Distribucion center = centrosDistribucion.get(c);
+			
+			Pair<Integer, Integer> nCoords = new Pair<Integer, Integer>(nGas.getCoordX(), nGas.getCoordY());
+			Pair<Integer, Integer> mCoords = new Pair<Integer, Integer>(mGas.getCoordX(), mGas.getCoordY());
+			Pair<Integer, Integer> centerCoords = new Pair<Integer, Integer>(center.getCoordX(), center.getCoordY());
+			
+			// Obtener las coordenadas de la gasolinera visitada justo antes o después de m, dependiendo de la paridad de m.
+			Gasolinera m1Gas, m_1Gas;
+			Pair<Integer, Integer> m1Coords = null;		// Coordenadas de la gasolinera siguiente
+			Pair<Integer, Integer> m_1Coords = null;	// Coordenadas de la gasolinera anterior
+			boolean mEsUltimo = false;
+			if (m % 2 == 0) { // Recorrido: centro -> mGas -> m1Gas -> centro
+				// Obtener las coordenadas de la gasolinera que se visita después de m
+				if (m+1 < asignaciones.get(c).size()) { // Si no lo fuera entonces implicaría que m ya es la última de las asignaciones
+					m1Gas = gasolineras.get(asignaciones.get(c).get(m+1).get().a);
+					m1Coords = new Pair<Integer, Integer>(m1Gas.getCoordX(), m1Gas.getCoordY());
+				} else {
+					mEsUltimo = true;
+				}
+			} else { // Recorrido: centro -> m_1Gas -> mGas -> centro
+				// Obtener las coordenadas de la gasolinera que se visita antes de m
+				m_1Gas = gasolineras.get(asignaciones.get(c).get(m-1).get().a);
+				m_1Coords = new Pair<Integer, Integer>(m_1Gas.getCoordX(), m_1Gas.getCoordY());
+			}
+			
+			if (n % 2 == 0) { // Trayecto centro -> n -> n1 -> centro
+				// Obtener las coordenadas de la gasolinera visitada justo después de la gasolinera n (siempre habrá una porque n va antes
+				// de m en las asignaciones.
+				Gasolinera n1Gas = gasolineras.get(asignaciones.get(c).get(n+1).get().a);
+				Pair<Integer, Integer> n1Coords = new Pair<Integer, Integer>(n1Gas.getCoordX(), n1Gas.getCoordY());
 				
-				int add = calcularDistancia(firstCoords, secondCoords) + calcularDistancia(thirdCoords, centerCoords);
-				int substract = 0;
-				if (p + p1 == 2) {
-					// Cambiar la primera y la tercera petición
-					substract = calcularDistancia(firstCoords, thirdCoords) + calcularDistancia(centerCoords, secondCoords);
+				if (m % 2 == 0) { // Trayecto centro -> m -> m1 -> centro
+					if (mEsUltimo) {
+						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, centerCoords);
+						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, centerCoords);
+					} else {
+						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(mCoords, m1Coords);
+						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(nCoords, m1Coords);
+					}
+				} else { // Trayecto centro -> m_1 -> m -> centro
+						distStore = distStore - calcularDistancia(nCoords, n1Coords) - calcularDistancia(m_1Coords, mCoords);
+						distStore = distStore + calcularDistancia(mCoords, n1Coords) + calcularDistancia(m_1Coords, nCoords);
 				}
-				if (p + p1 == 3) {
-					// Cambiar la segunda y la tercera petición
-					substract = calcularDistancia(thirdCoords, secondCoords) + calcularDistancia(firstCoords, centerCoords);
-				}
-				distAfterSwap += add - substract;
-				if (distAfterSwap > 0) {
-					check = true;
-					distStore = distStore - (distAfterSwap - dist);
+			} else { // Trayecto centro -> n_1 -> n -> centro
+				// Obtener las coordenadas de la gasolinera que se visita antes de n
+				Gasolinera n_1Gas = gasolineras.get(asignaciones.get(c).get(n-1).get().a);
+				Pair<Integer, Integer> n_1Coords = new Pair<Integer, Integer>(n_1Gas.getCoordX(), n_1Gas.getCoordY());
+				
+				if (m % 2 == 0) { // Trayecto centro -> m -> m1 -> centro
+					if (mEsUltimo) {
+						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, centerCoords);
+						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, centerCoords);
+					} else {
+						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(mCoords, m1Coords);
+						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(nCoords, m1Coords);
+					}
+				} else { // Trayecto centro -> m_1 -> m -> centro
+						distStore = distStore - calcularDistancia(n_1Coords, nCoords) - calcularDistancia(m_1Coords, mCoords);
+						distStore = distStore + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(m_1Coords, nCoords);
 				}
 			}
+			if (distStore <= AbastecimientoState.maxDist) check = true;
 		}
+		
 		if (check) {
 			
 			asignaciones.get(c).set(p1.intValue(), a);
 			asignaciones.get(c).set(p.intValue(), b);
 			
-			distancias.set(c, distAfterSwap);
+			distancias.set(c, AbastecimientoState.maxDist - distStore);
 			distTraveled = distStore;
 
 			return false;
