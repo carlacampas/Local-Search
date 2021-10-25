@@ -335,7 +335,7 @@ public class AbastecimientoState {
 						cDist = cDist + calcularDistancia(n_1Coords, mCoords) + calcularDistancia(m_1Coords, nCoords);
 				}
 			}
-			if (cDist < AbastecimientoState.maxDist) check = true;
+			if (cDist <= AbastecimientoState.maxDist) check = true;
 		}
 		
 		if (check) {
