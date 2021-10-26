@@ -44,6 +44,7 @@ public class Main {
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
+			System.out.println();
 			newState.print_state();
 			line();
 			time = System.currentTimeMillis() - time;
