@@ -26,7 +26,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     	for (int i = 0; i < ncen; i++) {
     		int m = as.getAsignaciones().get(i).size();
     		
-    		/* asigna peticiones no asignadas -- FUNCIONA
+    		// asigna peticiones no asignadas -- FUNCIONA
     		for (String s : as.getPeticionesDesatendidas()) {
     			Pair <Integer, Integer> p = new Pair <Integer, Integer> ();
     			int a = Integer.parseInt(p.fromStringA(s));
@@ -62,7 +62,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	    				ret.add(new Successor (s.toString(), newState));
     				}
     			}
-    		}*/
+    		}
 
     		// mover paquetes con los que ya estan asignados -- FUNCIONA
     		for (int j = i + 1; j < ncen; j++) {
@@ -78,7 +78,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     			}
     		}
 
-    		/*cambia peticiones
+    		// cambia peticiones
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -89,7 +89,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
         				ret.add(suc);
     				}
     			}
-    		}*/
+    		}
     	}
 
         return ret;

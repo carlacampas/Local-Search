@@ -5,6 +5,7 @@ import java.util.*;
 import IA.Gasolina.CentrosDistribucion;
 import IA.Gasolina.Gasolinera;
 import IA.Gasolina.Gasolineras;
+import IA.Gasolina.Distribucion;
 
 import aima.search.framework.Problem;
 import aima.search.framework.Search;
@@ -234,8 +235,21 @@ public class Main {
     		switch (cmd) {
     			case "run":
     				Gasolineras gasolineras = new Gasolineras (ngas, seed);
+    				
+    				int i = 0;
+    				for (Gasolinera g : gasolineras) {
+    					System.out.println (i + ": " + "(" + g.getCoordX() + "," + g.getCoordY() + ")");
+    					i++;
+    				}
+    				
+    				i = 0;
     		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
-    		  
+    		    	for (Distribucion d : centrosDistrbucion) {
+    					System.out.println (i + ": " + "(" + d.getCoordX() + "," + d.getCoordY() + ")");
+    					i++;
+    				}
+    		    	
+    		    	
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
     		    	
     		    	switch (initialSolution) {
