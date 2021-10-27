@@ -19,7 +19,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
     	AbastecimientoState nextState = new AbastecimientoState (currentState);
     	
     	s = new StringBuffer ();
-    	this.max = 5;
+    	this.max = 4;
     	
     	int numIter = 0;
     	
@@ -61,7 +61,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 	    	    	b = nextState.asignaPeticion(alCamion, x, true);
 		    		if (b) {
 		    			s.append("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
-		    			System.out.println ("asign petition, truck " + alCamion + " petition (" + x.geta() + "," + x.getb() + ")");
+		    			saSucesores.add(new Successor (s.toString(), nextState));
 		    			return saSucesores;
 		    		}
 				}
@@ -83,7 +83,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 		    	    																					
 			    		if (b) {
 			    			s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	
-			    			System.out.println ("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);
+			    			saSucesores.add(new Successor (s.toString(), nextState));
 			    			return saSucesores;
 			    		}
 					}
@@ -103,7 +103,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 						b = nextState.intercambioOrden(alPn1, alPn2, alCamion);
 						if (b) {
 							s.append("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
-							System.out.println ("swap petition order, truck " + alCamion + " petition " + alPn1 + " with petition " + alPn2);
+							saSucesores.add(new Successor (s.toString(), nextState));
 							return saSucesores;
 						}
 					}
@@ -112,7 +112,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 						
 				break;
 				
-			case 3:														//Modificamos el estado mediante cambiaPeticion	
+			/*case 3:														//Modificamos el estado mediante cambiaPeticion	
 	    		alCamion1 = rand.nextInt(nCamiones);
 	    		alCamion2 = rand.nextInt(nCamiones);
 					
@@ -131,9 +131,9 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 					}
 					
 				}
-				break;
+				break;*/
 			 		
-			case 4:														//Modificamos el estado mediante cambioPeticionNoAsig
+			case 3:														//Modificamos el estado mediante cambioPeticionNoAsig
 				alCamion = rand.nextInt(nCamiones);
 				
 				sizeC = nextState.getAsignaciones().get(alCamion).size();
@@ -165,7 +165,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 				b = (next.cambioPeticionNoAsig(alPnCamion, alCamion, x));
 				if (b) {
 					s.append("cambio peticion no assig"); //s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion); 
-					System.out.println ("cambio peticion no assig"); //s.append("changed petition " + alPnCamion + " with non assigned petition " + alPeticionNoAsig + "in truck " + alCamion);
+					saSucesores.add(new Successor (s.toString(), nextState));
 					return saSucesores;
 				}
 	
