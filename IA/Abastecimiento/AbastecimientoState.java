@@ -107,6 +107,16 @@ public class AbastecimientoState {
     public Set <String> getPeticionesDesatendidas () {
     	return this.peticionesDesatendidas;
     }
+    
+    // Funcion auxiliar para los experimentos
+    public double calcularPorcentajePetDesatendidas() {
+    	double atendidas = 0;
+    	for (ArrayList<Peticion> c : asignaciones) {
+    		atendidas += c.size();
+    	}
+    	double desatendidas = peticionesDesatendidas.size();
+    	return 100 * desatendidas / (atendidas + desatendidas);
+    }
 
     // OPERADORS.
     // Las peticiones seran identificadas asi: Pair <Integer, Integer> p = (id peticion, id gasolinera)

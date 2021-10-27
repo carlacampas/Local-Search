@@ -79,6 +79,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     		}
 
     		// cambia peticiones
+    		/*
     		for (int j = i + 1; j < ncen; j++) {
     			for (int k = 0; k < as.getAsignaciones().get(j).size(); k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);
@@ -90,6 +91,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
     				}
     			}
     		}
+    		*/
     	}
 
         return ret;
