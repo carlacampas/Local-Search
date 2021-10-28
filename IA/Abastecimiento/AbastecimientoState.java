@@ -387,9 +387,8 @@ public class AbastecimientoState {
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
     public void generateInitialSolution2 () {
-    	Set <String> used = new HashSet <String> ();
     	Set <String> coordVisited = new HashSet <String> ();
-
+    	
     	int n = centrosDistribucion.size();
     	for (int i=0; i<n; i++) {
     		Distribucion cd = centrosDistribucion.get(i);
@@ -410,7 +409,7 @@ public class AbastecimientoState {
     		boolean add = true;
 	    	for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
 	    		for (Pair <Integer, Integer> p : v) {
-	    			if (!used.contains(p.makeString()) && asignaPeticion(pos.get(j), p, true)) used.add(p.makeString());
+	    			if (peticionesDesatendidas.contains(p.makeString())) asignaPeticion(pos.get(j), p, true);
 
 	    			j = add ? j + 1 : j - 1;
 	    			

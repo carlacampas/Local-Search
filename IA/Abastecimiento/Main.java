@@ -235,6 +235,19 @@ public class Main {
     	
     	boolean executed = false;
     	
+    	/*int[] seedArr = {1234, 4352, 23, 5, 345890, 3241, 873, 4357, 99, 700};
+    	
+    	for (int s : seedArr) {
+    		System.out.println ("SEED " + s);
+    		seed = s;
+    		Gasolineras gasolineras = new Gasolineras (ngas, seed);
+	    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
+	    	
+	    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
+	    	as.generateInitialSolution2();
+	    	AbastecimientoHillClimbingHeuristic1(as);
+    	}*/
+    	
     	while (!executed) {
     		while (!sc.hasNext());
     		String cmd = sc.next(); 
@@ -243,20 +256,7 @@ public class Main {
     		switch (cmd) {
     			case "run":
     				Gasolineras gasolineras = new Gasolineras (ngas, seed);
-    				
-    				int i = 0;
-    				for (Gasolinera g : gasolineras) {
-    					System.out.println (i + ": " + "(" + g.getCoordX() + "," + g.getCoordY() + ")");
-    					i++;
-    				}
-    				
-    				i = 0;
     		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
-    		    	for (Distribucion d : centrosDistrbucion) {
-    					System.out.println (i + ": " + "(" + d.getCoordX() + "," + d.getCoordY() + ")");
-    					i++;
-    				}
-    		    	
     		    	
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
     		    	
