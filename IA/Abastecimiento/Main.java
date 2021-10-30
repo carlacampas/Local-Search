@@ -58,7 +58,7 @@ public class Main {
 			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			line();
@@ -113,7 +113,7 @@ public class Main {
 			state.print_state();
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(300000, 10, 125, 0.0001);
+			Search search = new SimulatedAnnealingSearch(150000, 10, 125, 0.001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -122,11 +122,10 @@ public class Main {
 			//newState.print_state();
 			printInstrumentation(agent.getInstrumentation());
 			line();
-			
 			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
@@ -235,6 +234,23 @@ public class Main {
     	
     	boolean executed = false;
     	
+<<<<<<< Updated upstream
+=======
+    	int[] seedArr = {1234, 4352, 23, 5, 345890, 3241, 873, 4357, 99, 700};
+    	
+    	for (int s : seedArr) {
+    		System.out.println ("SEED " + s);
+    		seed = s;
+    		Gasolineras gasolineras = new Gasolineras (ngas, seed);
+	    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
+	    	
+	    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
+	    	as.generateInitialSolution2();
+	    	AbastecimientoHillClimbingHeuristic1(as);
+	    	//AbastecimientoSimulatedAnnealingHeuristic1(as);
+    	}
+    	
+>>>>>>> Stashed changes
     	while (!executed) {
     		while (!sc.hasNext());
     		String cmd = sc.next(); 
