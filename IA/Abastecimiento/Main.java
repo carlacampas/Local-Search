@@ -58,7 +58,7 @@ public class Main {
 			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + (int) newState.getBenefit());
+			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			line();
@@ -113,7 +113,7 @@ public class Main {
 			state.print_state();
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(150000, 10, 125, 0.001);
+			Search search = new SimulatedAnnealingSearch(150000, 10, 100, 0.00001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -122,10 +122,11 @@ public class Main {
 			//newState.print_state();
 			printInstrumentation(agent.getInstrumentation());
 			line();
+			
 			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + (int) newState.getBenefit());
+			System.out.println ("solution benefit " + newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
@@ -223,6 +224,7 @@ public class Main {
     	// valores para experimentar
     	int costeKm = 2;
     	int horasTrabajo = 8;
+    	int valorDeposito = 1000;
     	
     	boolean hillClibming = true;
     	int initialSolution = 0;
@@ -234,8 +236,6 @@ public class Main {
     	
     	boolean executed = false;
     	
-<<<<<<< Updated upstream
-=======
     	int[] seedArr = {1234, 4352, 23, 5, 345890, 3241, 873, 4357, 99, 700};
     	
     	for (int s : seedArr) {
@@ -245,12 +245,10 @@ public class Main {
 	    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
 	    	
 	    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
-	    	as.generateInitialSolution2();
-	    	AbastecimientoHillClimbingHeuristic1(as);
-	    	//AbastecimientoSimulatedAnnealingHeuristic1(as);
+	    	as.generateInitialSolution1();
+	    	AbastecimientoHillClimbingHeuristic2(as);
     	}
     	
->>>>>>> Stashed changes
     	while (!executed) {
     		while (!sc.hasNext());
     		String cmd = sc.next(); 
@@ -259,22 +257,12 @@ public class Main {
     		switch (cmd) {
     			case "run":
     				Gasolineras gasolineras = new Gasolineras (ngas, seed);
-    				
-    				int i = 0;
-    				for (Gasolinera g : gasolineras) {
-    					System.out.println (i + ": " + "(" + g.getCoordX() + "," + g.getCoordY() + ")");
-    					i++;
-    				}
-    				
-    				i = 0;
     		    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
-    		    	for (Distribucion d : centrosDistrbucion) {
-    					System.out.println (i + ": " + "(" + d.getCoordX() + "," + d.getCoordY() + ")");
-    					i++;
-    				}
-    		    	
     		    	
     		    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
+    		    	as.setMaxDist(horasTrabajo*80);
+    		    	as.setCosteKilometro(costeKm);
+    		    	as.setValorDeposito(valorDeposito);
     		    	
     		    	switch (initialSolution) {
     		    		case 0:

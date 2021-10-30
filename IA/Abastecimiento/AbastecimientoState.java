@@ -10,8 +10,10 @@ import IA.Gasolina.Gasolinera;
 
 public class AbastecimientoState {
     // ATRIBUTOS.
-    final static int maxDist = 640;
-
+    static int maxDist;
+    static int costeKilometro;
+    static int valorDeposito;
+    
     Gasolineras gasolineras;
     CentrosDistribucion centrosDistribucion;
     
@@ -30,6 +32,9 @@ public class AbastecimientoState {
         this.centrosDistribucion = centrosDistribucion;
         this.distTraveled = 0;
         this.precioEnDepositos = 0.0;
+        AbastecimientoState.maxDist = 960;
+        AbastecimientoState.valorDeposito = 1000;
+        AbastecimientoState.costeKilometro = 2;
 
         this.peticionesDesatendidas = new HashSet <> ();
         this.asignaciones = new ArrayList <> (centrosDistribucion.size());
@@ -86,6 +91,18 @@ public class AbastecimientoState {
     public void setPrecioEnDepositos (int precioEnDepositos) {
     	this.precioEnDepositos = precioEnDepositos;
     }
+    
+    public void setMaxDist (int maxDist) {
+    	this.maxDist = maxDist;
+    }
+    
+    public void setCosteKilometro (int costeKilometro) {
+    	AbastecimientoState.costeKilometro = costeKilometro;
+    }
+    
+    public void setValorDeposito (int valorDeposito) {
+    	AbastecimientoState.valorDeposito = valorDeposito;
+    }
 
     // GETTERS.
     public ArrayList<ArrayList<Peticion>> getAsignaciones() {
@@ -106,6 +123,14 @@ public class AbastecimientoState {
     
     public Set <String> getPeticionesDesatendidas () {
     	return this.peticionesDesatendidas;
+    }
+    
+    public double getBenefit (){
+    	return (valorDeposito * precioEnDepositos - costeKilometro * distTraveled);
+    }
+    
+    public int getValorDeposito () {
+    	return this.valorDeposito;
     }
 
     // OPERADORS.
@@ -311,10 +336,6 @@ public class AbastecimientoState {
         return false;
     }
     
-    public Pair <Integer, Integer> getCoordGas (Pair <Integer, Integer> p){
-    	return new Pair <Integer, Integer> (gasolineras.get(p.a.intValue()).getCoordX(), gasolineras.get(p.a.intValue()).getCoordY());
-    }
-    
     public boolean cambioPeticionNoAsig(Integer p, int c, Pair <Integer, Integer> newP){  
         int distc = distancias.get(c);
         int checkc = actualizaDistancia(p, newP, c);
@@ -387,9 +408,8 @@ public class AbastecimientoState {
     // Genera solució inicial repartint paquets equitativament entre tots els camions amb ponderacions dels costos i
     // beneficis. Posar maxim x paquets en els diferents camions equitativament.
     public void generateInitialSolution2 () {
-    	Set <String> used = new HashSet <String> ();
     	Set <String> coordVisited = new HashSet <String> ();
-
+    	
     	int n = centrosDistribucion.size();
     	for (int i=0; i<n; i++) {
     		Distribucion cd = centrosDistribucion.get(i);
@@ -410,7 +430,7 @@ public class AbastecimientoState {
     		boolean add = true;
 	    	for (ArrayList<Pair<Integer, Integer>> v : pOrg.values()) {
 	    		for (Pair <Integer, Integer> p : v) {
-	    			if (!used.contains(p.makeString()) && asignaPeticion(pos.get(j), p, true)) used.add(p.makeString());
+	    			if (peticionesDesatendidas.contains(p.makeString())) asignaPeticion(pos.get(j), p, true);
 
 	    			j = add ? j + 1 : j - 1;
 	    			
@@ -421,18 +441,13 @@ public class AbastecimientoState {
     	}
     }
     
-    public double getBenefit (){
-    	AbastecimientoHeuristicFunction1 ah = new AbastecimientoHeuristicFunction1 ();
-    	return ah.computeProfits(this);
-    }
-    
     public void print_state () {
     	int total_dist = 0;
     	int petitions = 0;
     	for (int i=0; i<asignaciones.size(); i++) {
         	ArrayList <Peticion> assigs = asignaciones.get(i);
         	System.out.println ("(" + i + ") --> " + distancias.get(i) + ": ");
-        	total_dist += (640-distancias.get(i));
+        	total_dist += (maxDist-distancias.get(i));
 	        for (Peticion p : assigs) {
 	        	petitions++;
 	        	System.out.print ("(" + p.get().a + "," + p.get().b + ")");
