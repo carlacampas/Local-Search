@@ -52,7 +52,7 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 				}
     		}
 
-    		// mover paquetes dentro del camion
+    		//mover paquetes dentro del camion
     		for (int j = 0; j < m; j++) {
     			for (int k = j+1; k < m; k++) {
     				AbastecimientoState newState = new AbastecimientoState (as);

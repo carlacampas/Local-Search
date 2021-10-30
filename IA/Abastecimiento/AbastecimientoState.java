@@ -32,7 +32,7 @@ public class AbastecimientoState {
         this.centrosDistribucion = centrosDistribucion;
         this.distTraveled = 0;
         this.precioEnDepositos = 0.0;
-        AbastecimientoState.maxDist = 960;
+        AbastecimientoState.maxDist = 640;
         AbastecimientoState.valorDeposito = 1000;
         AbastecimientoState.costeKilometro = 2;
 

@@ -236,19 +236,6 @@ public class Main {
     	
     	boolean executed = false;
     	
-    	int[] seedArr = {1234, 4352, 23, 5, 345890, 3241, 873, 4357, 99, 700};
-    	
-    	for (int s : seedArr) {
-    		System.out.println ("SEED " + s);
-    		seed = s;
-    		Gasolineras gasolineras = new Gasolineras (ngas, seed);
-	    	CentrosDistribucion centrosDistrbucion = new CentrosDistribucion (ncen, mult, seed);
-	    	
-	    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
-	    	as.generateInitialSolution1();
-	    	AbastecimientoHillClimbingHeuristic2(as);
-    	}
-    	
     	while (!executed) {
     		while (!sc.hasNext());
     		String cmd = sc.next(); 
