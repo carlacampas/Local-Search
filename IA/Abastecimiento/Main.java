@@ -102,14 +102,14 @@ public class Main {
 		}
 	}
 	
-	public static void AbastecimientoSimulatedAnnealingHeuristic1 (AbastecimientoState state) {
+	public static void AbastecimientoSimulatedAnnealingHeuristic1 (AbastecimientoState state, int steps, int k, int stiter, double lambda) {
 		System.out.println ("Solution using Simulated Annealing + Heuristic 1");
 		try {
 			printInitialState(state);
 			
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(150000, 10, 100, 0.00001);
+			Search search = new SimulatedAnnealingSearch(steps, stiter, k, lambda);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -123,14 +123,14 @@ public class Main {
 		}
 	}
 	
-	public static void AbastecimientoSimulatedAnnealingHeuristic2 (AbastecimientoState state) {
+	public static void AbastecimientoSimulatedAnnealingHeuristic2 (AbastecimientoState state, int steps, int k, int stiter, double lambda) {
 		System.out.println ("Abastecimiento Simulated Annealing Heuristic 2");
 		try {
 			printInitialState(state);
 			
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction2());
-			Search search = new SimulatedAnnealingSearch(300000, 10, 5, 0.01);
+			Search search = new SimulatedAnnealingSearch(steps, stiter, k, lambda);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -161,6 +161,10 @@ public class Main {
 		System.out.println ("inicial    --  cambiar solucion inicial (0 - randomizada, 1 - ponderada");
 		System.out.println ("heuristica --	cambiar heuristica (0 - penalización 2^x, 1 - penalización 4^x)");
 		System.out.println ("seed       --  cambiar la semilla aleatoria");
+		System.out.println ("steps      --  cambiar steps para algoritmo sa");
+		System.out.println ("stiter     --  cambiar stiter para algoritmo sa");
+		System.out.println ("k          --  cambiar k para algoritmo sa");
+		System.out.println ("lambda     --  cambiar lambda para algoritmo sa");
 		System.out.println ("print      --  ver opciones escogidas");
 		System.out.println ("opts       --  ver opciones");
 		line();
@@ -168,7 +172,7 @@ public class Main {
 	}
 	
 	public static void init (int ngas, int ncen, int mult, boolean ini, boolean heur, int estIni, int seed,
-			int horas, int costeKm) {
+			int horas, int costeKm, int steps, int k, int stiter, double lambda) {
 		line();
 		System.out.println("VALORES POR DEFECTO: ");
 		System.out.println();
@@ -191,6 +195,11 @@ public class Main {
 		System.out.println ("horas de trabajo: " + horas + " (camiones siempre van a 80km/h");
 		System.out.println ("coste de viajar un kilómetro: " + costeKm);
 		
+		System.out.println ("steps del algoritmo sa: " + steps);
+		System.out.println ("k del algoritmo sa: " + k);
+		System.out.println ("stiter del algoritmo sa: " + stiter);
+		System.out.println ("lambda del algoritmo sa: " + lambda);
+		
 		line();
 	}
 	
@@ -204,10 +213,14 @@ public class Main {
     	int horasTrabajo 		= 8;
     	int valorDeposito 		= 1000;
     	int initialSolution 	= 0;
+    	int steps				= 150000;
+    	int k					= 125;
+    	int stiter				= 10;
+    	double lambda			= 0.0001;
     	boolean firstHeuristic 	= true;
     	boolean hillClibming 	= true;
 
-    	init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed, horasTrabajo, costeKm);
+    	init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed, horasTrabajo, costeKm, steps, k, stiter, lambda);
     	opts();
     	
     	Scanner sc = new Scanner(System.in);
@@ -240,8 +253,8 @@ public class Main {
     		    	
     		    	if 		( hillClibming &&  firstHeuristic)	AbastecimientoHillClimbingHeuristic1(as);
     		    	else if ( hillClibming && !firstHeuristic)	AbastecimientoHillClimbingHeuristic2(as);
-    		    	else if (!hillClibming &&  firstHeuristic)	AbastecimientoSimulatedAnnealingHeuristic1(as);
-    		    	else if (!hillClibming && !firstHeuristic)	AbastecimientoSimulatedAnnealingHeuristic2(as);
+    		    	else if (!hillClibming &&  firstHeuristic)	AbastecimientoSimulatedAnnealingHeuristic1(as, steps, k, stiter, lambda);
+    		    	else if (!hillClibming && !firstHeuristic)	AbastecimientoSimulatedAnnealingHeuristic2(as, steps, k, stiter, lambda);
     		    	
     		    	executed = true;
     				break;
@@ -260,6 +273,22 @@ public class Main {
     				
     			case "costekm":
     				costeKm = sc.nextInt();
+    				break;
+    				
+    			case "steps":
+    				steps = sc.nextInt();
+    				break;
+    				
+    			case "stiter":
+    				stiter = sc.nextInt();
+    				break;
+    				
+    			case "k":
+    				k = sc.nextInt();
+    				break;
+    				
+    			case "lambda":
+    				lambda = sc.nextDouble();
     				break;
     				
     			case "horas":
@@ -316,7 +345,7 @@ public class Main {
     				break;
     				
     			case "print":
-    				init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed, horasTrabajo, costeKm);
+    				init(ngas, ncen, mult, hillClibming, firstHeuristic, initialSolution, seed, horasTrabajo, costeKm, steps, k, stiter, lambda);
     				break;
     				
     			case "opts":

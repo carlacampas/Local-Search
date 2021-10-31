@@ -28,17 +28,19 @@ public class AbastecimientoState {
     public AbastecimientoState () {}
     
     public AbastecimientoState (Gasolineras gasolineras, CentrosDistribucion centrosDistribucion){
-        this.gasolineras = gasolineras;
+        this.gasolineras		 = gasolineras;
         this.centrosDistribucion = centrosDistribucion;
-        this.distTraveled = 0;
-        this.precioEnDepositos = 0.0;
-        AbastecimientoState.maxDist = 640;
-        AbastecimientoState.valorDeposito = 1000;
-        AbastecimientoState.costeKilometro = 2;
+        
+        this.distTraveled 		= 0;
+        this.precioEnDepositos 	= 0.0;
+        
+        AbastecimientoState.maxDist 		= 640;
+        AbastecimientoState.valorDeposito 	= 1000;
+        AbastecimientoState.costeKilometro 	= 2;
 
         this.peticionesDesatendidas = new HashSet <> ();
-        this.asignaciones = new ArrayList <> (centrosDistribucion.size());
-        this.distancias = new ArrayList <> (centrosDistribucion.size());
+        this.asignaciones 			= new ArrayList <> (centrosDistribucion.size());
+        this.distancias 			= new ArrayList <> (centrosDistribucion.size());
 
         for (int i=0; i<centrosDistribucion.size(); i++){
             this.distancias.add(maxDist);
@@ -157,8 +159,6 @@ public class AbastecimientoState {
 	    		int prevD = calcularDistancia (coord1, coord2);
 	    		int newD = prevD + calcularDistancia (coord2, coord3) + calcularDistancia (coord3, coord1);
 	    		
-	    		int dCheck = distancias.get(c) + prevD*2 - newD;
-	    		if (dCheck > maxDist) System.out.println ("WROOONG " + dCheck + " new " + newD + " prevD " + prevD);
 	    		return distancias.get(c) + prevD*2 - newD;
 	    	}
 		}
@@ -191,7 +191,7 @@ public class AbastecimientoState {
 
             int dcToMidC = calcularDistancia(dCoord, midCoord);
 
-            int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; //dcToMidC + calcularDistancia(midCoord, oldCoord) + dcToOldC;
+            int dOld = dcToOldC + calcularDistancia(midCoord, oldCoord) + dcToMidC; 
             int dNew = dcToNewC + calcularDistancia(midCoord, newCoord) + dcToMidC;
 
             return distancias.get(c) + dOld - dNew;
@@ -232,7 +232,6 @@ public class AbastecimientoState {
 	    	peticionesDesatendidas.remove(p.makeString());
 	    	return true;
     	}
-    	//System.out.println (distTraveled);
     	return false;
 	}
 
@@ -326,8 +325,6 @@ public class AbastecimientoState {
 
     	Peticion a = asignaciones.get(c).get(p.intValue()); 
     	if (asignaPeticion(c1, a.get(), false)) {
-    		//System.out.println (distancias.get(c1));
-    		
     		asignaciones.get(c).remove(p.intValue());
     		
     		renewDistances(c);
