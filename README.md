@@ -1,5 +1,5 @@
  # Busqueda Local: 
-   Ruta de Camiones para Llenar Peticiones: mínimiza tiempo y peticiones desatendidas, maximiza beneficio
+   Ruta de Camiones para atender a peticiones: mínimiza tiempo y peticiones desatendidas, maximiza beneficio
 
 DOCUMENTACIÓN (./DOCUMENTACIÓ):
 - enunciado.pdf
