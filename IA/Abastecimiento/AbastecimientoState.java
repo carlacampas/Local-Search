@@ -455,11 +455,5 @@ public class AbastecimientoState {
 	        System.out.println();
     	}
     	System.out.println ("Total distance " + total_dist);
-    	
-    	for (String s : peticionesDesatendidas) {
-    		System.out.print(s + ", ");
-    	}
-    	System.out.println();
-    	System.out.println ("num petitions " + petitions);
     }
 }

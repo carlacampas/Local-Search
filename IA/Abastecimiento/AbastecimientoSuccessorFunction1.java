@@ -16,7 +16,6 @@ public class AbastecimientoSuccessorFunction1 implements SuccessorFunction{
 	}
 
     public List getSuccessors (Object state) {
-    	System.out.print ("-");
     	ArrayList <Successor> ret = new ArrayList<>();
     	AbastecimientoState as = new AbastecimientoState ((AbastecimientoState) state);
 
