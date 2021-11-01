@@ -20,7 +20,7 @@
 En cuanto se ejecuta el programa aparece el siguiente mensaje:
 
 VALORES POR DEFECTO: 
-     número gasolineras: 100  
+número gasolineras: 100  
      número centros de distribucion: 10  
      multiplicidad (camiones por centro distribucion): 1  
      algoritmo de busqueda: hill climbing  
@@ -54,8 +54,8 @@ OPCIONES:
 
 Para cambiar los valores se escribe el nombre de lo que quieres cambiar y el valor. Para ejecutar, escribe el comando run. 
 
-_EJEMPLOS:_
-ngas 5 ncen 2 mult 2 run
-algo sa costekm 3 run
+_EJEMPLOS:_  
+ngas 5 ncen 2 mult 2 run  
+algo sa costekm 3 run  
 
 En caso de necesitar ver los valores definidos usar el comando _print_ y en caso de necesitar ver las opciones disponibles usar el comando _opts_.
