@@ -19,15 +19,11 @@
 **PARA PROBAR DIFERENTES VALORES**
 En cuanto se ejecuta el programa aparece el siguiente mensaje:
 
-**VALORES POR DEFECTO**
-número de gasolineras: 100
-
-
 VALORES POR DEFECTO: 
-número gasolineras: 100
-número centros de distribucion: 10
-multiplicidad (camiones por centro distribucion): 1
-algoritmo de busqueda: hill climbing
+número gasolineras: 100  
+número centros de distribucion: 10  
+multiplicidad (camiones por centro distribucion): 1  
+algoritmo de busqueda: hill climbing  
 heuristica: 1
 estado inicial: randomizado
 seed 1234
