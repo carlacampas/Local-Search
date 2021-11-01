@@ -13,4 +13,5 @@
 - AbastecimientoSuccessorFunction2.java: funcion sucesora del algoritmo simulated annealing
 
 **COMO EJECUTAR:**
-
+- Ir hasta directorio Busqueda-Local y ejecutar (en terminal): _./script.sh_
+- Ir hasta directorio Busqueda-Local y ejecutar (en terminal): _java -jar Abastecimiento.jar_
