@@ -1,12 +1,12 @@
- # Busqueda Local: 
-   Ruta de Camiones para atender a peticiones: mínimiza tiempo y peticiones desatendidas, maximiza beneficio
+ # Búsqueda Local: 
+   Ruta de Camiones para atender a peticiones: minimiza tiempo y peticiones desatendidas, maximiza beneficio
 
 **DOCUMENTACIÓN (./DOCUMENTACIÓ):**
 - enunciado.pdf
 - documentacion_practica.pdf [NUESTRA DOCUMENTACIÓN]
 
 **CÓDIGO FUENTE (./src/IA/Abastecimiento):**
-- AbastecimientoState.java: operdaores, solución inicial
+- AbastecimientoState.java: operadores, solución inicial
 - AbastecimientoHeuristica1.java: pondera las peticiones no atendidas con exponencial 2
 - AbastecimientoHeuristica2.java: pondera las peticiones no atendidas con exponencial 4
 - AbastecimientoSuccessorFunction1.java: funcion sucesora del algoritmo hill climbing
@@ -21,9 +21,9 @@ En cuanto se ejecuta el programa aparece el siguiente mensaje:
 
 VALORES POR DEFECTO: 
 número gasolineras: 100  
-     número centros de distribucion: 10  
-     multiplicidad (camiones por centro distribucion): 1  
-     algoritmo de busqueda: hill climbing  
+     número centros de distribución: 10  
+     multiplicidad (camiones por centro distribución): 1  
+     algoritmo de búsqueda: hill climbing  
      heuristica: 1  
      estado inicial: randomizado  
      seed 1234  
