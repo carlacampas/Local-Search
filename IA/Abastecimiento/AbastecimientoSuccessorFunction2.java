@@ -79,7 +79,7 @@ public class AbastecimientoSuccessorFunction2 implements SuccessorFunction{
 						alPn1 =  rand.nextInt(sizeC);
 						alPn2  = rand.nextInt(sizeC1);
 	
-			    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			//Aqui probablemente haga falta controlar muchisimas cosas, intercambiaPeticion puede fallar por TODO :)
+			    		b = nextState.intercambiaPeticiones(alPn1, alPn2, alCamion1, alCamion2);			
 		    	    																					
 			    		if (b) {
 			    			s.append("swap petition, truck " + alCamion1 + " petition " + alPn1 + " with petition in truck " + alCamion2 + " petition " + alPn2);	

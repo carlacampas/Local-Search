@@ -315,9 +315,8 @@ public class AbastecimientoState {
 
     /*
      * Pre: La petición p estaba asignada al camion c
-     * Post: La petición p deja de estar asignada al camion c y pas+
-     * 
-     * a a formar parte de las asignaciones de c1
+     * Post: La petición p deja de estar asignada al camion c y pasa
+     * a formar parte de las asignaciones de c1
      * */
 
     public boolean cambiaPeticion (Integer p, int c, int c1) {
