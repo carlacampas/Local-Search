@@ -58,7 +58,7 @@ public class Main {
 			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			line();
@@ -93,7 +93,7 @@ public class Main {
 			
 			line();
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			line();
@@ -113,7 +113,7 @@ public class Main {
 			state.print_state();
 			long time = System.currentTimeMillis();
 			Problem problem = new Problem (state, new AbastecimientoSuccessorFunction2(), new AbastecimientoGoalTest(), new AbastecimientoHeuristicFunction1());
-			Search search = new SimulatedAnnealingSearch(150000, 10, 100, 0.00001);
+			Search search = new SimulatedAnnealingSearch(150000, 10, 125, 0.0001);
 			SearchAgent agent = new SearchAgent (problem, search);
 			
 			AbastecimientoState newState = (AbastecimientoState) search.getGoalState();
@@ -126,7 +126,7 @@ public class Main {
 			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
@@ -158,7 +158,7 @@ public class Main {
 			System.out.println ("SOLUTION STATS: ");
 			
 			System.out.println ("time to generate solution " + time + " ms");
-			System.out.println ("solution benefit " + newState.getBenefit());
+			System.out.println ("solution benefit " + (int) newState.getBenefit());
 			System.out.println ("km: " + newState.getDistTraveled());
 			System.out.println ("precio " + newState.getPrecioEnDepositos());
 			
@@ -214,10 +214,10 @@ public class Main {
 	
     public static void main(String[] args) {
     	//inicializacion gasolinera
-    	int ngas = 100;
+    	int ngas = 400;
     	
     	//inicializacion centros distribucion
-    	int ncen = 10, mult = 1;
+    	int ncen = 40, mult = 1;
     	
     	int seed = 1234;
     	
@@ -246,7 +246,8 @@ public class Main {
 	    	
 	    	AbastecimientoState as = new AbastecimientoState (gasolineras, centrosDistrbucion);
 	    	as.generateInitialSolution1();
-	    	AbastecimientoHillClimbingHeuristic2(as);
+	    	//AbastecimientoHillClimbingHeuristic1(as);
+	    	AbastecimientoSimulatedAnnealingHeuristic1(as);
     	}
     	
     	while (!executed) {
